@@ -1,8 +1,13 @@
-
-import Login from './components/login';
+import { Routes, Route } from 'react-router-dom';
+import Login from './pages/Login';
 
 function App() {
-  return <Login />;
+  return (
+    <Routes>
+      <Route path="/" element={<Login />} />
+      <Route path="/home" element={<h1>Home Page</h1>} />
+    </Routes>
+  );
 }
 
 export default App;
