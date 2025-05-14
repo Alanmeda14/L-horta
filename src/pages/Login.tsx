@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { loginRequest } from "../services/authService";
 import LoginForm from "../components/LoginForm";
+import { Link } from "react-router-dom";
 
 const Login = () => {
     const { login } = useAuth();
@@ -27,7 +28,7 @@ const Login = () => {
                 <div className="absolute w-[150px] h-[150px] -bottom-[75px] -left-[75px] rounded-full bg-lime-100"></div>
                 <div className="text-center relative py-4">
                     <h1 className="text-6xl md:text-4xl font-semibold text-lime-600 mb-6 leading-tight tracking-tight">L'horta</h1>
-                    <p className="text-gray-600 text-base md:text-lg font-light mb-8 max-w-md mx-auto">Inicia sesión para acceder a tu colección de recetas</p>
+                    <p className="text-gray-600 text-base md:text-lg font-light mb-8 max-w-md mx-auto">Inicia sesión para acceder a tu huerto</p>
 
                     {/* Mostrar el error si existe */}
                     {error && <p className="text-red-500 mb-2">{error}</p>}
@@ -35,7 +36,10 @@ const Login = () => {
                     {/* Componente LoginForm */}
                     <LoginForm onSubmit={handleLogin} />
                     <p className="mt-6 text-gray-600">
-                        ¿No eres miembro? <a href="/signup" className="text-lime-600 font-medium no-underline">Regístrate</a>
+                        ¿No eres miembro?{" "}
+                        <Link to="/register" className="text-lime-600 font-medium no-underline">
+                            Regístrate
+                        </Link>
                     </p>
                 </div>
             </div>
