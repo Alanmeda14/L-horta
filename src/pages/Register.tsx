@@ -32,7 +32,7 @@ const Register = () => {
 
     return (
         <div className="min-h-screen p-4 md:p-8 flex items-center justify-center bg-[url('/img/Fondo.png')] bg-cover bg-center">
-            <div className="relative w-full sm:w-[400px] md:w-[500px] lg:w-[600px] bg-white p-2 rounded-2xl shadow-lg">
+            <div className="relative w-full sm:w-[400px] md:w-[500px] lg:w-[600px] bg-white p-2 rounded-    xl shadow-lg">
                 <div className="text-center relative py-4">
                     <h1 className="text-3xl md:text-4xl font-semibold text-lime-600 mb-2">
                         Crear cuenta
