@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Sprout } from 'lucide-react';
 
 type RegisterFormProps = {
     onSubmit: (data: {
@@ -6,7 +7,6 @@ type RegisterFormProps = {
         surname: string;
         email: string;
         password: string;
-        localizacion: string;
     }) => void;
 };
 
@@ -16,7 +16,6 @@ const RegisterForm = ({ onSubmit }: RegisterFormProps) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
-    const [localizacion, setLocalizacion] = useState("");
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
 
@@ -32,108 +31,94 @@ const RegisterForm = ({ onSubmit }: RegisterFormProps) => {
         setLoading(true);
 
         try {
-            await onSubmit({ name, surname, email, password, localizacion });
+            await onSubmit({ name, surname, email, password });
         } finally {
             setLoading(false);
         }
     };
 
     return (
-        <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-                <label htmlFor="name" className="block text-sm font-medium mt-4 text-gray-700">
-                    Nombre
-                </label>
-                <input
-                    id="name"
-                    type="text"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    className="mt-1 w-1/2 px-4 py-2 border border-gray-300 rounded-lg"
-                    required
-                />
+        <div className="w-full max-w-sm mx-auto">
+            <div className="flex justify-center mb-6">
+                <Sprout className="w-10 h-10 text-green-700" />
             </div>
+            <h2 className="text-2xl font-semibold text-center text-gray-800 mb-2">Crear tu cuenta</h2>
+            <p className="text-center text-gray-600 mb-8">Únete a nuestra comunidad</p>
 
-            <div>
-                <label htmlFor="surname" className="block text-sm font-medium text-gray-700">
-                    Apellidos
-                </label>
-                <input
-                    id="surname"
-                    type="text"
-                    value={surname}
-                    onChange={(e) => setSurname(e.target.value)}
-                    className="mt-1 w-2/3 px-4 py-2 border border-gray-300 rounded-lg"
-                    required
-                />
-            </div>
+            <form onSubmit={handleSubmit} className="space-y-4">
+                {error && <p className="text-red-500 text-sm text-center">{error}</p>}
 
-            <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                    Correo Electrónico
-                </label>
-                <input
-                    id="email"
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg"
-                    required
-                />
-            </div>
+                <div className="grid grid-cols-2 gap-4">
+                    <div className="relative">
+                        <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500 text-lg">👤</span>
+                        <input
+                            type="text"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                            className="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:border-green-500"
+                            placeholder="Nombre"
+                            required
+                        />
+                    </div>
 
-            <div>
-                <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                    Contraseña
-                </label>
-                <input
-                    id="password"
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg"
-                    required
-                />
-            </div>
+                    <div className="relative">
+                        <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500 text-lg">👥</span>
+                        <input
+                            type="text"
+                            value={surname}
+                            onChange={(e) => setSurname(e.target.value)}
+                            className="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:border-green-500"
+                            placeholder="Apellidos"
+                            required
+                        />
+                    </div>
+                </div>
 
-            <div>
-                <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
-                    Confirmar Contraseña
-                </label>
-                <input
-                    id="confirmPassword"
-                    type="password"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg"
-                    required
-                />
-            </div>
+                <div className="relative mt-4">
+                    <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500 text-lg">📧</span>
+                    <input
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        className="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:border-green-500"
+                        placeholder="Email"
+                        required
+                    />
+                </div>
 
-            <div>
-                <label htmlFor="localizacion" className="block text-sm font-medium text-gray-700">
-                    Localización
-                </label>
-                <input
-                    id="localizacion"
-                    type="text"
-                    value={localizacion}
-                    onChange={(e) => setLocalizacion(e.target.value)}
-                    className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg"
-                    required
-                />
-            </div>
+                <div className="relative mt-4">
+                    <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500 text-lg">🔒</span>
+                    <input
+                        type="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        className="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:border-green-500"
+                        placeholder="Contraseña"
+                        required
+                    />
+                </div>
 
-            {error && <p className="text-red-500 text-sm">{error}</p>}
+                <div className="relative mt-4">
+                    <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500 text-lg">🔒</span>
+                    <input
+                        type="password"
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                        className="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:border-green-500"
+                        placeholder="Confirmar Contraseña"
+                        required
+                    />
+                </div>
 
-            <button
-                type="submit"
-                disabled={loading}
-                className="w-full bg-lime-500 text-white py-2 rounded-lg hover:bg-lime-700 transition-colors"
-            >
-                {loading ? "Registrando..." : "Registrarse"}
-            </button>
-        </form>
+                <button
+                    type="submit"
+                    disabled={loading}
+                    className="w-full bg-green-700 text-white py-2 rounded-lg hover:bg-green-800 transition-colors"
+                >
+                    {loading ? "Registrando..." : "Sign Up"}
+                </button>
+            </form>
+        </div>
     );
 };
 

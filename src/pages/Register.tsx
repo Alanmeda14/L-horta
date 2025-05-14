@@ -13,17 +13,15 @@ const Register = () => {
         surname,
         email,
         password,
-        localizacion,
     }: {
         name: string;
         surname: string;
         email: string;
         password: string;
-        localizacion: string;
     }) => {
         setError(null);
         try {
-            await registerRequest(name, surname, email, password, localizacion);
+            await registerRequest(name, surname, email, password, "");
             navigate("/login");
         } catch (err: any) {
             setError(err.message || "Error al registrarse");
@@ -31,22 +29,24 @@ const Register = () => {
     };
 
     return (
-        <div className="min-h-screen p-4 md:p-8 flex items-center justify-center bg-[url('/img/Fondo.png')] bg-cover bg-center">
-            <div className="relative w-full sm:w-[400px] md:w-[500px] lg:w-[600px] bg-white p-2 rounded-    xl shadow-lg">
-                <div className="text-center relative py-4">
-                    <h1 className="text-3xl md:text-4xl font-semibold text-lime-600 mb-2">
-                        Crear cuenta
-                    </h1>
-                    {/* <p className="text-gray-600 text-base md:text-lg font-light mb-2 max-w-md mx-auto">
-                        Regístrate para algo....
-                    </p> */}
-                    {error && <p className="text-red-500 mb-2">{error}</p>}
-                    <RegisterForm onSubmit={handleRegister} />
-                    <p className="mt-2 text-gray-600">
-                        ¿Ya tienes una cuenta?{" "}
-                        <Link to="/login" className="text-lime-600 font-medium">Inicia sesión</Link>
-                    </p>
+<div className="min-h-screen flex items-center justify-center bg-[url('../img/Fondo.png')] py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+    <div className="max-w-md w-full bg-white rounded-xl rounded-bl-2xl shadow-lg p-8 relative">
+    {/* Before this closing div, add: */}
+    <div className="absolute -bottom-16 -left-16 w-32 h-32 rounded-full "></div>
+    <div className="absolute -top-16 -right-16 w-32 h-32 rounded-full "></div>
+                {error && <p className="text-red-500 text-sm text-center mb-4">{error}</p>}
+                <RegisterForm onSubmit={handleRegister} />
+                <div className="flex items-center justify-center my-6">
+                    <div className="flex-grow border-t border-gray-300"></div>
+                    <span className="mx-4 text-gray-500">or</span>
+                    <div className="flex-grow border-t border-gray-300"></div>
                 </div>
+                <p className="mt-4 text-center text-gray-600 text-sm">
+                    Already have an account?{" "}
+                    <Link to="/login" className="text-green-700 hover:text-green-800 font-medium">
+                        Sign In
+                    </Link>
+                </p>
             </div>
         </div>
     );
