@@ -26,7 +26,7 @@ const Login = () => {
                 <div className="absolute w-[200px] h-[200px] -top-[100px] -right-[100px] rounded-full bg-lime-50"></div>
                 <div className="absolute w-[150px] h-[150px] -bottom-[75px] -left-[75px] rounded-full bg-lime-100"></div>
                 <div className="text-center relative py-4">
-                    <h1 className="text-3xl md:text-4xl font-semibold text-lime-600 mb-6 leading-tight tracking-tight">L'horta</h1>
+                    <h1 className="text-6xl md:text-4xl font-semibold text-lime-600 mb-6 leading-tight tracking-tight">L'horta</h1>
                     <p className="text-gray-600 text-base md:text-lg font-light mb-8 max-w-md mx-auto">Inicia sesión para acceder a tu colección de recetas</p>
 
                     {/* Mostrar el error si existe */}
