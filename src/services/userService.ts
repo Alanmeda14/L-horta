@@ -6,6 +6,7 @@ export interface User {
   id?: number;
   name: string;
   surname: string;
+  email: string; // <-- Nuevo campo agregado
   password?: string; // No se debería exponer, solo para crear
   role: string;
 }
