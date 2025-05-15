@@ -25,7 +25,6 @@ const HomePage = () => {
   const [search, setSearch] = useState('');
   const [locationFilter, setLocationFilter] = useState('');
   const [productFilter, setProductFilter] = useState('');
-  const [priceFilter, setPriceFilter] = useState<number | "">("");
 
   const handleNameChange = (id: number, newName: string) => {
     const updatedProducts = products.map(product =>
@@ -37,8 +36,7 @@ const HomePage = () => {
   const filteredProducts = products.filter(product =>
     product.name.toLowerCase().includes(search.toLowerCase()) &&
     (locationFilter ? product.location.toLowerCase().includes(locationFilter.toLowerCase()) : true) &&
-    (productFilter ? (product.isProductAvailable ? 'disponible' : 'no disponible').includes(productFilter.toLowerCase()) : true) &&
-    (priceFilter !== "" ? product.price <= priceFilter : true)
+    (productFilter ? (product.isProductAvailable ? 'disponible' : 'no disponible').includes(productFilter.toLowerCase()) : true)
   );
 
   return (
@@ -67,17 +65,7 @@ const HomePage = () => {
             onChange={(e) => setProductFilter(e.target.value)} 
             className="px-4 py-2 rounded-md border flex-1 min-w-[150px]"
           />
-          <input 
-            type="number" 
-            placeholder="🔍 Filtrar por precio" 
-            value={priceFilter} 
-            onChange={(e) => setPriceFilter(Number(e.target.value) || "")} 
-            className="px-4 py-2 rounded-md border flex-1 min-w-[150px]"
-          />
         </div>
-
-        {/* Título */}
-        <h1 className="text-6xl md:text-4xl font-semibold text-lime-600 mb-4 text-center">Huertos Colaborativos</h1>
 
         {/* Lista de Productos Filtrados */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -92,16 +80,6 @@ const HomePage = () => {
                   className="font-bold text-xl mb-2 w-full border-b" 
                 />
                 <p className="text-gray-600">{product.location}</p>
-                <div className="mt-2 flex gap-2">
-                  <span className={`flex items-center gap-1 px-2 py-1 text-xs rounded-md ${product.isVolunteerAvailable ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
-                    <FiUser />
-                    {product.isVolunteerAvailable ? 'Disponible para Voluntariado' : 'Voluntariado No Disponible'}
-                  </span>
-                  <span className={`flex items-center gap-1 px-2 py-1 text-xs rounded-md ${product.isProductAvailable ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
-                    <GiTomato />
-                    {product.isProductAvailable ? 'Productos Disponibles' : 'Sin Productos'}
-                  </span>
-                </div>
               </div>
             </div>
           ))}
