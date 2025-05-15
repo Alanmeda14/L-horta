@@ -10,16 +10,33 @@ const Login = () => {
     const navigate = useNavigate();
     const [error, setError] = useState<string | null>(null);
 
-    const handleLogin = async ({ email, password }: { email: string; password: string }) => {
-        setError(null); // Limpiar errores anteriores
-        try {
-            const token = await loginRequest(email, password);
-            login(token); // Iniciar sesión con el token
-            navigate("/home"); // Redirigir a la página principal después del login exitoso
-        } catch (err: any) {
-            setError(err.message || "Error al iniciar sesión");
+    // ✅ src/pages/Login.tsx
+const handleLogin = async ({ email, password }: { email: string; password: string }) => {
+    setError(null); // ✅ Limpia cualquier error anterior
+
+    try {
+        console.log("📨 Intentando iniciar sesión...");
+
+        // ✅ Intentamos hacer la solicitud de autenticación
+        const token = await loginRequest(email, password);
+        console.log("🔑 Token recibido:", token);
+
+        if (token) {
+            // ✅ Guardamos el token en Local Storage directamente
+            localStorage.setItem("token", token);
+            login(token); // ✅ Si el token es válido, iniciamos sesión
+            console.log("✅ Usuario autenticado. Redirigiendo a /home...");
+            navigate("/home"); // ✅ Redirigimos al usuario a la página principal
+        } else {
+            setError("Error al iniciar sesión. Token inválido.");
+            console.error("❌ Token inválido:", token);
         }
-    };
+    } catch (err: any) {
+        setError(err.message || "Error al iniciar sesión");
+        console.error("❌ Error al iniciar sesión:", err);
+    }
+};
+
 
     return (
         <div className="min-h-screen p-4 md:p-8 flex items-center justify-center bg-[url('/img/Fondo.png')] bg-cover bg-center">
