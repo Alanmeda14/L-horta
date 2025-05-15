@@ -10,58 +10,41 @@ const Login = () => {
     const navigate = useNavigate();
     const [error, setError] = useState<string | null>(null);
 
-    // ✅ src/pages/Login.tsx
-const handleLogin = async ({ email, password }: { email: string; password: string }) => {
-    setError(null); // ✅ Limpia cualquier error anterior
-
-    try {
-        console.log("📨 Intentando iniciar sesión...");
-
-        // ✅ Intentamos hacer la solicitud de autenticación
-        const token = await loginRequest(email, password);
-        console.log("🔑 Token recibido:", token);
-
-        if (token) {
-            // ✅ Guardamos el token en Local Storage directamente
-            localStorage.setItem("token", token);
-            login(token); // ✅ Si el token es válido, iniciamos sesión
-            console.log("✅ Usuario autenticado. Redirigiendo a /home...");
-            navigate("/home"); // ✅ Redirigimos al usuario a la página principal
-        } else {
-            setError("Error al iniciar sesión. Token inválido.");
-            console.error("❌ Token inválido:", token);
+    const handleLogin = async ({ email, password }: { email: string; password: string }) => {
+        setError(null); // Limpiar errores anteriores
+        try {
+            const token = await loginRequest(email, password);
+            login(token); // Iniciar sesión con el token
+            navigate("/home"); // Redirigir a la página principal después del login exitoso
+        } catch (err: any) {
+            setError(err.message || "Error al iniciar sesión");
         }
-    } catch (err: any) {
-        setError(err.message || "Error al iniciar sesión");
-        console.error("❌ Error al iniciar sesión:", err);
-    }
-};
-
+    };
 
     return (
-        <div className="min-h-screen p-4 md:p-8 flex items-center justify-center bg-[url('/img/Fondo.png')] bg-cover bg-center">
-            <div className="relative w-full sm:w-[400px] md:w-[500px] lg:w-[600px] h-auto max-w-none bg-white p-8 rounded-2xl shadow-lg">
-                <div className="absolute w-[200px] h-[200px] -top-[100px] -right-[100px] rounded-full bg-lime-50"></div>
-                <div className="absolute w-[150px] h-[150px] -bottom-[75px] -left-[75px] rounded-full bg-lime-100"></div>
-                <div className="text-center relative py-4">
-                    <h1 className="text-6xl md:text-4xl font-semibold text-lime-600 mb-6 leading-tight tracking-tight">L'horta</h1>
-                    <p className="text-gray-600 text-base md:text-lg font-light mb-8 max-w-md mx-auto">Inicia sesión para acceder a tu huerto</p>
-
-                    {/* Mostrar el error si existe */}
-                    {error && <p className="text-red-500 mb-2">{error}</p>}
-
-                    {/* Componente LoginForm */}
-                    <LoginForm onSubmit={handleLogin} />
-                    <p className="mt-6 text-gray-600">
-                        ¿No eres miembro?{" "}
-                        <Link to="/register" className="text-lime-600 font-medium no-underline">
-                            Regístrate
-                        </Link>
-                    </p>
+        <div className="min-h-screen flex items-center justify-center bg-[url('../img/Fondo.png')] py-12 px-4 sm:px-6 lg:px-8">
+            <div className="max-w-md w-full bg-white rounded-xl shadow-lg p-8">
+                {error && <p className="text-red-500 text-sm text-center mb-4">{error}</p>}
+                <LoginForm onSubmit={handleLogin} />
+                <div className="mt-6 text-center">
+                    <div className="relative">
+                        <div className="absolute inset-0 flex items-center">
+                            <div className="w-full border-t border-gray-200"></div>
+                        </div>
+                        <div className="relative flex justify-center text-sm">
+                            <span className="px-2 bg-white text-gray-500">or</span>
+                        </div>
+                    </div>
                 </div>
+                <p className="mt-4 text-center text-gray-600 text-sm">
+                    Don't have an account?{" "}
+                    <Link to="/register" className="text-green-700 hover:text-green-800 font-medium">
+                        Sign Up
+                    </Link>
+                </p>
             </div>
         </div>
     );
 };
 
-export default Login;
+export default Login
