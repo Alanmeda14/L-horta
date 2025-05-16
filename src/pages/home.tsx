@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { FiSearch, FiUser } from 'react-icons/fi';
+import { FiSearch } from 'react-icons/fi';
 import { GiTomato } from 'react-icons/gi';
 import image1 from '../assets/imagen1.jpg';
 import image2 from '../assets/imagen2.png';
@@ -40,13 +40,13 @@ const HomePage = () => {
   );
 
   return (
-    <div className="min-h-screen px-2 py-2 md:px-6 md:py-4 bg-[url('/img/Fondo.png')] bg-cover bg-center">
-      <div className="w-full mx-auto">
-        {/* Filtros en Navbar */}
-        <div className="flex flex-wrap items-center gap-4 mb-4 bg-white p-4 rounded-lg shadow w-full">
+    <div className="pt- px-4 py-2 md:px-6 md:py-4 bg-[url('/img/Fondo.png')] bg-cover bg-center min-h-screen relative">
+      <div className="w-full mx-auto max-w-7xl mb-6 sticky top-16 z-20 rounded-lg p-4">
+        {/* Filtros de Búsqueda */}
+        <div className="flex flex-wrap items-center gap-4 mb-4 bg-white p-4 rounded-lg shadow-md sticky top-20 z-10">
           <input 
             type="text" 
-            placeholder=" 🔍 Buscar huertos" 
+            placeholder="🔍 Buscar huertos" 
             value={search} 
             onChange={(e) => setSearch(e.target.value)} 
             className="px-4 py-2 rounded-md border flex-1 min-w-[150px]" 
@@ -68,7 +68,7 @@ const HomePage = () => {
         </div>
 
         {/* Lista de Productos Filtrados */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
           {filteredProducts.map((product) => (
             <div key={product.id} className="relative rounded-lg overflow-hidden shadow-lg bg-white">
               <img src={product.image} alt={product.name} className="w-full h-40 object-cover" />
@@ -80,6 +80,14 @@ const HomePage = () => {
                   className="font-bold text-xl mb-2 w-full border-b" 
                 />
                 <p className="text-gray-600">{product.location}</p>
+                <div className="mt-2 flex gap-2">
+                  <span className={`px-2 py-1 text-xs rounded-md ${product.isVolunteerAvailable ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                    {product.isVolunteerAvailable ? 'Voluntariado Disponible' : 'Sin Voluntariado'}
+                  </span>
+                  <span className={`px-2 py-1 text-xs rounded-md ${product.isProductAvailable ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                    {product.isProductAvailable ? 'Productos Disponibles' : 'Sin Productos'}
+                  </span>
+                </div>
               </div>
             </div>
           ))}
