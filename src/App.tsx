@@ -1,4 +1,3 @@
-// ✅ App.tsx (Refactorizado)
 import React from "react";
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import Navbar from './components/navbar';
@@ -12,25 +11,21 @@ function App() {
   const { isAuthenticated } = useAuth();
   const location = useLocation();
 
-  // ✅ Redirige al home si el usuario está autenticado e intenta ir a "/"
   if (location.pathname === "/" && isAuthenticated) {
     return <Navigate to="/home" />;
   }
 
-  // ✅ Verifica si estás en la página de Login
   const isLoginPage = location.pathname === "/";
 
   return (
-    <>
-      {/* ✅ Solo muestra el Navbar si NO estás en la página de Login */}
+    <div className="min-h-screen bg-[url('../img/Fondo.png')] bg-cover">
       {!isLoginPage && <Navbar />}
-
       <Routes>
         <Route path="/" element={<Login />} />
-        <Route path="/home"  element={<HomePage />} />
-        <Route path="/cesta" element={<Cesta/>}/>
+        <Route path="/home" element={<HomePage />} />
+        <Route path="/cesta" element={<Cesta />} />
       </Routes>
-    </>
+    </div>
   );
 }
 
