@@ -9,6 +9,8 @@ import GardenListingPage from './pages/GardenListingPage';
 import UserProfile from './pages/UserProfile';
 import { useAuth } from './context/AuthContext';
 import "./index.css";
+import { GardenForm } from "./components/Form/GardenForm";
+
 
 function App() {
   const { isAuthenticated } = useAuth();
@@ -33,6 +35,7 @@ function App() {
         <Route path="/gardens" element={<GardenListingPage />} />
         <Route path="/usuario" element={<UserProfile />} />
         <Route path="/cesta" element={<Cesta />} />
+        <Route path="/gardenForm" element={<GardenForm />} />
       </Routes>
     </div>
   )
