@@ -22,7 +22,7 @@ const Register = () => {
         setError(null);
         try {
             await registerRequest(name, surname, email, password, "");
-            navigate("/login");
+            navigate("/");
         } catch (err: any) {
             setError(err.message || "Error al registrarse");
         }
@@ -43,7 +43,7 @@ const Register = () => {
                 </div>
                 <p className="mt-4 text-center text-gray-600 text-sm">
                     Already have an account?{" "}
-                    <Link to="/login" className="text-green-700 hover:text-green-800 font-medium">
+                    <Link to="/" className="text-green-700 hover:text-green-800 font-medium">
                         Sign In
                     </Link>
                 </p>

@@ -43,7 +43,7 @@ const Navbar: React.FC = () => {
         <button onClick={goToHome} className="flex items-center gap-2 hover:text-green-500"><FiHome />Inicio</button>
         <Link to="/usuario" className="flex items-center gap-2 hover:text-green-500"><FiUser />Usuario</Link>
         <Link to="/cesta" className="flex items-center gap-2 hover:text-green-500"><FiShoppingCart />Cesta</Link>
-        <Link to="/tu-huerto" className="flex items-center gap-2 hover:text-green-500"><FiSun />Tu Huerto</Link>
+        <Link to="/gardens" className="flex items-center gap-2 hover:text-green-500"><FiSun />Tu Huerto</Link>
         <Link to="/huertos" className="flex items-center gap-2 hover:text-green-500"><FiSun />Huertos</Link>
         <button onClick={logout} className="flex items-center gap-2 hover:text-green-500"><FiLogIn />Cerrar Sesión</button>
       </div>
