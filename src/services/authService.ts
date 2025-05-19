@@ -1,43 +1,48 @@
+const API_URL = 'http://localhost:8080'; // ✅ Ajusta según tu entorno
+
+// Login
 export const loginRequest = async (email: string, password: string): Promise<string> => {
-    const response = await fetch('https://tu-backend.com/login', {
+    const response = await fetch(`${API_URL}/login`, {
         method: 'POST',
-        body: JSON.stringify({ email, password }),
         headers: {
             'Content-Type': 'application/json',
         },
+        body: JSON.stringify({ email, password }),
     });
 
     if (!response.ok) {
-        throw new Error('Error al iniciar sesión');
+        const error = await response.json();
+        throw new Error(error.message || 'Error al iniciar sesión');
     }
 
     const data = await response.json();
-    return data.token;
+    return data.token; // Asegúrate de que el backend responde con { token: "..." }
 };
 
+// Registro
 export const registerRequest = async (
     name: string,
     surname: string,
     email: string,
     password: string,
-    localizacion: string
+    location: string // ⚠️ Usamos "location", como espera tu BD
 ): Promise<void> => {
-    const response = await fetch("https://tu-backend.com/register", {
-        method: "POST",
+    const response = await fetch(`${API_URL}/register`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
         body: JSON.stringify({
             name,
             surname,
             email,
             password,
-            localizacion
+            location, // ✅ nombre corregido
         }),
-        headers: {
-            "Content-Type": "application/json",
-        },
     });
 
     if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.message || "Error al registrar");
+        const error = await response.json();
+        throw new Error(error.message || 'Error al registrar');
     }
 };
