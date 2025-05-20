@@ -24,7 +24,7 @@ const Navbar: React.FC = () => {
     setMenuOpen(false);
   };
 
-  const isLoginPage = location.pathname === "/login";
+  const isLoginPage = location.pathname === "/login" || location.pathname === "/register";
   if (isLoginPage) return null;
 
   return (
@@ -36,7 +36,7 @@ const Navbar: React.FC = () => {
           <path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z"></path>
           <path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z"></path>
         </svg>
-        <span className="font-bold text-lg">Huertos Colaborativos</span>
+        <span className="font-bold text-lg">L'HORTA</span>
       </div>
 
       <div className="hidden md:flex gap-6 items-center">

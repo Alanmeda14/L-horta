@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Sprout } from 'lucide-react';
+import { Lock, Mail, Sprout, User, Users } from 'lucide-react';
 
 type RegisterFormProps = {
     onSubmit: (data: {
@@ -40,7 +40,7 @@ const RegisterForm = ({ onSubmit }: RegisterFormProps) => {
     return (
         <div className="w-full max-w-sm mx-auto">
             <div className="flex justify-center mb-6">
-                <Sprout className="w-10 h-10 text-green-700" />
+                <Sprout className="w-12 h-12 text-green-700" />
             </div>
             <h2 className="text-2xl font-semibold text-center text-gray-800 mb-2">Crear tu cuenta</h2>
             <p className="text-center text-gray-600 mb-8">Únete a nuestra comunidad</p>
@@ -50,7 +50,9 @@ const RegisterForm = ({ onSubmit }: RegisterFormProps) => {
 
                 <div className="grid grid-cols-2 gap-4">
                     <div className="relative">
-                        <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500 text-lg">👤</span>
+                        <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500 text-lg">
+                            <User className="h-5 w-5 text-gray-400" />
+                        </span>
                         <input
                             type="text"
                             value={name}
@@ -62,7 +64,9 @@ const RegisterForm = ({ onSubmit }: RegisterFormProps) => {
                     </div>
 
                     <div className="relative">
-                        <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500 text-lg">👥</span>
+                        <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500 text-lg">
+                            <Users  className="h-5 w-5 text-gray-400" />
+                        </span>
                         <input
                             type="text"
                             value={surname}
@@ -75,7 +79,9 @@ const RegisterForm = ({ onSubmit }: RegisterFormProps) => {
                 </div>
 
                 <div className="relative mt-4">
-                    <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500 text-lg">📧</span>
+                    <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500 text-lg">
+                        <Mail  className="h-5 w-5 text-gray-400" />
+                    </span>
                     <input
                         type="email"
                         value={email}
@@ -87,7 +93,9 @@ const RegisterForm = ({ onSubmit }: RegisterFormProps) => {
                 </div>
 
                 <div className="relative mt-4">
-                    <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500 text-lg">🔒</span>
+                    <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500 text-lg">
+                        <Lock className="h-5 w-5 text-gray-400" />
+                    </span>
                     <input
                         type="password"
                         value={password}
@@ -99,7 +107,9 @@ const RegisterForm = ({ onSubmit }: RegisterFormProps) => {
                 </div>
 
                 <div className="relative mt-4">
-                    <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500 text-lg">🔒</span>
+                    <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500 text-lg">
+                        <Lock className="h-5 w-5 text-gray-400" />
+                    </span>
                     <input
                         type="password"
                         value={confirmPassword}
@@ -113,9 +123,9 @@ const RegisterForm = ({ onSubmit }: RegisterFormProps) => {
                 <button
                     type="submit"
                     disabled={loading}
-                    className="w-full bg-green-700 text-white py-2 rounded-lg hover:bg-green-800 transition-colors"
+                    className="cursor-pointer w-full bg-green-700 text-white py-2 rounded-lg hover:bg-green-800 transition-colors"
                 >
-                    {loading ? "Registrando..." : "Sign Up"}
+                    {loading ? "Registrando..." : "Crear compte"}
                 </button>
             </form>
         </div>

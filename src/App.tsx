@@ -11,34 +11,80 @@ import { useAuth } from './context/AuthContext';
 import "./index.css";
 import { GardenForm } from "./components/Form/GardenForm";
 
+const PublicRoute = ({ children }: { children: React.ReactNode }) => {
+  const { isAuthenticated } = useAuth();
+  
+  if (isAuthenticated) {
+    return <Navigate to="/home" />;
+  }
+  
+  return <>{children}</>;
+};
 
-function App() {
+const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { isAuthenticated } = useAuth();
   const location = useLocation();
 
-  const publicRoutes = ["/", "/register", "/forgot-password"];
-  const isPublicRoute = publicRoutes.includes(location.pathname);
-
-  if (location.pathname === "/" && isAuthenticated) {
-    return <Navigate to="/home" />;
+  if (!isAuthenticated) {
+    return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
-  const isLoginPage = location.pathname === "/";
+  return <>{children}</>;
+};
+
+function App() {
 
   return (
-    <div className="min-h-screen bg-[url('../img/Fondo.png')] bg-cover">
-      {!isPublicRoute && <Navbar />}
+    <>
+      <Navbar />
       <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/home" element={<HomePage />} />
-        <Route path="/gardens" element={<GardenListingPage />} />
-        <Route path="/usuario" element={<UserProfile />} />
-        <Route path="/cesta" element={<Cesta />} />
-        <Route path="/gardenForm" element={<GardenForm />} />
+        {/* Public routes */}
+        <Route path="/login" element={
+          <PublicRoute>
+            <Login />
+          </PublicRoute>
+        } />
+        <Route path="/register" element={
+          <PublicRoute>
+            <Register />
+          </PublicRoute>
+        } />
+
+        {/* Private routes */}
+        <Route path="/home" element={
+          <ProtectedRoute>
+            <HomePage />
+          </ProtectedRoute>
+        } />
+        <Route path="/gardens" element={
+          <ProtectedRoute>
+            <GardenListingPage />
+          </ProtectedRoute>
+        } />
+        <Route path="/usuario" element={
+          <ProtectedRoute>
+            <UserProfile />
+          </ProtectedRoute>
+        } />
+        <Route path="/cesta" element={
+          <ProtectedRoute>
+            <Cesta />
+          </ProtectedRoute>
+        } />
+        <Route path="/gardenForm" element={
+          <ProtectedRoute>
+            <GardenForm />
+          </ProtectedRoute>
+        } />
+
+        {/* Default route */}
+        <Route path="/" element={<Navigate to="/login" />} />
+
+        {/* Unknown route */}
+        <Route path="*" element={<Navigate to="/login" />} />
       </Routes>
-    </div>
-  )
+    </>
+  );
 }
 
 export default App;
