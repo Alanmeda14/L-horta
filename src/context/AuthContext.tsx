@@ -1,61 +1,75 @@
-import { createContext, useContext, useState } from 'react';
-import type {ReactNode} from 'react';
+import { createContext, useContext, useState, useEffect } from "react";
+import type { ReactNode } from "react";
+import { jwtDecode } from "jwt-decode"; // Usa esta forma
+import { loginRequest } from "../services/authService"; // asegúrate de que esto existe
+
 interface AuthContextType {
-    isAuthenticated: boolean;
-    /* Tot el que estigui comentat a aquesta pàgina és per afegir posteriorment el token */
-    /* token: string | null;
-    login: (token: string) => void; */
-    login: (email: string, password: string) => void;
-    logout: () => void;
+  isAuthenticated: boolean;
+  token: string | null;
+  userId: number | null;
+  login: (email: string, password: string) => Promise<void>;
+  logout: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-    /* const [token, setToken] = useState<string | null>(localStorage.getItem('token'));
-    const isAuthenticated = !!token;
- */
-    const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [token, setToken] = useState<string | null>(
+    localStorage.getItem("token")
+  );
+  const [userId, setUserId] = useState<number | null>(null);
 
-    /* const login = (newToken: string) => {
-        setToken(newToken);
-        localStorage.setItem('token', newToken);
-    }; */
+  const isAuthenticated = !!token;
 
-    const login = (email: string, password: string) => {
-        // For now, just do a simple check. You can replace this with your actual authentication logic later
-        if (email && password) {
-            setIsAuthenticated(true);
-            localStorage.setItem('isAuthenticated', 'true');
-        }
-    };
+  useEffect(() => {
+    if (token) {
+      try {
+        const decoded: any = jwtDecode(token);
+        setUserId(decoded.userId || decoded.id); // depende del backend
+      } catch (err) {
+        console.error("Error decoding token:", err);
+        logout();
+      }
+    }
+  }, [token]);
 
-    const logout = () => {
-        /* setToken(null);
-        localStorage.removeItem('token'); */
-        setIsAuthenticated(false);
-        localStorage.removeItem('isAuthenticated');
-    };
+  const login = async (email: string, password: string) => {
+    try {
+      const token = await loginRequest(email, password);
+      if (!token || typeof token !== "string") {
+        throw new Error("Token no válido recibido del servidor");
+      }
 
-    useState(() => {
-        const storedAuth = localStorage.getItem('isAuthenticated');
-        if (storedAuth === 'true') {
-            setIsAuthenticated(true);
-        }
-    });
+      setToken(token);
+      localStorage.setItem("token", token);
 
-    return (
-        <AuthContext.Provider value={{ isAuthenticated, login, logout }}> {/* <AuthContext.Provider value={{ isAuthenticated, token, login, logout }}> */}
-            {children}
-        </AuthContext.Provider>
-    );
+      const decoded: any = jwtDecode(token);
+      setUserId(decoded.userId || decoded.id);
+    } catch (err) {
+      console.error("Login failed:", err);
+      throw err;
+    }
+  };
+
+  const logout = () => {
+    setToken(null);
+    setUserId(null);
+    localStorage.removeItem("token");
+  };
+
+  return (
+    <AuthContext.Provider
+      value={{ isAuthenticated, token, userId, login, logout }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
 };
 
 export const useAuth = () => {
-    const context = useContext(AuthContext);
-    if (context === undefined) {
-        throw new Error('useAuth must be used within an AuthProvider');
-    }
-    return context;
+  const context = useContext(AuthContext);
+  if (context === undefined) {
+    throw new Error("useAuth must be used within an AuthProvider");
+  }
+  return context;
 };
-
