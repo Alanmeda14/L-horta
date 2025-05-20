@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const GardenListingPage = () => {
     const navigate = useNavigate();
+    const { id } = useParams();
+    const [garden, setGarden] = useState<any>(null);
     const [activeTab, setActiveTab] = useState('productos');
     const [quantities, setQuantities] = useState({
         tomates: 0,
@@ -14,6 +16,17 @@ const GardenListingPage = () => {
         'plantacion': false,
         'riego': false
     });
+
+    useEffect(() => {
+        const selectedGarden = localStorage.getItem('selectedGarden');
+        if (selectedGarden) {
+            setGarden(JSON.parse(selectedGarden));
+        }
+    }, [id]);
+
+    if (!garden) {
+        return <div>Cargando...</div>;
+    }
 
     const updateQuantity = (product: keyof typeof quantities, amount: number) => {
         setQuantities(prev => ({
@@ -50,13 +63,13 @@ const GardenListingPage = () => {
             <div className="bg-white rounded-lg shadow-lg p-6">
                 <div className="relative h-64 mb-6">
                     <img
-                        src="https://images.pexels.com/photos/2751755/pexels-photo-2751755.jpeg"
-                        alt="L'Hort de Gavà"
+                        src={garden.image}
+                        alt={garden.name}
                         className="w-full h-full object-cover rounded-lg"
                     />
                     <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/60 to-transparent">
-                        <h1 className="text-white text-3xl font-bold">L'Hort de Gavà</h1>
-                        <p className="text-white">Gavà de Mar</p>
+                        <h1 className="text-white text-3xl font-bold">{garden.name}</h1>
+                        <p className="text-white">{garden.location}</p>
                     </div>
                 </div>
 
@@ -76,14 +89,14 @@ const GardenListingPage = () => {
                     <button
                         className={`px-4 py-2 ${activeTab === 'voluntariado' ? 'text-green-600 border-b-2 border-green-600' : 'text-gray-600'}`}
                         onClick={() => setActiveTab('voluntariado')}
+                        disabled={!garden.isVolunteerAvailable}
                     >
                         Voluntariado
                     </button>
                 </div>
 
-                {activeTab === 'productos' && (
+                {activeTab === 'productos' && garden.isProductAvailable && (
                     <div>
-                        {/* Solo unos productos para el ejemplo */}
                         <table className="w-full">
                             <thead>
                                 <tr className="border-b">
@@ -137,7 +150,7 @@ const GardenListingPage = () => {
                                 Añadir al carrito
                             </button>
                             <button
-                                onClick={() => navigate('/gardens')} // ✅ CORREGIDO
+                                onClick={() => navigate('/home')}
                                 className="px-6 py-2 border border-green-600 text-green-600 rounded-lg hover:bg-green-50 transition-colors"
                             >
                                 Volver al listado
@@ -146,7 +159,7 @@ const GardenListingPage = () => {
                     </div>
                 )}
 
-                {activeTab === 'voluntariado' && (
+                {activeTab === 'voluntariado' && garden.isVolunteerAvailable && (
                     <div className="space-y-4">
                         <div className="border rounded-lg p-4">
                             <h3 className="font-semibold">Plantación de semillas</h3>
@@ -192,12 +205,29 @@ const GardenListingPage = () => {
 
                         <div className="flex justify-end mt-6">
                             <button
-                                onClick={() => navigate('/gardens')} // ✅ CORREGIDO
+                                onClick={() => navigate('/home')}
                                 className="px-6 py-2 border border-green-600 text-green-600 rounded-lg hover:bg-green-50 transition-colors"
                             >
                                 Volver al listado
                             </button>
                         </div>
+                    </div>
+                )}
+
+                {((activeTab === 'productos' && !garden.isProductAvailable) || 
+                  (activeTab === 'voluntariado' && !garden.isVolunteerAvailable)) && (
+                    <div className="text-center py-8">
+                        <p className="text-gray-600 text-lg">
+                            {activeTab === 'productos' 
+                                ? 'Este huerto no tiene productos disponibles actualmente.'
+                                : 'Este huerto no tiene opciones de voluntariado disponibles actualmente.'}
+                        </p>
+                        <button
+                            onClick={() => navigate('/home')}
+                            className="mt-4 px-6 py-2 border border-green-600 text-green-600 rounded-lg hover:bg-green-50 transition-colors"
+                        >
+                            Volver al listado
+                        </button>
                     </div>
                 )}
             </div>

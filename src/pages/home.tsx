@@ -1,6 +1,5 @@
 import { useState } from 'react';
-import { FiSearch } from 'react-icons/fi';
-import { GiTomato } from 'react-icons/gi';
+import { useNavigate } from 'react-router-dom';
 import image1 from '../assets/imagen1.jpg';
 import image2 from '../assets/imagen2.png';
 import image3 from '../assets/imagen3.jpg';
@@ -11,6 +10,7 @@ import image7 from '../assets/imagen7.jpg';
 import image8 from '../assets/imagen8.jpg';
 
 const HomePage = () => {
+  const navigate = useNavigate();
   const [products, setProducts] = useState([
     { id: 1, name: "L'Hort de Gavà", location: 'Gavà de Mar', image: image1, isVolunteerAvailable: true, isProductAvailable: true, price: 10 },
     { id: 2, name: "L'Hort del Sol", location: 'Roda de Bará', image: image2, isVolunteerAvailable: false, isProductAvailable: true, price: 15 },
@@ -33,6 +33,11 @@ const HomePage = () => {
     setProducts(updatedProducts);
   };
 
+  const handleGardenClick = (garden: any) => {
+    localStorage.setItem('selectedGarden', JSON.stringify(garden));
+    navigate(`/garden/${garden.id}`);
+  };
+
   const filteredProducts = products.filter(product =>
     product.name.toLowerCase().includes(search.toLowerCase()) &&
     (locationFilter ? product.location.toLowerCase().includes(locationFilter.toLowerCase()) : true) &&
@@ -42,7 +47,6 @@ const HomePage = () => {
   return (
     <div className="pt- px-4 py-2 md:px-6 md:py-4 bg-[url('/img/Fondo.png')] bg-cover bg-center min-h-screen relative">
       <div className="w-full mx-auto max-w-7xl mb-6 sticky top-16 z-20 rounded-lg p-4">
-        {/* Filtros de Búsqueda */}
         <div className="flex flex-wrap items-center gap-4 mb-4 bg-white p-4 rounded-lg shadow-md sticky top-20 z-10">
           <input 
             type="text" 
@@ -67,18 +71,16 @@ const HomePage = () => {
           />
         </div>
 
-        {/* Lista de Productos Filtrados */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
           {filteredProducts.map((product) => (
-            <div key={product.id} className="relative rounded-lg overflow-hidden shadow-lg bg-white">
+            <div 
+              key={product.id} 
+              className="relative rounded-lg overflow-hidden shadow-lg bg-white cursor-pointer transform transition-transform hover:scale-105"
+              onClick={() => handleGardenClick(product)}
+            >
               <img src={product.image} alt={product.name} className="w-full h-40 object-cover" />
               <div className="p-4">
-                <input 
-                  type="text" 
-                  value={product.name} 
-                  onChange={(e) => handleNameChange(product.id, e.target.value)} 
-                  className="font-bold text-xl mb-2 w-full border-b" 
-                />
+                <h3 className="font-bold text-xl mb-2">{product.name}</h3>
                 <p className="text-gray-600">{product.location}</p>
                 <div className="mt-2 flex gap-2">
                   <span className={`px-2 py-1 text-xs rounded-md ${product.isVolunteerAvailable ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>

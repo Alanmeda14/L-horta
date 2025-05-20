@@ -1,5 +1,9 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Eye, EyeOff } from 'lucide-react';
+import Avatar from '../components/Avatar';
+import { DEFAULT_AVATAR } from '../constants/defaults';
+import { getUserProfile, updateUserProfile } from '../services/authService';
 
 interface UserData {
     name: string;
@@ -15,11 +19,11 @@ const UserProfile = () => {
     const [isEditing, setIsEditing] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [userData, setUserData] = useState<UserData>({
-        name: 'Usuario',
-        lastName: 'Ejemplo',
-        email: 'usuario@ejemplo.com',
+        name: '',
+        lastName: '',
+        email: '',
         location: 'Barcelona',
-        profileImage: 'https://images.pexels.com/photos/771742/pexels-photo-771742.jpeg',
+        profileImage: DEFAULT_AVATAR,
     });
     const [password, setPassword] = useState({
         current: '',
@@ -27,8 +31,26 @@ const UserProfile = () => {
         confirm: ''
     });
 
+    useEffect(() => {
+        const loadUserProfile = async () => {
+            try {
+                const userId = localStorage.getItem('userId');
+                if (userId) {
+                    const profile = await getUserProfile(userId);
+                    setUserData(profile);
+                }
+            } catch (error) {
+                console.error('Error loading profile:', error);
+            }
+        };
+
+        loadUserProfile();
+    }, []);
+
     const handleImageClick = () => {
-        fileInputRef.current?.click();
+        if (isEditing) {
+            fileInputRef.current?.click();
+        }
     };
 
     const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -61,10 +83,17 @@ const UserProfile = () => {
         }));
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        setIsEditing(false);
-        // Aquí iría la lógica para guardar los cambios en el backend
+        try {
+            const userId = localStorage.getItem('userId');
+            if (userId) {
+                await updateUserProfile(userId, userData);
+                setIsEditing(false);
+            }
+        } catch (error) {
+            console.error('Error updating profile:', error);
+        }
     };
 
     return (
@@ -84,13 +113,14 @@ const UserProfile = () => {
                     <div className="flex flex-col md:flex-row gap-8">
                         <div className="flex flex-col items-center">
                             <div
-                                className="relative w-48 h-48 rounded-full overflow-hidden cursor-pointer mb-4"
+                                className={`relative w-48 h-48 rounded-full overflow-hidden ${isEditing ? 'cursor-pointer' : ''} mb-4`}
                                 onClick={handleImageClick}
                             >
-                                <img
-                                    src={userData.profileImage}
-                                    alt="Profile"
-                                    className="w-full h-full object-cover"
+                                <Avatar 
+                                    src={userData.profileImage} 
+                                    alt="Perfil de usuario"
+                                    size={192} 
+                                    className="w-full h-full"
                                 />
                                 {isEditing && (
                                     <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center text-white">
@@ -170,27 +200,6 @@ const UserProfile = () => {
                                 <div className="mt-6 border-t pt-6">
                                     <h2 className="text-lg font-semibold text-gray-800 mb-4">Cambiar Contraseña</h2>
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                        <div>
-                                            <label className="block text-sm font-medium text-gray-700 mb-1">
-                                                Contraseña Actual
-                                            </label>
-                                            <div className="relative">
-                                                <input
-                                                    type={showPassword ? "text" : "password"}
-                                                    name="current"
-                                                    value={password.current}
-                                                    onChange={handlePasswordChange}
-                                                    className="w-full px-3 py-2 border rounded-lg focus:ring-green-500 focus:border-green-500"
-                                                />
-                                                <button
-                                                    type="button"
-                                                    onClick={() => setShowPassword(!showPassword)}
-                                                    className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500"
-                                                >
-                                                    {showPassword ? "Ocultar" : "Mostrar"}
-                                                </button>
-                                            </div>
-                                        </div>
 
                                         <div>
                                             <label className="block text-sm font-medium text-gray-700 mb-1">

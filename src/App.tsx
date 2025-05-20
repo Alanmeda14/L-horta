@@ -33,7 +33,6 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 };
 
 function App() {
-
   return (
     <>
       <Navbar />
@@ -56,7 +55,7 @@ function App() {
             <HomePage />
           </ProtectedRoute>
         } />
-        <Route path="/gardens" element={
+        <Route path="/garden/:id" element={
           <ProtectedRoute>
             <GardenListingPage />
           </ProtectedRoute>
