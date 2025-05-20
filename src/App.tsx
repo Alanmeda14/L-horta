@@ -1,5 +1,5 @@
 import React from "react";
-import { Routes, Route, Navigate, useLocation } from "react-router-dom";
+import { Routes, Route, Navigate, useLocation, data } from "react-router-dom";
 import Navbar from './components/navbar';
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -9,7 +9,7 @@ import GardenListingPage from './pages/GardenListingPage';
 import UserProfile from './pages/UserProfile';
 import { useAuth } from './context/AuthContext';
 import "./index.css";
-import { GardenForm } from "./components/Form/GardenForm";
+import GardenForm from './components/Form/GardenForm';
 
 
 function App() {
@@ -35,7 +35,8 @@ function App() {
         <Route path="/gardens" element={<GardenListingPage />} />
         <Route path="/usuario" element={<UserProfile />} />
         <Route path="/cesta" element={<Cesta />} />
-        <Route path="/gardenForm" element={<GardenForm />} />
+        <Route path="/gardenForm" 
+        element={< GardenForm onSubmit={(data)=> console.log("Datos del huerto:",data)}/>} />
       </Routes>
     </div>
   )
