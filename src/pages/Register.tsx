@@ -21,19 +21,19 @@ const Register = () => {
     }) => {
         setError(null);
         try {
-            const user = await registerRequest(name, surname, email, password);
-            localStorage.setItem('userId', user.id);
-            navigate("/usuario");
+            await registerRequest(name, surname, email, password, "");
+            navigate("/");
         } catch (err: any) {
             setError(err.message || "Error al registrarse");
         }
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-[url('../img/Fondo.png')] py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
-            <div className="max-w-md w-full bg-white rounded-xl rounded-bl-2xl shadow-lg p-8 relative">
-                <div className="absolute -bottom-16 -left-16 w-32 h-32 rounded-full"></div>
-                <div className="absolute -top-16 -right-16 w-32 h-32 rounded-full"></div>
+<div className="min-h-screen flex items-center justify-center bg-[url('../img/Fondo.png')] py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+    <div className="max-w-md w-full bg-white rounded-xl rounded-bl-2xl shadow-lg p-8 relative">
+    {/* Before this closing div, add: */}
+    <div className="absolute -bottom-16 -left-16 w-32 h-32 rounded-full"></div>
+    <div className="absolute -top-16 -right-16 w-32 h-32 rounded-full "></div>
                 {error && <p className="text-red-500 text-sm text-center mb-4">{error}</p>}
                 <RegisterForm onSubmit={handleRegister} />
                 <div className="flex items-center justify-center my-6">
