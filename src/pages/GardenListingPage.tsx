@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { ShoppingCart, Check } from 'lucide-react';
 
 const GardenListingPage = () => {
     const navigate = useNavigate();
@@ -20,6 +21,39 @@ const GardenListingPage = () => {
         'plantacion': 5,
         'riego': 1
     });
+    const [showAddedMessage, setShowAddedMessage] = useState(false);
+
+    // Product data
+    const products = {
+        tomates: {
+            id: 'tomates-' + (garden?.id || '1'),
+            name: 'Tomates',
+            price: 5,
+            image: 'https://images.pexels.com/photos/533280/pexels-photo-533280.jpeg',
+            unit: 'kg'
+        },
+        lechuga: {
+            id: 'lechuga-' + (garden?.id || '1'),
+            name: 'Lechuga',
+            price: 2,
+            image: 'https://images.pexels.com/photos/539431/pexels-photo-539431.jpeg',
+            unit: 'kg'
+        },
+        zanahorias: {
+            id: 'zanahorias-' + (garden?.id || '1'),
+            name: 'Zanahorias',
+            price: 3,
+            image: 'https://images.pexels.com/photos/143133/pexels-photo-143133.jpeg',
+            unit: 'kg'
+        },
+        pimientos: {
+            id: 'pimientos-' + (garden?.id || '1'),
+            name: 'Pimientos',
+            price: 4,
+            image: 'https://images.pexels.com/photos/128536/pexels-photo-128536.jpeg',
+            unit: 'kg'
+        }
+    };
 
     useEffect(() => {
         const selectedGarden = localStorage.getItem('selectedGarden');
@@ -53,6 +87,47 @@ const GardenListingPage = () => {
             };
             return total + (quantity / 1000) * prices[product as keyof typeof prices];
         }, 0);
+    };
+
+    const hasItemsInCart = Object.values(quantities).some(quantity => quantity > 0);
+
+    const handleAddToCart = () => {
+        const cartItems = Object.entries(quantities)
+            .filter(([_, quantity]) => quantity > 0)
+            .map(([productName, quantity]) => {
+                const product = products[productName as keyof typeof products];
+                return {
+                    id: product.id,
+                    name: product.name,
+                    image: product.image,
+                    price: product.price,
+                    quantity: quantity / 1000,
+                    unit: product.unit
+                };
+            });
+
+        // Get existing cart items from localStorage
+        const existingCart = JSON.parse(localStorage.getItem('cart') || '[]');
+        
+        // Merge new items with existing cart
+        const updatedCart = [...existingCart, ...cartItems];
+        
+        // Save back to localStorage
+        localStorage.setItem('cart', JSON.stringify(updatedCart));
+
+        // Show added to cart message
+        setShowAddedMessage(true);
+        setTimeout(() => {
+            setShowAddedMessage(false);
+        }, 2000);
+        
+        // Reset quantities after adding to cart
+        setQuantities({
+            tomates: 0,
+            lechuga: 0,
+            zanahorias: 0,
+            pimientos: 0
+        });
     };
 
     const toggleVolunteerStatus = (activity: keyof typeof volunteerStatus) => {
@@ -124,7 +199,7 @@ const GardenListingPage = () => {
                                     <tr>
                                         <td className="py-4 flex items-center gap-2">
                                             <img
-                                                src="https://images.pexels.com/photos/533280/pexels-photo-533280.jpeg"
+                                                src={products.tomates.image}
                                                 alt="Tomates"
                                                 className="w-12 h-12 rounded-full object-cover"
                                             />
@@ -156,6 +231,111 @@ const GardenListingPage = () => {
                                             </div>
                                         </td>
                                     </tr>
+                                    <tr>
+                                        <td className="py-4 flex items-center gap-2">
+                                            <img
+                                                src={products.lechuga.image}
+                                                alt="Lechuga"
+                                                className="w-12 h-12 rounded-full object-cover"
+                                            />
+                                            <span>Lechuga</span>
+                                        </td>
+                                        <td className="py-4 text-center">2€/kg</td>
+                                        <td className="py-4">
+                                            <div className="flex items-center justify-center gap-2">
+                                                <button
+                                                    className="bg-green-100 w-8 h-8 flex items-center justify-center rounded hover:bg-green-200 active:bg-green-300 transition-colors"
+                                                    onClick={() => updateQuantity('lechuga', -250)}
+                                                >
+                                                    <span className="text-green-800 font-medium">-</span>
+                                                </button>
+                                                <div className="w-20 text-center tabular-nums">
+                                                    {quantities.lechuga}g
+                                                </div>
+                                                <button
+                                                    className="bg-green-100 w-8 h-8 flex items-center justify-center rounded hover:bg-green-200 active:bg-green-300 transition-colors"
+                                                    onClick={() => updateQuantity('lechuga', 250)}
+                                                >
+                                                    <span className="text-green-800 font-medium">+</span>
+                                                </button>
+                                            </div>
+                                        </td>
+                                        <td className="py-4">
+                                            <div className="w-20 text-right ml-auto tabular-nums">
+                                                {calculateTotal('lechuga', 2).toFixed(2)}€
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td className="py-4 flex items-center gap-2">
+                                            <img
+                                                src={products.zanahorias.image}
+                                                alt="Zanahorias"
+                                                className="w-12 h-12 rounded-full object-cover"
+                                            />
+                                            <span>Zanahorias</span>
+                                        </td>
+                                        <td className="py-4 text-center">3€/kg</td>
+                                        <td className="py-4">
+                                            <div className="flex items-center justify-center gap-2">
+                                                <button
+                                                    className="bg-green-100 w-8 h-8 flex items-center justify-center rounded hover:bg-green-200 active:bg-green-300 transition-colors"
+                                                    onClick={() => updateQuantity('zanahorias', -250)}
+                                                >
+                                                    <span className="text-green-800 font-medium">-</span>
+                                                </button>
+                                                <div className="w-20 text-center tabular-nums">
+                                                    {quantities.zanahorias}g
+                                                </div>
+                                                <button
+                                                    className="bg-green-100 w-8 h-8 flex items-center justify-center rounded hover:bg-green-200 active:bg-green-300 transition-colors"
+                                                    onClick={() => updateQuantity('zanahorias', 250)}
+                                                >
+                                                    <span className="text-green-800 font-medium">+</span>
+                                                </button>
+                                            </div>
+                                        </td>
+                                        <td className="py-4">
+                                            <div className="w-20 text-right ml-auto tabular-nums">
+                                                {calculateTotal('zanahorias', 3).toFixed(2)}€
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td className="py-4 flex items-center gap-2">
+                                            <img
+                                                src={products.pimientos.image}
+                                                alt="Pimientos"
+                                                className="w-12 h-12 rounded-full object-cover"
+                                            />
+                                            <span>Pimientos</span>
+                                        </td>
+                                        <td className="py-4 text-center">4€/kg</td>
+                                        <td className="py-4">
+                                            <div className="flex items-center justify-center gap-2">
+                                                <button
+                                                    className="bg-green-100 w-8 h-8 flex items-center justify-center rounded hover:bg-green-200 active:bg-green-300 transition-colors"
+                                                    onClick={() => updateQuantity('pimientos', -250)}
+                                                >
+                                                    <span className="text-green-800 font-medium">-</span>
+                                                </button>
+                                                <div className="w-20 text-center tabular-nums">
+                                                    {quantities.pimientos}g
+                                                </div>
+                                                <button
+                                                    className="bg-green-100 w-8 h-8 flex items-center justify-center rounded hover:bg-green-200 active:bg-green-300 transition-colors"
+                                                    onClick={() => updateQuantity('pimientos', 250)}
+                                                >
+                                                    <span className="text-green-800 font-medium">+</span>
+                                                </button>
+                                            </div>
+                                        </td>
+                                        <td className="py-4">
+                                            <div className="w-20 text-right ml-auto tabular-nums">
+                                                {calculateTotal('pimientos', 4).toFixed(2)}€
+                                            </div>
+                                        </td>
+                                    </tr>
                                 </tbody>
                                 <tfoot>
                                     <tr className="border-t">
@@ -170,16 +350,43 @@ const GardenListingPage = () => {
                             </table>
                         </div>
 
-                        <div className="flex justify-between mt-6">
-                            <button className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
-                                Añadir al carrito
-                            </button>
-                            <button
-                                onClick={() => navigate('/home')}
-                                className="px-6 py-2 border border-green-600 text-green-600 rounded-lg hover:bg-green-50 transition-colors"
+                        <div className="flex flex-wrap justify-between mt-6 gap-4">
+                            <button 
+                                onClick={handleAddToCart}
+                                disabled={!hasItemsInCart}
+                                className={`px-6 py-2 rounded-lg transition-colors flex items-center gap-2 ${
+                                    hasItemsInCart 
+                                        ? 'bg-green-600 text-white hover:bg-green-700' 
+                                        : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                                }`}
                             >
-                                Volver al listado
+                                {showAddedMessage ? (
+                                    <>
+                                        <Check size={20} />
+                                        Añadido a la cesta
+                                    </>
+                                ) : (
+                                    <>
+                                        <ShoppingCart size={20} />
+                                        Añadir al carrito
+                                    </>
+                                )}
                             </button>
+                            <div className="flex gap-4">
+                                <button
+                                    onClick={() => navigate('/home')}
+                                    className="px-6 py-2 border border-green-600 text-green-600 rounded-lg hover:bg-green-50 transition-colors"
+                                >
+                                    Volver al listado
+                                </button>
+                                <button
+                                    onClick={() => navigate('/cesta')}
+                                    className="px-6 py-2 border border-green-600 text-green-600 rounded-lg hover:bg-green-50 transition-colors flex items-center gap-2"
+                                >
+                                    <ShoppingCart size={16} />
+                                    Ver carrito
+                                </button>
+                            </div>
                         </div>
                     </div>
                 )}
