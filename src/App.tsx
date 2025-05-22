@@ -12,6 +12,7 @@ import "./index.css";
 import GardenForm from './components/Form/GardenForm';
 
 
+
 function App() {
   const { isAuthenticated } = useAuth();
   const location = useLocation();
@@ -37,7 +38,9 @@ function App() {
         <Route path="/cesta" element={<Cesta />} />
         <Route path="/gardenForm" 
         element={< GardenForm onSubmit={(data)=> console.log("Datos del huerto:",data)}/>} />
+       
       </Routes>
+      
     </div>
   )
 }

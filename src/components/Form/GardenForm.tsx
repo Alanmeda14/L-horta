@@ -15,6 +15,9 @@ interface GardenFormData {
   imatge: File | null;
   productes: ProductItem[];
 }
+interface GardenFormProps {
+  onSubmit: (data: GardenFormData) => void;
+}
 
 const productList = [
   "Manzana ", "Pera ", "Melocotón ", "Nectarina",
@@ -27,7 +30,7 @@ const productList = [
   "Apio","Hinojo","Alcachofa","Escaluña","Achicoria"
 ];
 
-const GardenFormIllustrated: React.FC = () => {
+  const GardenForm: React.FC <GardenFormProps> = ({onSubmit}) => {
   const [formData, setFormData] = useState<GardenFormData>({
     nom: '',
     descripcio: '',
@@ -115,136 +118,150 @@ const GardenFormIllustrated: React.FC = () => {
       setSuggestions([]);
     }
   };
-
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    onSubmit(formData); // Esto manda los datos al padre (App.tsx)
+  };
+  
   return (
-    <div className="mt-16 p-4 space-y-4 max-w-3xl mx-auto bg-white rounded-xl shadow-lg">
-      <h2 className="text-xl font-bold text-green-700 mb-4">Formulario del Huerto </h2>
-
-      {/* Nombre */}
-      <div className="flex items-center gap-2 text-sm">
-        <Home className="text-green-500" size={18} />
-        <input
-          type="text"
-          name="nom"
-          placeholder="Nombre del huerto"
-          value={formData.nom}
-          onChange={handleChange}
-          className="w-full p-1.5 border rounded text-sm"
-        />
-      </div>
-
-      {/* Descripción */}
-      <div className="flex items-start gap-2 text-sm">
-        <FileText className="text-green-500 mt-1" size={18} />
-        <textarea
-          name="descripcio"
-          placeholder="Descripción"
-          value={formData.descripcio}
-          onChange={handleChange}
-          className="w-full p-1.5 border rounded h-20 text-sm"
-        />
-      </div>
-
-      {/* Ciudad */}
-      <div className="flex items-center gap-2 text-sm">
-        <MapPin className="text-green-500" size={18} />
-        <input
-          type="text"
-          name="ciutat"
-          placeholder="Ciudad"
-          value={formData.ciutat}
-          onChange={handleChange}
-          className="w-full p-1.5 border rounded text-sm"
-        />
-      </div>
-
-      {/* Código Postal */}
-      <div className="flex items-center gap-2 text-sm">
-        <Mail className="text-green-500" size={18} />
-        <input
-          type="text"
-          name="codiPostal"
-          placeholder="Código Postal"
-          value={formData.codiPostal}
-          onChange={handleChange}
-          className="w-full p-1.5 border rounded text-sm"
-        />
-      </div>
-
-      {/* Imagen */}
-      <div className="flex items-center gap-2 text-sm">
-        <ImageIcon className="text-green-500" size={18} />
-        <input type="file" name="imatge" onChange={handleImageChange} className="text-sm" />
-      </div>
-      {formData.imatge && (
-        <img
-          src={URL.createObjectURL(formData.imatge)}
-          alt="Vista previa"
-          className="w-full max-h-40 object-contain rounded shadow"
-        />
-      )}
-
-      {/* Productos con autocompletado */}
-      <div className="flex items-center gap-2 relative text-sm">
-        <Leaf className="text-green-500" size={18} />
-        <input
-          type="text"
-          value={productInput}
-          onChange={handleProductInputChange}
-          onKeyDown={handleProductInputKeyDown}
-          placeholder="Escriba y presione Enter para agregar"
-          className="w-full p-1.5 border rounded text-sm"
-        />
-        {suggestions.length > 0 && (
-          <ul className="absolute top-full mt-1 left-8 right-0 bg-white border border-green-200 rounded shadow z-10 text-sm">
-            {suggestions.map((product) => (
-              <li
-                key={product}
-                onClick={() => handleProductSelect(product)}
-                className="px-3 py-1 hover:bg-green-100 cursor-pointer"
-              >
-                {product}
-              </li>
-            ))}
-          </ul>
+    <form onSubmit={handleSubmit}>
+      <div className="mt-16 p-4 space-y-4 max-w-3xl mx-auto bg-white rounded-xl shadow-lg">
+        <h2 className="text-xl font-bold text-green-700 mb-4">Formulario del Huerto </h2>
+  
+        {/* Nombre */}
+        <div className="flex items-center gap-2 text-sm">
+          <Home className="text-green-500" size={18} />
+          <input
+            type="text"
+            name="nom"
+            placeholder="Nombre del huerto"
+            value={formData.nom}
+            onChange={handleChange}
+            className="w-full p-1.5 border rounded text-sm"
+          />
+        </div>
+  
+        {/* Descripción */}
+        <div className="flex items-start gap-2 text-sm">
+          <FileText className="text-green-500 mt-1" size={18} />
+          <textarea
+            name="descripcio"
+            placeholder="Descripción"
+            value={formData.descripcio}
+            onChange={handleChange}
+            className="w-full p-1.5 border rounded h-20 text-sm"
+          />
+        </div>
+  
+        {/* Ciudad */}
+        <div className="flex items-center gap-2 text-sm">
+          <MapPin className="text-green-500" size={18} />
+          <input
+            type="text"
+            name="ciutat"
+            placeholder="Ciudad"
+            value={formData.ciutat}
+            onChange={handleChange}
+            className="w-full p-1.5 border rounded text-sm"
+          />
+        </div>
+  
+        {/* Código Postal */}
+        <div className="flex items-center gap-2 text-sm">
+          <Mail className="text-green-500" size={18} />
+          <input
+            type="text"
+            name="codiPostal"
+            placeholder="Código Postal"
+            value={formData.codiPostal}
+            onChange={handleChange}
+            className="w-full p-1.5 border rounded text-sm"
+          />
+        </div>
+  
+        {/* Imagen */}
+        <div className="flex items-center gap-2 text-sm">
+          <ImageIcon className="text-green-500" size={18} />
+          <input type="file" name="imatge" onChange={handleImageChange} className="text-sm" />
+        </div>
+        {formData.imatge && (
+          <img
+            src={URL.createObjectURL(formData.imatge)}
+            alt="Vista previa"
+            className="w-full max-h-40 object-contain rounded shadow"
+          />
         )}
-      </div>
-
-      <div className="flex flex-wrap gap-2">
-        {formData.productes.map((product) => (
-          <div key={product.nombre} className="bg-green-100 text-green-900 px-3 py-2 rounded flex items-center gap-2 text-sm">
-            <span className="font-medium whitespace-nowrap">{product.nombre}</span>
-            <input
-              type="text"
-              inputMode="decimal"
-              value={product.cantidad}
-              onChange={(e) => handleCantidadInput(product.nombre, e.target.value)}
-              className="w-16 p-1 border rounded text-center text-sm"
-              pattern="[0-9]*[.,]?[0-9]*"
-            />
-            <select
-              value={product.unidad}
-              onChange={(e) => handleUnidadChange(product.nombre, e.target.value)}
-              className="border rounded px-1 py-0.5 text-sm"
+  
+        {/* Productos con autocompletado */}
+        <div className="flex items-center gap-2 relative text-sm">
+          <Leaf className="text-green-500" size={18} />
+          <input
+            type="text"
+            value={productInput}
+            onChange={handleProductInputChange}
+            onKeyDown={handleProductInputKeyDown}
+            placeholder="Escriba y presione Enter para agregar"
+            className="w-full p-1.5 border rounded text-sm"
+          />
+          {suggestions.length > 0 && (
+            <ul className="absolute top-full mt-1 left-8 right-0 bg-white border border-green-200 rounded shadow z-10 text-sm">
+              {suggestions.map((product) => (
+                <li
+                  key={product}
+                  onClick={() => handleProductSelect(product)}
+                  className="px-3 py-1 hover:bg-green-100 cursor-pointer"
+                >
+                  {product}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+  
+        <div className="flex flex-wrap gap-2">
+          {formData.productes.map((product) => (
+            <div
+              key={product.nombre}
+              className="bg-green-100 text-green-900 px-3 py-2 rounded flex items-center gap-2 text-sm"
             >
-              <option value="kg">kg</option>
-            </select>
-            <button
-              type="button"
-              onClick={() => handleRemoveProduct(product.nombre)}
-              className="text-gray-500 hover:text-black"
-            >
-              &times;
-            </button>
-          </div>
-        ))}
+              <span className="font-medium whitespace-nowrap">{product.nombre}</span>
+              <input
+                type="text"
+                inputMode="decimal"
+                value={product.cantidad}
+                onChange={(e) => handleCantidadInput(product.nombre, e.target.value)}
+                className="w-16 p-1 border rounded text-center text-sm"
+                pattern="[0-9]*[.,]?[0-9]*"
+              />
+              <select
+                value={product.unidad}
+                onChange={(e) => handleUnidadChange(product.nombre, e.target.value)}
+                className="border rounded px-1 py-0.5 text-sm"
+              >
+                <option value="kg">kg</option>
+              </select>
+              <button
+                type="button"
+                onClick={() => handleRemoveProduct(product.nombre)}
+                className="text-gray-500 hover:text-black"
+              >
+                &times;
+              </button>
+            </div>
+          ))}
+        </div>
+  
+        {/* ✅ Botón de envío */}
+        <button
+          type="submit"
+          className="w-full mt-4 bg-green-600 text-white py-2 rounded hover:bg-green-700 transition text-sm"
+        >
+          Guardar Huerto
+        </button>
       </div>
-
-      <button className="w-full mt-4 bg-green-600 text-white py-2 rounded hover:bg-green-700 transition text-sm">
-        Guardar Huerto
-      </button>
-    </div>
+    </form>
   );
+  
 };
 
-export default GardenFormIllustrated;
+export default GardenForm;
