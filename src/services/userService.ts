@@ -10,6 +10,7 @@ export interface User {
   location: string; // <-- Nuevo campo de ubicación
   password?: string; // No se debería exponer, solo para crear
   role: string;
+  profileImage?: string;
 }
 
 export const getAllUsers = async (): Promise<User[]> => {

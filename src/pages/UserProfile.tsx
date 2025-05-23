@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { getUserById } from '../services/userService';
+import Avatar from '../components/Avatar';
 
 interface UserData {
     name: string;
@@ -14,7 +15,7 @@ interface UserData {
 const UserProfile = () => {
     const navigate = useNavigate();
     const fileInputRef = useRef<HTMLInputElement>(null);
-    const { userId } = useAuth(); // ⚠️ Asegúrate que esto esté disponible en el contexto
+    const { userId } = useAuth();
     const [isEditing, setIsEditing] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [userData, setUserData] = useState<UserData>({
@@ -22,7 +23,7 @@ const UserProfile = () => {
         lastName: 'Ejemplo',
         email: 'usuario@ejemplo.com',
         location: 'Barcelona',
-        profileImage: 'https://images.pexels.com/photos/771742/pexels-photo-771742.jpeg',
+        profileImage: '',
     });
     const [password, setPassword] = useState({
         current: '',
@@ -35,13 +36,14 @@ const UserProfile = () => {
             try {
                 if (!userId) return;
                 const user = await getUserById(userId);
-                setUserData({
+                setUserData(prev => ({
+                    ...prev,
                     name: user.name,
                     lastName: user.surname,
                     email: user.email,
                     location: user.location,
-                    profileImage: 'https://via.placeholder.com/150',
-                });
+                    profileImage: user.profileImage || prev.profileImage
+                }));
             } catch (err) {
                 console.error("Error cargando usuario:", err);
             }
@@ -50,7 +52,9 @@ const UserProfile = () => {
     }, [userId]);
 
     const handleImageClick = () => {
-        fileInputRef.current?.click();
+        if (isEditing) {
+            fileInputRef.current?.click();
+        }
     };
 
     const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -105,18 +109,20 @@ const UserProfile = () => {
 
                     <div className="flex flex-col md:flex-row gap-8">
                         <div className="flex flex-col items-center">
-                            <div
-                                className="relative w-48 h-48 rounded-full overflow-hidden cursor-pointer mb-4"
+                            <div 
+                                className="relative" 
                                 onClick={handleImageClick}
                             >
-                                <img
+                                <Avatar
                                     src={userData.profileImage}
-                                    alt="Profile"
-                                    className="w-full h-full object-cover"
+                                    alt="Foto de perfil"
+                                    size={192}
+                                    className="shadow-md"
                                 />
+                                
                                 {isEditing && (
-                                    <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center text-white">
-                                        Cambiar foto
+                                    <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center text-white rounded-full cursor-pointer">
+                                        <span className="text-sm font-medium">Cambiar foto</span>
                                     </div>
                                 )}
                             </div>

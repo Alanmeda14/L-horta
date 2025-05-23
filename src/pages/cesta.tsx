@@ -2,9 +2,19 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import { Trash2, ShoppingBag, ArrowLeft } from 'lucide-react';
 
+// Define the CartItem interface
+interface CartItem {
+  id: string;
+  name: string;
+  price: number;
+  quantity: number;
+  unit: string;
+  image: string;
+}
+
 const Cesta: React.FC = () => {
   const navigate = useNavigate();
-  const [items, setItems] = useState<any[]>([]);
+  const [items, setItems] = useState<CartItem[]>([]);
   
   useEffect(() => {
     const cartItems = JSON.parse(localStorage.getItem('cart') || '[]');
@@ -41,7 +51,7 @@ const Cesta: React.FC = () => {
 
   if (items.length === 0) {
     return (
-      <div className="container mx-auto px-4 py-16 max-w-4xl">
+      <div className="container mx-auto px-4 pt-24 pb-16 max-w-4xl">
         <div className="bg-white rounded-lg shadow-lg p-8 text-center">
           <div className="flex justify-center mb-6">
             <ShoppingBag className="h-16 w-16 text-gray-400" />
@@ -61,14 +71,13 @@ const Cesta: React.FC = () => {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-4xl">
+    <div className="container mx-auto px-4 pt-24 pb-8 max-w-4xl">
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-2xl font-bold">Mi Cesta</h1>
         <button 
           onClick={clearCart}
-          className="text-red-600 hover:text-red-700 transition-colors inline-flex items-center gap-1 text-sm"
+          className="px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
         >
-          <Trash2 size={16} />
           Vaciar cesta
         </button>
       </div>
@@ -143,9 +152,8 @@ const Cesta: React.FC = () => {
       <div className="mt-8 flex flex-col sm:flex-row justify-between gap-4">
         <button 
           onClick={() => navigate('/home')}
-          className="px-6 py-3 border border-green-600 text-green-600 rounded-lg hover:bg-green-50 transition-colors inline-flex items-center justify-center gap-2"
+          className="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
         >
-          <ArrowLeft size={18} />
           Seguir comprando
         </button>
         

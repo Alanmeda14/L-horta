@@ -11,13 +11,15 @@ import { useAuth } from './context/AuthContext';
 import "./index.css";
 import { GardenForm } from "./components/Form/GardenForm";
 
+// Aquí mantengo las rutas protegidas y públicas que tenías
+
 const PublicRoute = ({ children }: { children: React.ReactNode }) => {
   const { isAuthenticated } = useAuth();
-  
+
   if (isAuthenticated) {
     return <Navigate to="/home" />;
   }
-  
+
   return <>{children}</>;
 };
 
@@ -34,7 +36,17 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 
 function App() {
   return (
-    <>
+    <div
+      className="
+        bg-[url('/img/Fondo.png')] 
+        bg-cover 
+        bg-no-repeat 
+        bg-center 
+        min-h-screen
+        m-0
+        p-0
+      "
+    >
       <Navbar />
       <Routes>
         {/* Public routes */}
@@ -82,7 +94,7 @@ function App() {
         {/* Unknown route */}
         <Route path="*" element={<Navigate to="/login" />} />
       </Routes>
-    </>
+    </div>
   );
 }
 
