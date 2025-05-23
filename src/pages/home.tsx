@@ -27,8 +27,6 @@ const HomePage = () => {
       fetchGardens();
   }, []);
 
-  console.log(gardens);
-
 
   const handleNameChange = (id: number, newName: string) => {
     const updatedProducts = gardens.map(garden =>
@@ -93,7 +91,7 @@ const HomePage = () => {
               className="relative rounded-lg overflow-hidden shadow-lg bg-white cursor-pointer transform transition-transform hover:scale-105"
               onClick={() => handleGardenClick(garden)}
             >
-              <img src={`http://localhost:8080/${garden.image}`} alt={garden.name} className="w-full h-40 object-cover" />
+              <img src={`http://localhost:8080${garden.image}`} alt={garden.name} className="w-full h-40 object-cover" />
               <div className="p-4">
                 <h3 className="font-bold text-xl mb-2">{garden.name}</h3>
                 <p className="text-gray-600">{garden.location}</p>

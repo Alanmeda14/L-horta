@@ -35,7 +35,7 @@ export const getGardenById = async (id: number): Promise<Garden> => {
 
 // Create new garden
 export const createGarden = async (formData: FormData): Promise<Garden> => {
-  const res = await api.post<Garden>('', formData, {
+  const res = await api.post<Garden>(API_URL, formData, {
         headers: {
             'Content-Type': 'multipart/form-data',
         },

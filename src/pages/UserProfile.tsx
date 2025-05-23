@@ -1,5 +1,7 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
+import { getUserById } from '../services/userService';
 
 interface UserData {
     name: string;
@@ -12,6 +14,7 @@ interface UserData {
 const UserProfile = () => {
     const navigate = useNavigate();
     const fileInputRef = useRef<HTMLInputElement>(null);
+    const { userId } = useAuth(); // ⚠️ Asegúrate que esto esté disponible en el contexto
     const [isEditing, setIsEditing] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [userData, setUserData] = useState<UserData>({
@@ -26,6 +29,25 @@ const UserProfile = () => {
         new: '',
         confirm: ''
     });
+
+    useEffect(() => {
+        const fetchUser = async () => {
+            try {
+                if (!userId) return;
+                const user = await getUserById(userId);
+                setUserData({
+                    name: user.name,
+                    lastName: user.surname,
+                    email: user.email,
+                    location: user.location,
+                    profileImage: 'https://via.placeholder.com/150',
+                });
+            } catch (err) {
+                console.error("Error cargando usuario:", err);
+            }
+        };
+        fetchUser();
+    }, [userId]);
 
     const handleImageClick = () => {
         fileInputRef.current?.click();

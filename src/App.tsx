@@ -10,6 +10,7 @@ import UserProfile from './pages/UserProfile';
 import { useAuth } from './context/AuthContext';
 import "./index.css";
 import GardenForm from "./components/Form/GardenForm";
+import { ToastContainer } from "react-toastify";
 
 const PublicRoute = ({ children }: { children: React.ReactNode }) => {
   const { isAuthenticated } = useAuth();
@@ -37,6 +38,7 @@ function App() {
   return (
     <>
       <Navbar />
+      <ToastContainer position="top-right" autoClose={3000} />
       <Routes>
         {/* Public routes */}
         <Route path="/login" element={

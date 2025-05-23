@@ -3,6 +3,7 @@ import { Home, FileText, MapPin, Mail, Image as ImageIcon, Leaf } from 'lucide-r
 import { useTranslation } from 'react-i18next';
 import { createGarden } from '../../services/gardenService';
 import { toast } from "react-toastify";
+import { useNavigate } from 'react-router-dom';
 
 interface ProductItem {
   name: string;
@@ -44,16 +45,16 @@ const GardenForm: React.FC = () => {
   const [productInput, setProductInput] = useState('');
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const {t} = useTranslation();
+  const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    console.log(name, value)
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null;
-    setFormData(prev => ({ ...prev, imatge: file }));
+    setFormData(prev => ({ ...prev, image: file }));
   };
 
   const handleRemoveProduct = (product: string) => {
@@ -125,8 +126,7 @@ const GardenForm: React.FC = () => {
   const handleSubmit = async () => {
     try {
         const gardenFormData = new FormData();
-        
-        // Add all garden fields directly to FormData
+      
         gardenFormData.append('name', formData.name);
         gardenFormData.append('description', formData.description);
         gardenFormData.append('location', formData.location);
@@ -143,10 +143,9 @@ const GardenForm: React.FC = () => {
         if (formData.image) {
             gardenFormData.append('image', formData.image);
         }
-
         const createdGarden = await createGarden(gardenFormData);
-        console.log('Garden created:', createdGarden);
         toast.success("Garden created successfully!");
+        navigate("/home");
     } catch (error) {
         console.error('Error creating garden:', error);
         toast.error("Error creating garden");
