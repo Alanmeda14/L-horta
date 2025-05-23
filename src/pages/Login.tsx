@@ -4,26 +4,28 @@ import { useAuth } from "../context/AuthContext";
 import { Link } from "react-router-dom";
 import LoginForm from "../components/Form/LoginForm";
 import { Sprout } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 const Login = () => {
     const { login } = useAuth();
     const navigate = useNavigate();
     const [error, setError] = useState<string | null>(null);
+    const [isLoading, setIsLoading] = useState(false);
+    const { t } = useTranslation();
 
     const handleLogin = async ({ email, password }: { email: string; password: string }) => {
         setError(null);
+        setIsLoading(true);
         try {
-           /*  const token = await loginRequest(email, password);
-            login(token); // Iniciar sesión con el token
-            navigate("/home"); // Redirigir a la página principal después del login exitoso */
             if(!email || !password){
                 throw new Error("Sisplau, introdueix el correu electrònic i la contrasenya.")
             }
-            login(email, password);
+            await login(email, password);
             navigate("/home");
-            
         } catch (err: any) {
             setError(err.message || "Error a l'iniciar sessió");
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -34,10 +36,10 @@ const Login = () => {
                     <div className="flex justify-center mb-6">
                         <Sprout className="w-12 h-12 text-green-700" />
                     </div>
-                    <h2 className="text-2xl font-semibold text-center text-gray-800 mb-2">Bienvenido</h2>
+                    <h2 className="text-2xl font-semibold text-center text-gray-800 mb-2">{t("welcome")}</h2>
                     <p className="text-center text-gray-600 mb-8">Accede a tu comunidad</p>
                     {error && <p className="text-red-500 text-sm text-center mb-4">{error}</p>}
-                    <LoginForm onSubmit={handleLogin}/>
+                    <LoginForm onSubmit={handleLogin} isLoading={isLoading}/>
                     <div className="mt-6 text-center">
                         <div className="relative">
                             <div className="absolute inset-0 flex items-center">

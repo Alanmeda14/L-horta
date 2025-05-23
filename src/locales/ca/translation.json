@@ -2,5 +2,6 @@
   "welcome": "Benvingut!",
   "access-community": "Accedeix a la comunitat",
   "login": "Iniciar sessió",
-  "logout": "Tancar sessió"
+  "logout": "Tancar sessió",
+  "loading": "Carregant"
 }

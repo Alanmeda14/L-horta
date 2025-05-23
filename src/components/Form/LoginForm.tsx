@@ -2,29 +2,25 @@ import { useState } from 'react';
 import { Mail, Lock } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
-
 type LoginFormProps = {
     onSubmit: (data: { email: string; password: string }) => void;
+    isLoading?: boolean;
 };
 
-const LoginForm = ({ onSubmit }: LoginFormProps) => {
+const LoginForm = ({ onSubmit, isLoading = false }: LoginFormProps) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
-    const [loading, setLoading] = useState(false);
     const { t } = useTranslation();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        setLoading(true);
         setError("");
 
         try {
             await onSubmit({ email, password });
         } catch (err) {
             setError("Ocurrió un error al intentar iniciar sesión. Por favor, inténtalo de nuevo.");
-        } finally {
-            setLoading(false);
         }
     };
 
@@ -45,6 +41,7 @@ const LoginForm = ({ onSubmit }: LoginFormProps) => {
                         className="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:border-green-500"
                         placeholder="Email"
                         required
+                        disabled={isLoading}
                     />
                 </div>
 
@@ -62,16 +59,20 @@ const LoginForm = ({ onSubmit }: LoginFormProps) => {
                         className="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:border-green-500"
                         placeholder="Password"
                         required
+                        disabled={isLoading}
                     />
                 </div>
 
-
                 <button
                     type="submit"
-                    className="cursor-pointer w-full bg-green-700 text-white py-2 rounded-lg hover:bg-green-800 transition-colors"
-                    disabled={loading}
+                    className={`w-full py-2 rounded-lg transition-colors ${
+                        isLoading 
+                            ? 'bg-gray-400 cursor-not-allowed' 
+                            : 'bg-green-700 hover:bg-green-800 cursor-pointer'
+                    } text-white`}
+                    disabled={isLoading}
                 >
-                    {loading ? 'Cargando...' : t('welcome')}
+                    {isLoading ? t('loading') : t('login')}
                 </button>
             </form>
     );

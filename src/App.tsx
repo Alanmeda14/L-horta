@@ -1,5 +1,5 @@
 import React from "react";
-import { Routes, Route, Navigate, useLocation } from "react-router-dom";
+import { Routes, Route, Navigate, useLocation, data } from "react-router-dom";
 import Navbar from './components/navbar';
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -34,57 +34,66 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 };
 
 function App() {
+  const location = useLocation();
+  const isLoginPage = location.pathname === "/login" || location.pathname === "/register";
 
   return (
     <>
       <Navbar />
       <ToastContainer position="top-right" autoClose={3000} />
-      <Routes>
-        {/* Public routes */}
-        <Route path="/login" element={
-          <PublicRoute>
-            <Login />
-          </PublicRoute>
-        } />
-        <Route path="/register" element={
-          <PublicRoute>
-            <Register />
-          </PublicRoute>
-        } />
+      <div className={!isLoginPage ? "pt-16" : ""}>
+        <Routes>
+          {/* Public routes */}
+          <Route path="/login" element={
+            <PublicRoute>
+              <Login />
+            </PublicRoute>
+          } />
+          <Route path="/register" element={
+            <PublicRoute>
+              <Register />
+            </PublicRoute>
+          } />
 
-        {/* Private routes */}
-        <Route path="/home" element={
-          <ProtectedRoute>
-            <HomePage />
-          </ProtectedRoute>
-        } />
-        <Route path="/gardens" element={
-          <ProtectedRoute>
-            <GardenListingPage />
-          </ProtectedRoute>
-        } />
-        <Route path="/usuario" element={
-          <ProtectedRoute>
-            <UserProfile />
-          </ProtectedRoute>
-        } />
-        <Route path="/cesta" element={
-          <ProtectedRoute>
-            <Cesta />
-          </ProtectedRoute>
-        } />
-        <Route path="/gardenForm" element={
-          <ProtectedRoute>
-            <GardenForm />
-          </ProtectedRoute>
-        } />
+          {/* Private routes */}
+          <Route path="/home" element={
+            <ProtectedRoute>
+              <HomePage />
+            </ProtectedRoute>
+          } />
+          <Route path="/garden/:id" element={
+            <ProtectedRoute>
+              <GardenListingPage />
+            </ProtectedRoute>
+          } />
+          <Route path="/gardens" element={
+            <ProtectedRoute>
+              <GardenListingPage />
+            </ProtectedRoute>
+          } />
+          <Route path="/usuario" element={
+            <ProtectedRoute>
+              <UserProfile />
+            </ProtectedRoute>
+          } />
+          <Route path="/cesta" element={
+            <ProtectedRoute>
+              <Cesta />
+            </ProtectedRoute>
+          } />
+          <Route path="/gardenForm" element={
+            <ProtectedRoute>
+              <GardenForm />
+            </ProtectedRoute>
+          } />
 
-        {/* Default route */}
-        <Route path="/" element={<Navigate to="/login" />} />
+          {/* Default route */}
+          <Route path="/" element={<Navigate to="/login" />} />
 
-        {/* Unknown route */}
-        <Route path="*" element={<Navigate to="/login" />} />
-      </Routes>
+          {/* Unknown route */}
+          <Route path="*" element={<Navigate to="/login" />} />
+        </Routes>
+      </div>
     </>
   );
 }
