@@ -9,7 +9,7 @@ import GardenListingPage from './pages/GardenListingPage';
 import UserProfile from './pages/UserProfile';
 import { useAuth } from './context/AuthContext';
 import "./index.css";
-import { GardenForm } from "./components/Form/GardenForm";
+import GardenForm from "./components/Form/GardenForm";
 
 const PublicRoute = ({ children }: { children: React.ReactNode }) => {
   const { isAuthenticated } = useAuth();

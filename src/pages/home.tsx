@@ -1,49 +1,68 @@
-import { useState } from 'react';
-import { FiSearch } from 'react-icons/fi';
-import { GiTomato } from 'react-icons/gi';
-import image1 from '../assets/imagen1.jpg';
-import image2 from '../assets/imagen2.png';
-import image3 from '../assets/imagen3.jpg';
-import image4 from '../assets/imagen4.png';
-import image5 from '../assets/imegen5.png';
-import image6 from '../assets/imagen6.jpg';
-import image7 from '../assets/imagen7.jpg';
-import image8 from '../assets/imagen8.jpg';
+import { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Garden, getAllGardens } from '../services/gardenService';
 
 const HomePage = () => {
-  const [products, setProducts] = useState([
-    { id: 1, name: "L'Hort de Gavà", location: 'Gavà de Mar', image: image1, isVolunteerAvailable: true, isProductAvailable: true, price: 10 },
-    { id: 2, name: "L'Hort del Sol", location: 'Roda de Bará', image: image2, isVolunteerAvailable: false, isProductAvailable: true, price: 15 },
-    { id: 3, name: "Planters d'horta Mas Pastoret", location: 'Torredembarra', image: image3, isVolunteerAvailable: true, isProductAvailable: false, price: 0 },
-    { id: 4, name: 'Los huertos de los Abuelos de Sitges', location: 'Sitges', image: image4, isVolunteerAvailable: false, isProductAvailable: false, price: 0 },
-    { id: 5, name: 'Los huertos del mar', location: 'Lloret de Mar', image: image5, isVolunteerAvailable: false, isProductAvailable: false, price: 2 },
-    { id: 6, name: "L'Hort de Tarragona", location: 'Tarragona', image: image6, isVolunteerAvailable: true, isProductAvailable: true, price: 10 },
-    { id: 7, name: "L'Hort de Salou", location: 'Salou', image: image7, isVolunteerAvailable: true, isProductAvailable: true, price: 10 },
-    { id: 8, name: "Planters de Lleida", location: 'LLeida', image: image8, isVolunteerAvailable: true, isProductAvailable: false, price: 0 },
-  ]);
-
+  const navigate = useNavigate();
+  const [ gardens, setGardens ] = useState<Garden[]>([]);
+  const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [locationFilter, setLocationFilter] = useState('');
   const [productFilter, setProductFilter] = useState('');
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchGardens = async () => {
+        try {
+            const data = await getAllGardens();
+            setGardens(data);
+        } catch (err) {
+            setError('Failed to fetch gardens. Please try again later.');
+            console.error('Error fetching gardens:', err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+      fetchGardens();
+  }, []);
+
+  console.log(gardens);
+
 
   const handleNameChange = (id: number, newName: string) => {
-    const updatedProducts = products.map(product =>
-      product.id === id ? { ...product, name: newName } : product
+    const updatedProducts = gardens.map(garden =>
+      garden.id === id ? { ...garden, name: newName } : garden
     );
-    setProducts(updatedProducts);
+    setGardens(updatedProducts);
   };
 
-  const filteredProducts = products.filter(product =>
+  const handleGardenClick = (garden: any) => {
+    localStorage.setItem('selectedGarden', JSON.stringify(garden));
+    navigate(`/garden/${garden.id}`);
+  };
+
+  /*  const filteredGardens = gardens.filter(garden =>
+        garden.name.toLowerCase().includes(search.toLowerCase()) &&
+        (locationFilter ? garden.location.toLowerCase().includes(locationFilter.toLowerCase()) : true) &&
+        (productFilter ? (garden.isProductAvailable ? 'disponible' : 'no disponible').includes(productFilter.toLowerCase()) : true)
+    ); */
+
+  /* const filteredProducts = gardens.filter(product =>
     product.name.toLowerCase().includes(search.toLowerCase()) &&
     (locationFilter ? product.location.toLowerCase().includes(locationFilter.toLowerCase()) : true) &&
     (productFilter ? (product.isProductAvailable ? 'disponible' : 'no disponible').includes(productFilter.toLowerCase()) : true)
-  );
+  ); */
 
   return (
     <div className="pt- px-4 py-2 md:px-6 md:py-4 bg-[url('/img/Fondo.png')] bg-cover bg-center min-h-screen relative">
       <div className="w-full mx-auto max-w-7xl mb-6 sticky top-16 z-20 rounded-lg p-4">
-        {/* Filtros de Búsqueda */}
         <div className="flex flex-wrap items-center gap-4 mb-4 bg-white p-4 rounded-lg shadow-md sticky top-20 z-10">
+          <div className="mt-8 flex justify-center gap-4">
+              <Link to="/gardenForm" className="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors shadow-md hover:shadow-lg">
+                  Create a Garden
+              </Link>
+          </div>
           <input 
             type="text" 
             placeholder="🔍 Buscar huertos" 
@@ -67,31 +86,31 @@ const HomePage = () => {
           />
         </div>
 
-        {/* Lista de Productos Filtrados */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
-          {filteredProducts.map((product) => (
-            <div key={product.id} className="relative rounded-lg overflow-hidden shadow-lg bg-white">
-              <img src={product.image} alt={product.name} className="w-full h-40 object-cover" />
+          {gardens.map((garden) => (
+            <div 
+              key={garden.id} 
+              className="relative rounded-lg overflow-hidden shadow-lg bg-white cursor-pointer transform transition-transform hover:scale-105"
+              onClick={() => handleGardenClick(garden)}
+            >
+              <img src={`http://localhost:8080/${garden.image}`} alt={garden.name} className="w-full h-40 object-cover" />
               <div className="p-4">
-                <input 
-                  type="text" 
-                  value={product.name} 
-                  onChange={(e) => handleNameChange(product.id, e.target.value)} 
-                  className="font-bold text-xl mb-2 w-full border-b" 
-                />
-                <p className="text-gray-600">{product.location}</p>
+                <h3 className="font-bold text-xl mb-2">{garden.name}</h3>
+                <p className="text-gray-600">{garden.location}</p>
                 <div className="mt-2 flex gap-2">
-                  <span className={`px-2 py-1 text-xs rounded-md ${product.isVolunteerAvailable ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
-                    {product.isVolunteerAvailable ? 'Voluntariado Disponible' : 'Sin Voluntariado'}
+                  {/* <span className={`px-2 py-1 text-xs rounded-md ${garden.isVolunteerAvailable ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                    {garden.isVolunteerAvailable ? 'Voluntariado Disponible' : 'Sin Voluntariado'}
                   </span>
-                  <span className={`px-2 py-1 text-xs rounded-md ${product.isProductAvailable ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
-                    {product.isProductAvailable ? 'Productos Disponibles' : 'Sin Productos'}
-                  </span>
+                  <span className={`px-2 py-1 text-xs rounded-md ${garden.isProductAvailable ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                    {garden.isProductAvailable ? 'Productos Disponibles' : 'Sin Productos'}
+                  </span> */}
                 </div>
               </div>
             </div>
           ))}
         </div>
+
+        
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:8080'; // ✅ Ajusta según tu entorno
+const API_URL = 'http://localhost:8080/api';
 
 // Login
 export const loginRequest = async (email: string, password: string): Promise<string> => {
@@ -25,7 +25,7 @@ export const registerRequest = async (
     surname: string,
     email: string,
     password: string,
-    location: string // ⚠️ Usamos "location", como espera tu BD
+    location: string
 ): Promise<void> => {
     const response = await fetch(`${API_URL}/register`, {
         method: 'POST',
@@ -37,7 +37,7 @@ export const registerRequest = async (
             surname,
             email,
             password,
-            location, // ✅ nombre corregido
+            location,
         }),
     });
 
