@@ -1,5 +1,6 @@
 import { useState } from "react";
 import {createInscription} from '../services/VolunteerInscriptionService';
+import { toast } from "react-toastify";
 
 interface Props {
   sessionId: number;
@@ -15,10 +16,10 @@ export const InscriptionButton: React.FC<Props> = ({ sessionId, userId }) => {
     try {
       await createInscription({ sessionId, userId });
       setInscribed(true);
-      alert("✅ Te has inscrito exitosamente.");
+      toast.success("Te has inscrito exitosamente.");
     } catch (error) {
       console.error("❌ Error al inscribirse:", error);
-      alert("No se pudo completar la inscripción.");
+      toast.success("No se pudo completar la inscripción.");
     } finally {
       setLoading(false);
     }
