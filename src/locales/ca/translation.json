@@ -3,5 +3,43 @@
   "access-community": "Accedeix a la comunitat",
   "login": "Iniciar sessió",
   "logout": "Tancar sessió",
-  "loading": "Carregant"
+  "loading": "Carregant",
+  "email": "Correu electrònic",
+  "password": "Contrasenya",
+  "not-have-an-account": "No tens un compte?",
+  "sign-up": "Registar-se",
+
+  "create-an-account": "Crear el teu compte",
+  "name": "Nom",
+  "surname": "Cognoms",
+  "confirm-password": "Confirmar contrasenya",
+  "o": "or",
+  "have-an-account": "Ja tens un compte?",
+
+  "home": "Inici",
+  "user": "Perfil",
+  "cart": "Carret",
+  "your-garden": "El teu hort",
+  "gardens": "Horts",
+
+  "discover": "Discover local gardens",
+  "connect": "Connect with the garden community, find fresh products.",
+
+  "find-gardens": "Buscar horts...",
+  "find-by-location": "Filtrar per localització...",
+  "find-products": "Filtrar per productes",
+
+  "location": "Població",
+  "profile": "Perfil d'usuari",
+  "edit-profile": "Editar perfil",
+  "change-password": "Canviar contrasenya",
+  "new-password": "Nova contrasenya",
+
+  "products": "Productes",
+  "volunteers": "voluntariat",
+
+  "empty-cart": "El carret està buit",
+  "empty-cart2": "Sembla que encara no has afegit productes",
+  "explore-gardens": "Explora els horts"
+
 }

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Modal } from '../common/Modal';
 import { createSession } from "../../services/volunteerSessionService";
+import { toast } from "react-toastify";
 
 
 
@@ -33,11 +34,11 @@ export const CreateSessionModal: React.FC<Props> = ({ isOpen, onClose, gardenId 
   
       // ✅ Enviar la sesión
       await createSession(payload);
-      alert("✅ Sesión creada con éxito");
+      toast.success("✅ Sesión creada con éxito");
       //onClose();
     } catch (err) {
       console.error("❌ Error al crear sesión:", err);
-      alert("No se pudo crear la sesión");
+      toast.error("No se pudo crear la sesión");
     }
   };
   

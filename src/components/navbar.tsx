@@ -40,11 +40,10 @@ const Navbar: React.FC = () => {
       </div>
 
       <div className="hidden md:flex gap-6 items-center">
-        <button onClick={goToHome} className="flex items-center gap-2 hover:text-green-500"><FiHome />Inicio</button>
+        <button onClick={goToHome} className="cursor-pointer flex items-center gap-2 hover:text-green-500"><FiHome />Inicio</button>
         <Link to="/usuario" className="flex items-center gap-2 hover:text-green-500"><FiUser />Usuario</Link>
         <Link to="/cesta" className="flex items-center gap-2 hover:text-green-500"><FiShoppingCart />Cesta</Link>
-        <Link to="/gardens" className="flex items-center gap-2 hover:text-green-500"><FiSun />Tu Huerto</Link>
-        <Link to="/huertos" className="flex items-center gap-2 hover:text-green-500"><FiSun />Huertos</Link>
+        <Link to="/your-gardens" className="flex items-center gap-2 hover:text-green-500"><FiSun />Tu Huerto</Link>
         <button onClick={logout} className="flex items-center gap-2 hover:text-green-500"><FiLogIn />Cerrar Sesión</button>
       </div>
 
@@ -61,7 +60,7 @@ const Navbar: React.FC = () => {
             <button onClick={() => { goToHome(); }} className="text-2xl mb-4">Inicio</button>
             <Link to="/usuario" onClick={toggleMenu} className="text-2xl mb-4">Usuario</Link>
             <Link to="/cesta" onClick={toggleMenu} className="text-2xl mb-4">Cesta</Link>
-            <Link to="/tu-huerto" onClick={toggleMenu} className="text-2xl mb-4">Tu Huerto</Link>
+            <Link to="/your-gardens" onClick={toggleMenu} className="text-2xl mb-4">Tu Huerto</Link>
             <Link to="/huertos" onClick={toggleMenu} className="text-2xl mb-4">Huertos</Link>
             <button onClick={() => { logout(); toggleMenu(); }} className="text-2xl mb-4">Cerrar Sesión</button>
           </motion.div>

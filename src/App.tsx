@@ -11,14 +11,17 @@ import { useAuth } from './context/AuthContext';
 import "./index.css";
 import GardenForm from "./components/Form/GardenForm";
 import { ToastContainer } from "react-toastify";
+import { YourGardens } from "./pages/YourGardens";
+
+// Aquí mantengo las rutas protegidas y públicas que tenías
 
 const PublicRoute = ({ children }: { children: React.ReactNode }) => {
   const { isAuthenticated } = useAuth();
-  
+
   if (isAuthenticated) {
     return <Navigate to="/home" />;
   }
-  
+
   return <>{children}</>;
 };
 
@@ -38,7 +41,17 @@ function App() {
   const isLoginPage = location.pathname === "/login" || location.pathname === "/register";
 
   return (
-    <>
+    <div
+      className="
+        bg-gray-50
+        bg-cover 
+        bg-no-repeat 
+        bg-center 
+        min-h-screen
+        m-0
+        p-0
+      "
+    >
       <Navbar />
       <ToastContainer position="top-right" autoClose={3000} />
       <div className={!isLoginPage ? "pt-16" : ""}>
@@ -71,6 +84,11 @@ function App() {
               <GardenListingPage />
             </ProtectedRoute>
           } />
+           <Route path="/your-gardens" element={
+            <ProtectedRoute>
+              <YourGardens/>
+            </ProtectedRoute>
+          } />
           <Route path="/usuario" element={
             <ProtectedRoute>
               <UserProfile />
@@ -94,7 +112,7 @@ function App() {
           <Route path="*" element={<Navigate to="/login" />} />
         </Routes>
       </div>
-    </>
+    </div>
   );
 }
 
