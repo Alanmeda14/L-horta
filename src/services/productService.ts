@@ -1,3 +1,4 @@
+import axios from 'axios';
 import api from './api';
 const API_URL = '/products';
 
@@ -28,4 +29,9 @@ export const createProduct = async (product: Product): Promise<Product> => {
 
 export const deleteProduct = async (id: number): Promise<void> => {
   await api.delete(`${API_URL}/${id}`);
+};
+
+export const getPagedProducts = async (page = 0, size = 10) => {
+  const res = await axios.get(`http://localhost:8080/products/paged?page=${page}&size=${size}`);
+  return res.data;
 };

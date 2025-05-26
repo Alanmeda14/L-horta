@@ -1,3 +1,4 @@
+import axios from 'axios';
 import api from './api';
 
 const API_URL = '/gardens';
@@ -51,5 +52,10 @@ export const deleteGarden = async (id: number): Promise<void> => {
 // Buscar jardines que contengan cierto producto
 export const getGardensByProduct = async (productName: string): Promise<Garden[]> => {
   const res = await api.get(`${API_URL}/products/${encodeURIComponent(productName)}`);
+  return res.data;
+};
+
+export const getPagedGardens = async (page = 0, size = 10) => {
+  const res = await axios.get(`http://localhost:8080/gardens/paged?page=${page}&size=${size}`);
   return res.data;
 };
