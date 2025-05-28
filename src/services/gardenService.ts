@@ -1,3 +1,4 @@
+import { Garden } from 'types/types';
 import api from './api';
 
 const API_URL = '/gardens';
@@ -9,7 +10,7 @@ export interface Product {
   stock: number;
 }
 
-export interface Garden {
+/* export interface Garden {
   id?: number;
   name: string;
   description: string;
@@ -19,7 +20,8 @@ export interface Garden {
     id: number;
   };
   products?: Product[];
-}
+} */
+
 
 // Obtener todos los jardines
 export const getAllGardens = async (): Promise<Garden[]> => {
@@ -30,6 +32,7 @@ export const getAllGardens = async (): Promise<Garden[]> => {
 // Obtener jardín por ID
 export const getGardenById = async (id: number): Promise<Garden> => {
   const res = await api.get(`${API_URL}/${id}`);
+  console.log(res.data)
   return res.data;
 };
 

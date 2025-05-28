@@ -41,7 +41,6 @@ export const deleteUser = async (id: number): Promise<void> => {
 
 export const updateUserProfile = async (userId: number, data: Partial<UserData>, imageFile?: File): Promise<void> => {
   const formData = new FormData();
-  console.log(data);
 
   for (const key in data) {
     const value = data[key as keyof UserData];

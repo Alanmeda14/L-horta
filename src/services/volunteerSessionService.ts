@@ -1,13 +1,17 @@
+import { Session } from 'types/types';
 import api from './api';
 
 const API_URL = '/sessions';
 
-export interface VolunteerSession {
-  id?: number;
-  gardenId: number;
-  datetime: string; // ISO string
-  maxVolunteers: number;
-  taskDescription: string;
+export type VolunteerSession = Session;
+
+export interface CreateSessionData {
+    date: string;
+    startTime: string;
+    endTime: string;
+    maxParticipants: number;
+    description: string;
+    gardenId: number;
 }
 
 export const getAllSessions = async (): Promise<VolunteerSession[]> => {
@@ -15,24 +19,20 @@ export const getAllSessions = async (): Promise<VolunteerSession[]> => {
   return res.data;
 };
 
-export const createSession = async (session: VolunteerSession): Promise<VolunteerSession> => {
-  const payload = {
-    datetime: session.datetime,
-    maxVolunteers: session.maxVolunteers,
-    taskDescription: session.taskDescription,
-    garden: { id: session.gardenId }
-  };
-  console.log(payload);
-  const res = await api.post(API_URL, payload);
+export const createSession = async (sessionData: CreateSessionData): Promise<VolunteerSession> => {
+    const payload = {
+        ...sessionData,
+        garden: { id: sessionData.gardenId }
+    };
+    const res = await api.post(API_URL, payload);
+    return res.data;
+};
+
+export const getSessionsByGardenId = async (gardenId: number): Promise<VolunteerSession[]> => {
+  const res = await api.get(`${API_URL}?gardenId=${gardenId}`);
   return res.data;
 };
 
 export const deleteSession = async (id: number): Promise<void> => {
   await api.delete(`${API_URL}/${id}`);
-};
-
-
-export const getSessionsByGardenId = async (gardenId: number): Promise<VolunteerSession[]> => {
-  const res = await api.get(`${API_URL}?gardenId=${gardenId}`);
-  return res.data;
 };

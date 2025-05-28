@@ -143,9 +143,9 @@ const GardenForm: React.FC = () => {
         if (formData.image) {
             gardenFormData.append('image', formData.image);
         }
-        const createdGarden = await createGarden(gardenFormData);
-        toast.success("Garden created successfully!");
-        navigate("/home");
+        await createGarden(gardenFormData);
+        //toast.success("Garden created successfully!");
+        //navigate("/home");
     } catch (error) {
         console.error('Error creating garden:', error);
         toast.error("Error creating garden");

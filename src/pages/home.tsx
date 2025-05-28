@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { Garden, getAllGardens } from '../services/gardenService';
+import { useNavigate } from 'react-router-dom';
+import { getAllGardens } from '../services/gardenService';
 import { MapPin, Package, Search } from 'lucide-react';
+import { Garden } from 'types/types';
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -26,7 +27,7 @@ const HomePage = () => {
     };
 
       fetchGardens();
-  }, []);
+  }, []); 
 
 
   const handleNameChange = (id: number, newName: string) => {
@@ -51,8 +52,6 @@ const HomePage = () => {
     (locationFilter ? product.location.toLowerCase().includes(locationFilter.toLowerCase()) : true) &&
     (productFilter ? (product.isProductAvailable ? 'disponible' : 'no disponible').includes(productFilter.toLowerCase()) : true)
   ); */
-
-  console.log(gardens)
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -119,8 +118,8 @@ const HomePage = () => {
                   <h3 className="font-bold text-xl mb-2">{garden.name}</h3>
                   <p className="text-gray-600">{garden.location}</p>
                   <div className="mt-2 flex gap-2">
-                    <span className={`px-2 py-1 text-xs rounded-md ${garden.sessionAvailable ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
-                      {garden.sessionAvailable ? 'Voluntariado Disponible' : 'Sin Voluntariado'}
+                    <span className={`px-2 py-1 text-xs rounded-md ${garden.volunteerSessionAvailable ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                      {garden.volunteerSessionAvailable ? 'Voluntariado Disponible' : 'Sin Voluntariado'}
                     </span>
                     <span className={`px-2 py-1 text-xs rounded-md ${garden.productAvailable ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
                       {garden.productAvailable ? 'Productos Disponibles' : 'Sin Productos'}

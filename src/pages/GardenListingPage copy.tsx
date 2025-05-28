@@ -2,19 +2,22 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ShoppingCart, Check } from 'lucide-react';
 import { getGardenById } from '../services/gardenService';
-import { getSessionsByGardenId, VolunteerSession } from '../services/volunteerSessionService';
 
 const GardenListingPage = () => {
     const navigate = useNavigate();
     const { id } = useParams();
     const [garden, setGarden] = useState<any>(null);
     const [activeTab, setActiveTab] = useState('productos');
-    const [products, setProducts] = useState<any[]>([]);
-    const [productLookup, setProductLookup] = useState<Record<string, any>>({});
+    const [products, setProducts] = useState<any>(null);
     const [quantities, setQuantities] = useState<Record<string, number>>({});
-    const [sessions, setSessions] = useState<VolunteerSession[]>([]);
-    const [volunteerStatus, setVolunteerStatus] = useState<Record<number, boolean>>({});
-    const [availableSpots, setAvailableSpots] = useState<Record<number, number>>({});
+    const [volunteerStatus, setVolunteerStatus] = useState({
+        'plantacion': false,
+        'riego': false
+    });
+    const [availableSpots, setAvailableSpots] = useState({
+        'plantacion': 5,
+        'riego': 1
+    });
     const [showAddedMessage, setShowAddedMessage] = useState(false);
 
 
@@ -24,46 +27,23 @@ const GardenListingPage = () => {
                 const data = await getGardenById(Number(id));
                 console.log(data)
                 setGarden(data);
-                
+                setProducts(data.gardenProducts)
                 if (data.gardenProducts) {
-                    // Set the products array
-                    setProducts(data.gardenProducts);
-                    
-                    // Create initial quantities using product IDs
-                    const initialQuantities: Record<string, number> = {};
+                const initialQuantities: Record<string, number> = {};
                     data.gardenProducts.forEach((p: any) => {
-                        initialQuantities[p.id] = 0;
+                        initialQuantities[p.name] = 0;
                     });
                     setQuantities(initialQuantities);
-                    
-                    // Create product lookup object using IDs
-                    const lookup = data.gardenProducts.reduce((acc: any, p: any) => {
-                        acc[p.id] = p;
+                    setProducts(
+                        data.gardenProducts.reduce((acc: any, p: any) => {
+                        acc[p.name] = p;
                         return acc;
-                    }, {});
-                    setProductLookup(lookup);
+                        }, {})
+                    );
                 }
-
-                // Fetch and set sessions
-                const gardenSessions = await getSessionsByGardenId(Number(id));
-                setSessions(gardenSessions);
-                
-                // Initialize volunteer status and available spots for each session
-                const initialVolunteerStatus: Record<number, boolean> = {};
-                const initialAvailableSpots: Record<number, number> = {};
-                gardenSessions.forEach(session => {
-                    if (session.id) {
-                        initialVolunteerStatus[session.id] = false;
-                        initialAvailableSpots[session.id] = session.maxVolunteers;
-                    }
-                });
-                setVolunteerStatus(initialVolunteerStatus);
-                setAvailableSpots(initialAvailableSpots);
-
             } catch (err) {
                 console.error('Error fetching gardens:', err);
-            }
-        };
+            }};
     
         fetchGardens();
     }, []);
@@ -80,9 +60,14 @@ const GardenListingPage = () => {
     };
 
     const calculateGrandTotal = () => {
-        return Object.entries(quantities).reduce((total, [productName, quantity]) => {
-            const product = productLookup[productName];
-            return total + (quantity / 1000) * product.unitPrice;
+        return Object.entries(quantities).reduce((total, [product, quantity]) => {
+            const prices = {
+                tomates: 5,
+                lechuga: 2,
+                zanahorias: 3,
+                pimientos: 4
+            };
+            return total + (quantity / 1000) * prices[product as keyof typeof prices];
         }, 0);
     };
 
@@ -92,12 +77,12 @@ const GardenListingPage = () => {
         const cartItems = Object.entries(quantities)
             .filter(([_, quantity]) => quantity > 0)
             .map(([productName, quantity]) => {
-                const product = productLookup[productName];
+                const product = products[productName as keyof typeof products];
                 return {
                     id: product.id,
-                    name: product.caName,
+                    name: product.name,
                     image: product.image,
-                    price: product.unitPrice,
+                    price: product.price,
                     quantity: quantity / 1000,
                     unit: product.unit
                 };
@@ -125,19 +110,19 @@ const GardenListingPage = () => {
         setQuantities(resetQuantities);
     };
 
-    const toggleVolunteerStatus = (sessionId: number) => {
-        if (!volunteerStatus[sessionId] && availableSpots[sessionId] === 0) {
+    const toggleVolunteerStatus = (activity: keyof typeof volunteerStatus) => {
+        if (!volunteerStatus[activity] && availableSpots[activity] === 0) {
             return;
         }
 
         setVolunteerStatus(prev => ({
             ...prev,
-            [sessionId]: !prev[sessionId]
+            [activity]: !prev[activity]
         }));
 
         setAvailableSpots(prev => ({
             ...prev,
-            [sessionId]: prev[sessionId] + (volunteerStatus[sessionId] ? 1 : -1)
+            [activity]: prev[activity] + (volunteerStatus[activity] ? 1 : -1)
         }));
     };
 
@@ -173,6 +158,7 @@ const GardenListingPage = () => {
                     <button
                         className={`px-4 py-2 font-medium transition-colors ${activeTab === 'voluntariado' ? 'text-green-600 border-b-2 border-green-600' : 'text-gray-600 hover:text-green-500'}`}
                         onClick={() => setActiveTab('voluntariado')}
+                        disabled={!garden.sessionAvailable}
                     >
                         Voluntariado
                     </button>
@@ -206,16 +192,16 @@ const GardenListingPage = () => {
                                         <div className="flex items-center justify-center gap-2">
                                         <button
                                             className="bg-green-100 w-8 h-8 flex items-center justify-center rounded hover:bg-green-200 active:bg-green-300 transition-colors"
-                                            onClick={() => updateQuantity(product.id, -250)}
+                                            onClick={() => updateQuantity(product.name, -250)}
                                         >
                                             <span className="text-green-800 font-medium">-</span>
                                         </button>
                                         <div className="w-20 text-center tabular-nums">
-                                             {quantities[product.id] || 0}g
+                                             {quantities[product.name] || 0}g
                                         </div>
                                         <button
                                             className="bg-green-100 w-8 h-8 flex items-center justify-center rounded hover:bg-green-200 active:bg-green-300 transition-colors"
-                                            onClick={() => updateQuantity(product.id, 250)}
+                                            onClick={() => updateQuantity(product.name, 250)}
                                         >
                                             <span className="text-green-800 font-medium">+</span>
                                         </button>
@@ -223,7 +209,7 @@ const GardenListingPage = () => {
                                     </td>
                                     <td className="py-4">
                                         <div className="w-20 text-right ml-auto tabular-nums">
-                                        {calculateTotal(product.id, product.unitPrice).toFixed(2)}€
+                                        {calculateTotal(product.name, product.unitPrice).toFixed(2)}€
                                         </div>
                                     </td>
                                     </tr>
@@ -283,46 +269,41 @@ const GardenListingPage = () => {
                     </div>
                 )}
 
-                {activeTab === 'voluntariado' && (
+                {activeTab === 'voluntariado' && garden.sessionAvailable && (
                     <div className="space-y-4">
-                        {sessions.length > 0 ? (
-                            sessions.map((session) => (
-                                <div key={session.id} className="border rounded-lg p-4 transition-all hover:shadow-md">
-                                    <h3 className="font-semibold">{session.taskDescription}</h3>
-                                    <p className="text-gray-600">{new Date(session.datetime).toLocaleString()}</p>
-                                    <div className="flex items-center gap-2">
-                                        <p className="text-gray-600">Plazas disponibles: {availableSpots[session.id!]}</p>
-                                        {availableSpots[session.id!] === 0 && (
-                                            <span className="text-red-600 text-sm">No hay plazas disponibles</span>
-                                        )}
-                                    </div>
-                                    {!volunteerStatus[session.id!] ? (
-                                        <button
-                                            onClick={() => toggleVolunteerStatus(session.id!)}
-                                            disabled={availableSpots[session.id!] === 0}
-                                            className={`mt-3 px-4 py-2 rounded-lg transition-colors ${
-                                                availableSpots[session.id!] === 0
-                                                    ? 'bg-gray-400 cursor-not-allowed'
-                                                    : 'bg-green-600 hover:bg-green-700 text-white'
-                                            }`}
-                                        >
-                                            Inscribirse
-                                        </button>
-                                    ) : (
-                                        <button
-                                            onClick={() => toggleVolunteerStatus(session.id!)}
-                                            className="mt-3 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
-                                        >
-                                            Desinscribirse
-                                        </button>
-                                    )}
-                                </div>
-                            ))
-                        ) : (
-                            <div className="text-center py-8">
-                                <p className="text-gray-600">No hay sesiones de voluntariado disponibles en este momento.</p>
+                        {garden.sessions.map((session: any) => (
+                        <div className="border rounded-lg p-4 transition-all hover:shadow-md">
+                            <h3 className="font-semibold">{session.taskDescription}</h3>
+                            <p className="text-gray-600">{session.datetime}</p>
+                            <div className="flex items-center gap-2">
+                                <p className="text-gray-600">Plazas disponibles: {session.maxVolunteers}</p>
+                                {availableSpots.plantacion === 0 && (
+                                    <span className="text-red-600 text-sm">No hay plazas disponibles</span>
+                                )}
                             </div>
-                        )}
+                            {!volunteerStatus.plantacion ? (
+                                <button
+                                    onClick={() => toggleVolunteerStatus(session.id)}
+                                    disabled={availableSpots.plantacion === 0}
+                                    className={`mt-3 px-4 py-2 rounded-lg transition-colors ${
+                                        availableSpots.plantacion === 0
+                                            ? 'bg-gray-400 cursor-not-allowed'
+                                            : 'bg-green-600 hover:bg-green-700 text-white'
+                                    }`}
+                                >
+                                    Inscribirse
+                                </button>
+                            ) : (
+                                <button
+                                    onClick={() => toggleVolunteerStatus(session.id)}
+                                    className="mt-3 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+                                >
+                                    Desinscribirse
+                                </button>
+                            )}
+                        </div>
+                        ))}
+
 
                         <div className="flex justify-end mt-6">
                             <button
@@ -336,7 +317,7 @@ const GardenListingPage = () => {
                 )}
 
                 {((activeTab === 'productos' && !garden.productAvailable) ||
-                    (activeTab === 'voluntariado' && sessions.length === 0)) && (
+                    (activeTab === 'voluntariado' && !garden.sessionAvailable)) && (
                         <div className="text-center py-8">
                             <p className="text-gray-600 text-lg">
                                 {activeTab === 'productos'

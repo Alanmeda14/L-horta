@@ -17,8 +17,8 @@ const Cesta: React.FC = () => {
   const [items, setItems] = useState<CartItem[]>([]);
   
   useEffect(() => {
-    const cartItems = JSON.parse(localStorage.getItem('cart') || '[]');
-    setItems(cartItems);
+    /* const cartItems = JSON.parse(localStorage.getItem('cart') || '[]');
+    setItems(cartItems); */
   }, []);
 
   const removeFromCart = (itemId: string) => {
