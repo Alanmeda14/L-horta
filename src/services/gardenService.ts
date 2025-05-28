@@ -1,4 +1,5 @@
 import api from './api';
+import { VolunteerSession } from './volunteerSessionService';
 
 const API_URL = 'http://localhost:8080/api/gardens';
 
@@ -16,10 +17,11 @@ export interface Garden {
   image: string | null | string;
   location: string;
   postalCode?: string;
-  user?: { id: number }; // tu versión
+  user?: { id: number };
   productAvailable?: boolean;
   sessionAvailable?: boolean;
   products?: Product[];
+  sessions?: VolunteerSession[]; // ✅ Añadido aquí
 }
 
 // Obtener todos los jardines

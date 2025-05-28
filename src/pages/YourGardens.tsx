@@ -62,7 +62,7 @@ const YourGardens: React.FC = () => {
     };
 
     const handleGardenClick = (garden: Garden) => {
-        navigate(`/garden/${garden.id}`);
+        navigate(`/my-garden/${garden.id}`);
     };
 
     if (loading) {

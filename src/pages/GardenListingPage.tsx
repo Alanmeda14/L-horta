@@ -197,7 +197,7 @@ const GardenListingPage = () => {
                                             <span className="text-green-800 font-medium">-</span>
                                         </button>
                                         <div className="w-20 text-center tabular-nums">
-                                             {quantities[product.name] || 0}g
+                                                        {quantities[product.name] || 0}g
                                         </div>
                                         <button
                                             className="bg-green-100 w-8 h-8 flex items-center justify-center rounded hover:bg-green-200 active:bg-green-300 transition-colors"
