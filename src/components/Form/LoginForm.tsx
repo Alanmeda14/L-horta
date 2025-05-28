@@ -20,7 +20,7 @@ const LoginForm = ({ onSubmit, isLoading = false }: LoginFormProps) => {
         try {
             await onSubmit({ email, password });
         } catch (err) {
-            setError("Ocurrió un error al intentar iniciar sesión. Por favor, inténtalo de nuevo.");
+            setError(t("login_error"));
         }
     };
 
@@ -28,7 +28,7 @@ const LoginForm = ({ onSubmit, isLoading = false }: LoginFormProps) => {
             <form onSubmit={handleSubmit} className="space-y-4">
                 {error && <p className="text-red-500 text-sm text-center">{error}</p>}
                 <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                    Email
+                {t("email")}
                 </label>
                 <div className="relative">
                     <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500 text-lg">
@@ -39,14 +39,14 @@ const LoginForm = ({ onSubmit, isLoading = false }: LoginFormProps) => {
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         className="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:border-green-500"
-                        placeholder="Email"
+                        placeholder={t("email")}
                         required
                         disabled={isLoading}
                     />
                 </div>
 
                 <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                    Password
+                {t("password")}
                 </label>
                 <div className="relative">
                     <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500 text-lg">
@@ -57,7 +57,7 @@ const LoginForm = ({ onSubmit, isLoading = false }: LoginFormProps) => {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         className="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:border-green-500"
-                        placeholder="Password"
+                        placeholder={t("password")}
                         required
                         disabled={isLoading}
                     />

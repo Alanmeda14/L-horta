@@ -3,9 +3,11 @@ import { useState } from "react";
 import { registerRequest } from "../services/authService";
 import { Link } from "react-router-dom";
 import RegisterForm from "../components/Form/RegisterForm";
+import { useTranslation } from "react-i18next";
 
 const Register = () => {
     const navigate = useNavigate();
+    const { t } = useTranslation();
     const [error, setError] = useState<string | null>(null);
 
     const handleRegister = async ({
@@ -38,13 +40,14 @@ const Register = () => {
                 <RegisterForm onSubmit={handleRegister} />
                 <div className="flex items-center justify-center my-6">
                     <div className="flex-grow border-t border-gray-300"></div>
-                    <span className="mx-4 text-gray-500">or</span>
+                    <span className="mx-4 text-gray-500">{t("or")}</span>
                     <div className="flex-grow border-t border-gray-300"></div>
                 </div>
                 <p className="mt-4 text-center text-gray-600 text-sm">
-                    Already have an account?{" "}
+                {t("already_have_account")}{" "}
+                    
                     <Link to="/" className="text-green-700 hover:text-green-800 font-medium">
-                        Sign In
+                    {t("sign_in")}
                     </Link>
                 </p>
             </div>

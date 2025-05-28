@@ -1,0 +1,19 @@
+.language-selector {
+  display: flex;
+  top: 1rem;
+  right: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  z-index: 1000; /* asegúrate de que esté por encima de otros elementos */
+}
+
+.language-icon {
+  font-size: 1.2rem;
+}
+
+.language-select {
+  padding: 0.25rem 0.5rem;
+  font-size: 1rem;
+  border-radius: 4px;
+}

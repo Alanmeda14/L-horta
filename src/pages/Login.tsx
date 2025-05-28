@@ -18,12 +18,12 @@ const Login = () => {
         setIsLoading(true);
         try {
             if(!email || !password){
-                throw new Error("Sisplau, introdueix el correu electrònic i la contrasenya.")
+                throw new Error(t("auth_missing_fields"))
             }
             await login(email, password);
             navigate("/home");
         } catch (err: any) {
-            setError(err.message || "Error a l'iniciar sessió");
+            setError(err.message || t("login_error_"));
         } finally {
             setIsLoading(false);
         }
@@ -37,7 +37,7 @@ const Login = () => {
                         <Sprout className="w-12 h-12 text-green-700" />
                     </div>
                     <h2 className="text-2xl font-semibold text-center text-gray-800 mb-2">{t("welcome")}</h2>
-                    <p className="text-center text-gray-600 mb-8">Accede a tu comunidad</p>
+                    <p className="text-center text-gray-600 mb-8">{t("access_community")}</p>
                     {error && <p className="text-red-500 text-sm text-center mb-4">{error}</p>}
                     <LoginForm onSubmit={handleLogin} isLoading={isLoading}/>
                     <div className="mt-6 text-center">
@@ -46,14 +46,14 @@ const Login = () => {
                                 <div className="w-full border-t border-gray-200"></div>
                             </div>
                             <div className="relative flex justify-center text-sm">
-                                <span className="px-2 bg-white text-gray-500">or</span>
+                                <span className="px-2 bg-white text-gray-500">{t("or")}</span>
                             </div>
                         </div>
                     </div>
                     <p className="mt-4 text-center text-gray-600 text-sm">
-                        Don't have an account?{" "}
+                    {t("no_account")}{" "}
                         <Link to="/register" className="text-green-700 hover:text-green-800 font-medium">
-                            Sign Up
+                        {t("sign_up")}
                         </Link>
                     </p>
                 </div>

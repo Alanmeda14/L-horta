@@ -20,11 +20,22 @@ export interface Garden {
     id: number;
   };
   products?: Product[];
+  productAvailable?: boolean;
+  sessionAvailable?: boolean;
 }
 
-// Obtener todos los jardines
-export const getAllGardens = async (): Promise<Garden[]> => {
-  const res = await api.get(API_URL);
+// Obtener todos los jardines con filtros
+export const getAllGardens = async (
+  name?: string,
+  location?: string,
+  productAvailable?: string
+): Promise<Garden[]> => {
+  const params: any = {};
+  if (name) params.name = name;
+  if (location) params.location = location;
+  if (productAvailable) params.productAvailable = productAvailable;
+
+  const res = await api.get(API_URL, { params });
   return res.data;
 };
 
@@ -37,11 +48,11 @@ export const getGardenById = async (id: number): Promise<Garden> => {
 // Create new garden
 export const createGarden = async (formData: FormData): Promise<Garden> => {
   const res = await api.post<Garden>(API_URL, formData, {
-        headers: {
-            'Content-Type': 'multipart/form-data',
-        },
-    });
-    return res.data;
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+  return res.data;
 };
 
 // Eliminar jardín por ID

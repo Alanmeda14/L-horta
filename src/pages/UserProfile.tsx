@@ -3,8 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { changeUserPassword, getUserById, updateUserProfile } from '../services/userService';
 import Avatar from '../components/Avatar';
-import { t } from 'i18next';
 import { toast } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
+
 
 export interface UserData {
   name: string;
@@ -13,8 +14,9 @@ export interface UserData {
   location: string;
   profileImage?: string;
 }
-
+ 
 const UserProfile = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { userId } = useAuth();
@@ -32,6 +34,7 @@ const UserProfile = () => {
   const [originalUserData, setOriginalUserData] = useState<UserData | null>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [password, setPassword] = useState({ current: '', new: '', confirm: '' });
+  
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -92,7 +95,7 @@ const UserProfile = () => {
 
     if (password.new || password.confirm || password.current) {
       if (password.new !== password.confirm) {
-        alert("Les noves contrasenyes no coincideixen.");
+        alert(t("passwords_do_not_match"));
         return;
       }
     }
@@ -112,14 +115,15 @@ const UserProfile = () => {
         });
       }
 
-      toast.success("Perfil actualitzat correctament.");
+      toast.success(t("profile_updated_success"));
       setOriginalUserData(userData);
       setIsEditing(false);
       setPassword({ current: '', new: '', confirm: '' });
       setImageFile(null);
     } catch (err: any) {
-      alert(err.message || "Error desconegut");
+      alert(err.message || t("unknown_error"));
     }
+    
   };
 
   return (
@@ -132,7 +136,7 @@ const UserProfile = () => {
               onClick={() => setIsEditing(!isEditing)}
               className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
             >
-              {isEditing ? 'Cancelar' : t("edit-profile")}
+              {isEditing ? t("cancel"): t("edit-profile")}
             </button>
           </div>
 
@@ -147,7 +151,7 @@ const UserProfile = () => {
                 />
                 {isEditing && (
                   <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center text-white rounded-full cursor-pointer">
-                    <span className="text-sm font-medium">Cambiar foto</span>
+                    <span className="text-sm font-medium">{t("change_photo")}</span>
                   </div>
                 )}
               </div>
@@ -213,10 +217,10 @@ const UserProfile = () => {
 
               {isEditing && (
                 <div className="mt-6 border-t pt-6">
-                  <h2 className="text-lg font-semibold text-gray-800 mb-4">Cambiar Contraseña</h2>
+                  <h2 className="text-lg font-semibold text-gray-800 mb-4">{t("change_password")}</h2>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Contraseña Actual</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">{t("current_password")}</label>
                       <div className="relative">
                         <input
                           type={showPassword ? "text" : "password"}
@@ -236,7 +240,7 @@ const UserProfile = () => {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Nueva Contraseña</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">{t("new_password")}</label>
                       <input
                         type="password"
                         name="new"
@@ -247,7 +251,7 @@ const UserProfile = () => {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Confirmar Nueva Contraseña</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">{t("confirm_new_password")}</label>
                       <input
                         type="password"
                         name="confirm"
@@ -263,7 +267,7 @@ const UserProfile = () => {
               {isEditing && (
                 <div className="mt-6 flex justify-end">
                   <button type="submit" className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
-                    Guardar Cambios
+                  {t("save_changes")}
                   </button>
                 </div>
               )}

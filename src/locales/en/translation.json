@@ -1,6 +1,106 @@
 {
-  "welcome": "Bienvenido!",
-  "access-community": "Accede a la comunidad",
-  "login": "Iniciar sessió",
-  "logout": "Cerrar sessión"
+  "welcome": "Welcome!",
+  "access-community": "Access the community",
+  "logout": "Log out",
+
+  "not-have-an-account": "Don't have an account?",
+  "sign-up": "Sign up",
+
+  "create-an-account": "Create your account",
+  "confirm-password": "Confirm password",
+ 
+
+  "home": "Home",
+  "user": "Profile",
+  "cart": "Cart",
+  "Your Garden": "Your Garden",
+  "Basket":"Basket",
+
+  "discover": "Discover local gardens",
+  "connect": "Connect with the garden community, find fresh products.",
+
+  "find-gardens": "Search gardens...",
+  "find-by-location": "Filter by location...",
+  "find-products": "Filter by products",
+
+  "location": "Location",
+  "profile": "User Profile",
+  "edit-profile": "Edit Profile",
+  "change-password": "Change password",
+  "new-password": "New password",
+
+  "products": "Products",
+  "volunteers": "Volunteering",
+
+  "empty-cart": "The cart is empty",
+  "empty-cart2": "It seems you haven't added any products yet",
+  "explore-gardens": "Explore the gardens",
+
+  "emptySubtitle": "It looks like you haven't added any products to your cart yet",
+  "explore": "Explore gardens",
+  "title": "My Cart",
+  "clear": "Clear cart",
+  "tax": "VAT (4%)",
+  "continue": "Continue shopping",
+
+
+  "Your cart is empty":"Your cart is empty",
+  "It looks like you haven't added any products to your cart yet":"It looks like you haven't added any products to your cart yet",
+  "explore orchards":"explore orchards"
+
+  ,"mi-cesta":"My Basket",
+   "connects_home": "Connect with the community, find fresh products, and join the movement for a sustainable life.",
+  "discovering the garden": "Discover local gardens",
+  "Search gardens": "Search gardens...",
+  "Filter by location": "Filter by location...",
+  "Filter by products": "Filter by products...",
+  "products_available": "Products Available",
+  "no_products": "No Products",
+  "Volunteering Available": "Volunteering Available",
+  "Without Volunteering": "No Volunteering",
+
+
+  "passwords_do_not_match": "The new passwords do not match.",
+  "profile_updated_success": "Profile updated successfully.",
+  "unknown_error": "Unknown error",
+  "change_photo": "Change photo",
+  "change_password": "Change Password",
+  "current_password": "Current Password",
+  "new_password": "New Password",
+  "confirm_new_password": "Confirm New Password",
+  "cancel": "Cancel",
+  "save_changes": "Save Changes",
+
+  "your_cart_is_empty": "Your cart is empty",
+  "cart_empty_message": "It looks like you haven’t added any products to your cart yet",
+  "explore_gardens": "Explore gardens",
+  "empty_cart": "Empty cart",
+  "subtotal": "Subtotal",
+  "tax_label": "VAT ({{percent}}%)",
+  "total": "Total",
+  "continue_shopping": "Continue shopping",
+  "checkout": "Checkout",
+
+  "login_error": "An error occurred while trying to log in. Please try again.",
+  "email": "Email",
+  "password": "Password",
+  "login": "Log in",
+  "loading": "Loading...",
+  "create_account": "Create your account",
+  "join_community": "Join our community",
+  "name": "Name",
+  "surname": "Surname",
+  "registering": "Registering...",
+  "create_account_": "Create account",
+  "auth_missing_fields": "Please enter your email and password.",
+  "login_error_": "Login error",
+  "access_community": "Access your community",
+  "no_account": "Don't have an account?",
+  "sign_up": "Sign up",
+  "or": "or",
+   "sign_in": "Sign In",
+  "already_have_account": "Already have an account?"
+  
+  
 }
+ 
