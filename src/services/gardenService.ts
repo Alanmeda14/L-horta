@@ -1,8 +1,7 @@
 import api from './api';
 import { VolunteerSession } from './volunteerSessionService';
 
-const API_URL = 'http://localhost:8080/api/gardens';
-
+const API_URL = '/gardens'
 export interface Product {
   id?: number;
   name: string;
