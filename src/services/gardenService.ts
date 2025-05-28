@@ -78,3 +78,9 @@ export const updateGardenProductPrices = async (gardenId: number, products: Prod
   const res = await api.patch(`${API_URL}/${gardenId}/products`, { products });
   return res.data;
 };
+
+// Obtener jardines del usuario autenticado
+export const getMyGardens = async (): Promise<Garden[]> => {
+  const res = await api.get(`${API_URL}/my-gardens`);
+  return res.data;
+};
