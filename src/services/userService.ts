@@ -65,6 +65,11 @@ export const updateUserProfile = async (userId: number, data: Partial<UserData>,
   });
 };
 
+// Cambiar rol de usuario a OWNER
+export const changeUserRoleToOwner = async (userId: number): Promise<void> => {
+  await api.patch(`${API_URL}/${userId}/role`);
+};
+
 export const changeUserPassword = async (userId: number, data: PasswordPayload): Promise<void> => {
   /* await api.put(`${API_URL}/${userId}/change-password`, data, {
     headers: {
@@ -72,4 +77,3 @@ export const changeUserPassword = async (userId: number, data: PasswordPayload):
     },
   }); */
 };
-
