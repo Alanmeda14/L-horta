@@ -3,9 +3,9 @@ import { Session } from '../../types/types';
 
 interface Props {
     sessions: Session[];
-    volunteerStatus: Record<number, boolean>;
-    availableSpots: Record<number, number>;
-    onToggleVolunteerStatus: (sessionId: number) => void;
+    volunteerStatus?: Record<number, boolean>;
+    availableSpots?: Record<number, number>;
+    onToggleVolunteerStatus?: (sessionId: number) => void;
     onNavigate: (path: string) => void;
 }
 

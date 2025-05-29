@@ -1,24 +1,28 @@
 import { Garden } from 'types/types';
 import api from './api';
+import { VolunteerSession } from './volunteerSessionService';
 
-const API_URL = '/gardens';
+const API_URL = 'http://localhost:8080/api/gardens';
 
 export interface Product {
   id?: number;
   name: string;
   unitPrice: number;
   stock: number;
+    unitType?: string;
+
 }
 
 /* export interface Garden {
   id?: number;
   name: string;
   description: string;
-  image: string;
+  image: string | null | string;
   location: string;
-  user: {
-    id: number;
-  };
+  postalCode?: string;
+  user?: { id: number };
+  productAvailable?: boolean;
+  sessionAvailable?: boolean;
   products?: Product[];
 } */
 
@@ -36,22 +40,32 @@ export const getGardenById = async (id: number): Promise<Garden> => {
   return res.data;
 };
 
-// Create new garden
+// Crear jardín
 export const createGarden = async (formData: FormData): Promise<Garden> => {
-  const res = await api.post<Garden>(API_URL, formData, {
-        headers: {
-            'Content-Type': 'multipart/form-data',
-        },
-    });
-    return res.data;
+  const res = await api.post(API_URL, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+  return res.data;
 };
 
-// Eliminar jardín por ID
+// Editar jardín
+export const updateGarden = async (id: number, gardenData: FormData): Promise<Garden> => {
+  const res = await api.put(`${API_URL}/${id}`, gardenData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+  return res.data;
+};
+
+// Eliminar jardín
 export const deleteGarden = async (id: number): Promise<void> => {
   await api.delete(`${API_URL}/${id}`);
 };
 
-// Buscar jardines que contengan cierto producto
+// Buscar jardines por nombre de producto
 export const getGardensByProduct = async (productName: string): Promise<Garden[]> => {
   const res = await api.get(`${API_URL}/products/${encodeURIComponent(productName)}`);
   return res.data;

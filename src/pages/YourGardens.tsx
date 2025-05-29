@@ -145,6 +145,14 @@ const GardenCard: React.FC<GardenCardProps> = ({
             onClick={() => onClick(garden)}
         >
             
+            <div className="relative">
+                <img
+                    src={imageError ? defaultImage : (garden.image ? `http://localhost:8080${garden.image}` : defaultImage)}
+                    alt={garden.name}
+                    className="w-full h-48 object-cover transition-transform duration-500 hover:scale-105"
+                    onError={() => setImageError(true)}
+                />
+            </div>
             <div className="p-5">
                 <h2 className="text-xl font-bold text-gray-800 mb-2">{garden.name}</h2>
                 <div className="flex items-center text-gray-600 mb-3">

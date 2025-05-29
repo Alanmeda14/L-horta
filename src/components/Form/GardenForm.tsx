@@ -115,6 +115,21 @@ const GardenForm: React.FC = () => {
     }
   };
 
+  const handlePriceInput = (product: string, price: string) => {
+    const cleaned = price.replace(/[^0-9.,]/g, '').replace(',', '.');
+    const parts = cleaned.split('.');
+    const formattedPrice = parts.length > 1 
+      ? `${parts[0]}.${parts.slice(1).join('')}`
+      : cleaned;
+    
+    setFormData(prev => ({
+      ...prev,
+      products: prev.products.map(p =>
+        p.name === product ? { ...p, price: formattedPrice } : p
+      )
+    }));
+  };
+
   const handleProductInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setProductInput(value);
@@ -158,6 +173,7 @@ const GardenForm: React.FC = () => {
 
       setProductInput('');
       setSuggestions([]);
+      setShowSuggestions(false);
     }
   };
 

@@ -12,7 +12,9 @@ import "./index.css";
 import GardenForm from "./components/Form/GardenForm";
 import { ToastContainer } from "react-toastify";
 import YourGardens from "./pages/YourGardens";
-//import OwnerGarden from "./pages/OwnerGarden";
+import OwnerGarden from "./pages/OwnerGarden";
+
+// Aquí mantengo las rutas protegidas y públicas que tenías
 
 const PublicRoute = ({ children }: { children: React.ReactNode }) => {
   const { isAuthenticated } = useAuth();
@@ -68,9 +70,15 @@ function App() {
           } />
 
           {/* Private routes */}
+          <Route path="/garden/new" element={<GardenForm />} />
           <Route path="/home" element={
             <ProtectedRoute>
               <HomePage />
+            </ProtectedRoute>
+          } />
+          <Route path="/my-garden/:id" element={
+            <ProtectedRoute>
+              <OwnerGarden />
             </ProtectedRoute>
           } />
           <Route path="/garden/:id" element={
@@ -78,16 +86,21 @@ function App() {
               <GardenListingPage />
             </ProtectedRoute>
           } />
+          <Route path="/your-gardens" element={
+            <ProtectedRoute>
+              <YourGardens />
+            </ProtectedRoute>
+          } />
           <Route path="/gardens" element={
             <ProtectedRoute>
               <GardenListingPage />
             </ProtectedRoute>
           } />
-           <Route path="/your-gardens" element={
+          {/* <Route path="/your-gardens" element={
             <ProtectedRoute>
-              <YourGardens/>
+              // <YourGardens/>
             </ProtectedRoute>
-          } />
+          } /> */}
           <Route path="/usuario" element={
             <ProtectedRoute>
               <UserProfile />

@@ -7,9 +7,9 @@ interface Props {
     quantities: Record<string, number>;
     productLookup: Record<string, any>;
     showAddedMessage: boolean;
-    hasItemsInCart: boolean;
-    onUpdateQuantity: (productId: string, amount: number) => void;
-    onAddToCart: () => void;
+    hasItemsInCart?: boolean;
+    onUpdateQuantity?: (productId: string, amount: number) => void;
+    onAddToCart?: () => void;
     onNavigate: (path: string) => void;
 }
 
