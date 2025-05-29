@@ -68,3 +68,7 @@ export const changeUserPassword = async (userId: number, data: PasswordPayload):
   }); */
 };
 
+// Cambiar rol de usuario a OWNER
+export const changeUserRoleToOwner = async (userId: number): Promise<void> => {
+  await api.patch(`${API_URL}/${userId}/role`);
+};
