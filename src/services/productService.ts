@@ -35,3 +35,11 @@ export const getPagedProducts = async (page = 0, size = 10) => {
   const res = await axios.get(`http://localhost:8080/products/paged?page=${page}&size=${size}`);
   return res.data;
 };
+
+export const updateProduct = async (id: number, product: Product): Promise<Product> => {
+  const response = await api.put(`${API_URL}/${id}`, {
+    ...product,
+    garden: { id: product.gardenId }
+  });
+  return response.data;
+};
