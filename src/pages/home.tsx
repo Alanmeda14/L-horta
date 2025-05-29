@@ -13,23 +13,25 @@ const HomePage = () => {
   const [productFilter, setProductFilter] = useState('');
   const [error, setError] = useState<string | null>(null);
   const { t } = useTranslation();
-
+  
   useEffect(() => {
     const fetchGardens = async () => {
-        try {
-            const data = await getAllGardens();
-            setGardens(data);
-        } catch (err) {
-            setError('Failed to fetch gardens. Please try again later.');
-            console.error('Error fetching gardens:', err);
-        } finally {
-            setLoading(false);
-        }
+      try {
+        setLoading(true);
+        const data = await getAllGardens(search, locationFilter,productFilter);
+        setGardens(data);
+      } catch (err) {
+        setError(t('fetch_gardens_error'));
+        console.error('Error fetching gardens:', err);
+      } finally {
+        setLoading(false);
+      }
     };
-
-      fetchGardens();
-  }, []);
-
+  
+    fetchGardens();
+  }, [search, locationFilter, productFilter]); // ⬅ Se dispara cuando cambian los filtros
+  
+  
 
   const handleNameChange = (id: number, newName: string) => {
     const updatedProducts = gardens.map(garden =>
@@ -48,13 +50,9 @@ const HomePage = () => {
         (productFilter ? (garden.productAvailable ? 'disponible' : 'no disponible').includes(productFilter.toLowerCase()) : true)
     );
 
-  /* const filteredProducts = gardens.filter(product =>
-    product.name.toLowerCase().includes(search.toLowerCase()) &&
-    (locationFilter ? product.location.toLowerCase().includes(locationFilter.toLowerCase()) : true) &&
-    (productFilter ? (product.isProductAvailable ? 'disponible' : 'no disponible').includes(productFilter.toLowerCase()) : true)
-  ); */
+  
 
-  console.log(gardens)
+
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -109,7 +107,7 @@ const HomePage = () => {
       <div className="max-w-7xl mx-auto px-6 sm:px-8 md:px-6 py-8">
         {/* Garden cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {filteredGardens.map((garden) => (
+        {gardens.map((garden) => (
               <div 
                 key={garden.id} 
                 className="relative rounded-lg overflow-hidden shadow-lg bg-white cursor-pointer transform transition-transform hover:scale-102"

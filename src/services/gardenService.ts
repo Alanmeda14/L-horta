@@ -1,3 +1,4 @@
+import { C } from '@fullcalendar/core/internal-common';
 import api from './api';
 import { VolunteerSession } from './volunteerSessionService';
 
@@ -27,17 +28,20 @@ export interface Garden {
 export const getAllGardens = async (
   name?: string,
   location?: string,
-  productAvailable?: string
+  productName?: string
 ): Promise<Garden[]> => {
   const params: any = {};
   if (name) params.name = name;
   if (location) params.location = location;
-  if (productAvailable) params.productAvailable = productAvailable;
-
-  const res = await api.get(API_URL, { params });
+  if (productName) params.product = productName; // <- CORREGIDO
+  
+  console.log("🔍 Enviando filtros:", params);
+  
+  const res = await api.get(`${API_URL}`, { params });
+  
+  console.log("✅ Resultado backend:", res.data);
   return res.data;
-};
-
+}
 // Obtener jardín por ID
 export const getGardenById = async (id: number): Promise<Garden> => {
   const res = await api.get(`${API_URL}/${id}`);
