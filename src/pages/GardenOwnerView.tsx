@@ -3,9 +3,6 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Pencil, Trash2, PlusCircle } from 'lucide-react';
 import { getGardenById } from '../services/gardenService';
 import { CreateSessionModal } from '../components/Modal/CreateSessionModal';
-import { EditProductModal } from '../components/Modal/EditProductModal';
-
-
 
 const GardenOwnerView = () => {
     const navigate = useNavigate();
@@ -17,8 +14,7 @@ const GardenOwnerView = () => {
     const [productToEdit, setProductToEdit] = useState(null);
     const [volunteerModalOpen, setVolunteerModalOpen] = useState(false);
     const [showCreateSession, setShowCreateSession] = useState(false);
-    const [showEditProductModal, setShowEditProductModal] = useState(false)
-    
+
 
     useEffect(() => {
         const fetchGarden = async () => {
@@ -61,7 +57,7 @@ const GardenOwnerView = () => {
                         />
                         <div className="absolute top-4 right-4 flex gap-2">
                             <button
-                                onClick={() => navigate(`/GardenForm/${garden.id}`)}
+                                onClick={() => navigate(`/editar-huerto/${garden.id}`)}
                                 className="bg-yellow-500 text-white p-2 rounded-full hover:bg-yellow-600"
                             >
                                 <Pencil size={20} />
@@ -107,7 +103,7 @@ const GardenOwnerView = () => {
                                     </div>
                                     <div className="flex gap-2">
                                         <button
-                                            onClick={() => setShowEditProductModal(product)}
+                                            onClick={() => handleEditProduct(product)}
                                             className="bg-yellow-400 text-white px-3 py-1 rounded hover:bg-yellow-500"
                                         >Editar</button>
                                         <button
@@ -131,7 +127,7 @@ const GardenOwnerView = () => {
                             ))}
                             <div className="flex justify-end">
                                 <button
-                                    onClick={() => setShowCreateSession(true)}
+                                    onClick={() =>setShowCreateSession(true)}
                                     className="bg-green-600 text-white px-4 py-2 rounded flex items-center gap-2 hover:bg-green-700"
                                 >
                                     <PlusCircle size={20} /> Crear sesión de voluntariado
@@ -160,24 +156,7 @@ const GardenOwnerView = () => {
                     {/* Modal contenido creación voluntariado */}
                 </div>
             )}
-
-            {showCreateSession && (
-            <CreateSessionModal
-                isOpen={showCreateSession}
-                onClose={() => setShowCreateSession(false)}
-                gardenId={Number(id)}
-            />
-            )}
-            {showEditProductModal && (
-                <EditProductModal
-                    isOpen={showEditProductModal}
-                    onClose={() => setShowEditProductModal(false)}
-                    gardenId={Number(id)}
-                    product={null}
-                />
-            )}
         </div>
-
     );
 };
 

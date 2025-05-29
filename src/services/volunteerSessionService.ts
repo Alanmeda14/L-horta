@@ -3,9 +3,9 @@ import api from './api';
 const API_URL = '/sessions';
 
 export interface VolunteerSession {
-  id?: number;
   gardenId: number;
-  datetime: string; // ISO string
+  startDatetime: string;
+  endDatetime: string;
   maxVolunteers: number;
   taskDescription: string;
 }
@@ -17,7 +17,7 @@ export const getAllSessions = async (): Promise<VolunteerSession[]> => {
 
 export const createSession = async (session: VolunteerSession): Promise<VolunteerSession> => {
   const payload = {
-    datetime: session.datetime,
+    datetime: session.startDatetime,
     maxVolunteers: session.maxVolunteers,
     taskDescription: session.taskDescription,
     garden: { id: session.gardenId }

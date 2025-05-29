@@ -192,36 +192,6 @@ const GardenCard: React.FC<GardenCardProps> = ({
                     className="w-full h-48 object-cover transition-transform duration-500 hover:scale-105"
                     onError={() => setImageError(true)}
                 />
-                <div className="absolute top-0 right-0 p-2 flex space-x-2">
-                    <motion.button
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.95 }}
-                        onClick={(e) => onPreview(garden.id!, e)}
-                        className="bg-blue-500 hover:bg-blue-600 text-white p-2 rounded-full shadow-md transition-colors duration-200"
-                        title="Vista previa"
-                    >
-                        <Eye size={18} />
-                    </motion.button>
-                    <motion.button
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.95 }}
-                        onClick={(e) => onEdit(garden.id!, e)}
-                        className="bg-yellow-500 hover:bg-yellow-600 text-white p-2 rounded-full shadow-md transition-colors duration-200"
-                        title="Editar"
-                    >
-                        <Edit size={18} />
-                    </motion.button>
-                    <motion.button
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.95 }}
-                        onClick={(e) => onDelete(garden.id!, e)}
-                        className="bg-red-500 hover:bg-red-600 text-white p-2 rounded-full shadow-md transition-colors duration-200"
-                        title="Eliminar"
-                        disabled={isDeleting}
-                    >
-                        {isDeleting ? <Loader size={18} className="animate-spin" /> : <Trash2 size={18} />}
-                    </motion.button>
-                </div>
             </div>
             <div className="p-5">
                 <h2 className="text-xl font-bold text-gray-800 mb-2">{garden.name}</h2>

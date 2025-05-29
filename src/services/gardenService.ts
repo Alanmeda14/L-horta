@@ -8,6 +8,8 @@ export interface Product {
   name: string;
   unitPrice: number;
   stock: number;
+    unitType?: string;
+
 }
 
 export interface Garden {

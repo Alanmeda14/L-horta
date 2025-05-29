@@ -7,6 +7,7 @@ interface ModalProps {
   text: React.ReactNode;
   onConfirm: () => void;
   onCancel: () => void;
+  isSubmitting?: boolean;
 }
 
 export const Modal: React.FC<ModalProps> = ({ title, text, onConfirm, onCancel }) => {
