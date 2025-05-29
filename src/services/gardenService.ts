@@ -10,6 +10,16 @@ export interface Product {
   stock: number;
 }
 
+interface GardenResponse {
+  content: Garden[];
+  page: {
+    size: number;
+    number: number;
+    totalElements: number;
+    totalPages: number;
+  };
+}
+
 /* export interface Garden {
   id?: number;
   name: string;
@@ -24,8 +34,8 @@ export interface Product {
 
 
 // Obtener todos los jardines
-export const getAllGardens = async (): Promise<Garden[]> => {
-  const res = await api.get(API_URL);
+export const getAllGardens = async (): Promise<GardenResponse> => {
+  const res = await api.get<GardenResponse>(API_URL);
   return res.data;
 };
 
