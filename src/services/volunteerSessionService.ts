@@ -29,7 +29,7 @@ export const createSession = async (sessionData: CreateSessionData): Promise<Vol
 };
 
 export const getSessionsByGardenId = async (gardenId: number): Promise<VolunteerSession[]> => {
-  const res = await api.get(`${API_URL}?gardenId=${gardenId}`);
+  const res = await api.get(`${API_URL}/garden/${gardenId}`);
   return res.data;
 };
 

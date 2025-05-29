@@ -13,19 +13,17 @@ export interface Product {
     caName: string;
     esName: string;
     enName: string;
-    description: string;
-    image: string;
-    price: number;
-    stock: number;
+    frName: string;
+    image?: string;
 }
 
 export interface GardenProduct {
-    id: number;
-    garden: Garden;
+    id?: number;
     product: Product;
-    quantity: number;
-    price: number;
-    available: boolean;
+    unitPrice: number;
+    stock: number;
+    units: string;
+    garden?: Garden;
 }
 
 export interface Garden {

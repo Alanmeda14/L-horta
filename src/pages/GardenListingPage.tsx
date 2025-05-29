@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { ShoppingCart, Check } from 'lucide-react';
 import { getGardenById } from '../services/gardenService';
 import { getSessionsByGardenId, VolunteerSession } from '../services/volunteerSessionService';
+import { GardenProductsTable } from '../components/Table/GardenProductsTable';
+import { GardenSessionsList } from '../components/Table/GardenSessionsList';
+import { GardenProduct } from '../types/types';
 
 const GardenListingPage = () => {
     const navigate = useNavigate();
     const { id } = useParams();
     const [garden, setGarden] = useState<any>(null);
     const [activeTab, setActiveTab] = useState('productos');
-    const [products, setProducts] = useState<any[]>([]);
+    const [products, setProducts] = useState<GardenProduct[]>([]);
     const [productLookup, setProductLookup] = useState<Record<string, any>>({});
     const [quantities, setQuantities] = useState<Record<string, number>>({});
     const [sessions, setSessions] = useState<VolunteerSession[]>([]);
@@ -17,38 +19,35 @@ const GardenListingPage = () => {
     const [availableSpots, setAvailableSpots] = useState<Record<number, number>>({});
     const [showAddedMessage, setShowAddedMessage] = useState(false);
 
-
     useEffect(() => {
         const fetchGardens = async () => {
             try {
                 const data = await getGardenById(Number(id));
-                console.log(data)
                 setGarden(data);
                 
                 if (data.gardenProducts) {
-                    // Set the products array
                     setProducts(data.gardenProducts);
                     
-                    // Create initial quantities using product IDs
                     const initialQuantities: Record<string, number> = {};
-                    data.gardenProducts.forEach((p: any) => {
-                        initialQuantities[p.id] = 0;
+                    data.gardenProducts.forEach((p: GardenProduct) => {
+                        if (p.id) {
+                            initialQuantities[p.id.toString()] = 0;
+                        }
                     });
                     setQuantities(initialQuantities);
                     
-                    // Create product lookup object using IDs
-                    const lookup = data.gardenProducts.reduce((acc: any, p: any) => {
-                        acc[p.id] = p;
+                    const lookup = data.gardenProducts.reduce((acc: any, p: GardenProduct) => {
+                        if (p.id) {
+                            acc[p.id.toString()] = p;
+                        }
                         return acc;
                     }, {});
                     setProductLookup(lookup);
                 }
 
-                // Fetch and set sessions
                 const gardenSessions = await getSessionsByGardenId(Number(id));
                 setSessions(gardenSessions);
                 
-                // Initialize volunteer status and available spots for each session
                 const initialVolunteerStatus: Record<number, boolean> = {};
                 const initialAvailableSpots: Record<number, number> = {};
                 gardenSessions.forEach(session => {
@@ -66,24 +65,13 @@ const GardenListingPage = () => {
         };
     
         fetchGardens();
-    }, []);
+    }, [id]);
 
-    const updateQuantity = (product: keyof typeof quantities, amount: number) => {
+    const updateQuantity = (productId: string, amount: number) => {
         setQuantities(prev => ({
             ...prev,
-            [product]: Math.max(0, prev[product] + amount)
+            [productId]: Math.max(0, (prev[productId] || 0) + amount)
         }));
-    };
-
-    const calculateTotal = (product: keyof typeof quantities, pricePerKg: number) => {
-        return (quantities[product] / 1000) * pricePerKg;
-    };
-
-    const calculateGrandTotal = () => {
-        return Object.entries(quantities).reduce((total, [productName, quantity]) => {
-            const product = productLookup[productName];
-            return total + (quantity / 1000) * product.unitPrice;
-        }, 0);
     };
 
     const hasItemsInCart = Object.values(quantities).some(quantity => quantity > 0);
@@ -91,15 +79,15 @@ const GardenListingPage = () => {
     const handleAddToCart = () => {
         const cartItems = Object.entries(quantities)
             .filter(([_, quantity]) => quantity > 0)
-            .map(([productName, quantity]) => {
-                const product = productLookup[productName];
+            .map(([productId, quantity]) => {
+                const product = productLookup[productId];
                 return {
-                    id: product.id,
-                    name: product.caName,
-                    image: product.image,
+                    id: product.id.toString(),
+                    name: product.product.caName,
+                    image: product.product.image,
                     price: product.unitPrice,
                     quantity: quantity / 1000,
-                    unit: product.unit
+                    unit: 'kg'
                 };
             });
 
@@ -118,9 +106,10 @@ const GardenListingPage = () => {
             setShowAddedMessage(false);
         }, 2000);
         
+        // Reset quantities
         const resetQuantities: Record<string, number> = {};
         Object.keys(quantities).forEach((key) => {
-        resetQuantities[key] = 0;
+            resetQuantities[key] = 0;
         });
         setQuantities(resetQuantities);
     };
@@ -179,178 +168,39 @@ const GardenListingPage = () => {
                 </div>
 
                 {activeTab === 'productos' && garden.productAvailable && (
-                    <div>
-                        <div className="overflow-x-auto">
-                            <table className="w-full">
-                                <thead>
-                                    <tr className="border-b">
-                                        <th className="text-left py-2 w-1/3">Producto</th>
-                                        <th className="text-center py-2 w-1/6">Precio por kg</th>
-                                        <th className="text-center py-2 w-1/3">Cantidad</th>
-                                        <th className="text-right py-2 w-1/6">Total</th>
-                                    </tr>
-                                </thead>
-                                <tbody className="divide-y divide-gray-200">
-                                    {products.map((product: any) => (
-                                    <tr key={product.id}>
-                                    <td className="py-4 flex items-center gap-2">
-                                        <img
-                                        src={product.image}
-                                        alt={product.caName}
-                                        className="w-12 h-12 rounded-full object-cover"
-                                        />
-                                        <span>{product.caName}</span>
-                                    </td>
-                                    <td className="py-4 text-center">{product.unitPrice}€/kg</td>
-                                    <td className="py-4">
-                                        <div className="flex items-center justify-center gap-2">
-                                        <button
-                                            className="bg-green-100 w-8 h-8 flex items-center justify-center rounded hover:bg-green-200 active:bg-green-300 transition-colors"
-                                            onClick={() => updateQuantity(product.id, -250)}
-                                        >
-                                            <span className="text-green-800 font-medium">-</span>
-                                        </button>
-                                        <div className="w-20 text-center tabular-nums">
-                                             {quantities[product.id] || 0}g
-                                        </div>
-                                        <button
-                                            className="bg-green-100 w-8 h-8 flex items-center justify-center rounded hover:bg-green-200 active:bg-green-300 transition-colors"
-                                            onClick={() => updateQuantity(product.id, 250)}
-                                        >
-                                            <span className="text-green-800 font-medium">+</span>
-                                        </button>
-                                        </div>
-                                    </td>
-                                    <td className="py-4">
-                                        <div className="w-20 text-right ml-auto tabular-nums">
-                                        {calculateTotal(product.id, product.unitPrice).toFixed(2)}€
-                                        </div>
-                                    </td>
-                                    </tr>
-                                ))}
-                                </tbody>
-                                <tfoot>
-                                    <tr className="border-t">
-                                        <td colSpan={3} className="py-4 text-right font-semibold">Total</td>
-                                        <td className="py-4">
-                                            <div className="w-20 text-right ml-auto tabular-nums font-bold">
-                                                {calculateGrandTotal().toFixed(2)}€
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tfoot>
-                            </table>
-                        </div>
-
-                        <div className="flex flex-wrap justify-between mt-6 gap-4">
-                            <button 
-                                onClick={handleAddToCart}
-                                disabled={!hasItemsInCart}
-                                className={`px-6 py-2 rounded-lg transition-colors flex items-center gap-2 ${
-                                    hasItemsInCart 
-                                        ? 'bg-green-600 text-white hover:bg-green-700' 
-                                        : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                                }`}
-                            >
-                                {showAddedMessage ? (
-                                    <>
-                                        <Check size={20} />
-                                        Añadido a la cesta
-                                    </>
-                                ) : (
-                                    <>
-                                        <ShoppingCart size={20} />
-                                        Añadir al carrito
-                                    </>
-                                )}
-                            </button>
-                            <div className="flex gap-4">
-                                <button
-                                    onClick={() => navigate('/home')}
-                                    className="px-6 py-2 border border-green-600 text-green-600 rounded-lg hover:bg-green-50 transition-colors"
-                                >
-                                    Volver al listado
-                                </button>
-                                <button
-                                    onClick={() => navigate('/cesta')}
-                                    className="px-6 py-2 border border-green-600 text-green-600 rounded-lg hover:bg-green-50 transition-colors flex items-center gap-2"
-                                >
-                                    <ShoppingCart size={16} />
-                                    Ver carrito
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+                    <GardenProductsTable
+                        products={products}
+                        quantities={quantities}
+                        productLookup={productLookup}
+                        showAddedMessage={showAddedMessage}
+                        hasItemsInCart={hasItemsInCart}
+                        onUpdateQuantity={updateQuantity}
+                        onAddToCart={handleAddToCart}
+                        onNavigate={navigate}
+                    />
                 )}
 
                 {activeTab === 'voluntariado' && (
-                    <div className="space-y-4">
-                        {sessions.length > 0 ? (
-                            sessions.map((session) => (
-                                <div key={session.id} className="border rounded-lg p-4 transition-all hover:shadow-md">
-                                    <h3 className="font-semibold">{session.taskDescription}</h3>
-                                    <p className="text-gray-600">{new Date(session.datetime).toLocaleString()}</p>
-                                    <div className="flex items-center gap-2">
-                                        <p className="text-gray-600">Plazas disponibles: {availableSpots[session.id!]}</p>
-                                        {availableSpots[session.id!] === 0 && (
-                                            <span className="text-red-600 text-sm">No hay plazas disponibles</span>
-                                        )}
-                                    </div>
-                                    {!volunteerStatus[session.id!] ? (
-                                        <button
-                                            onClick={() => toggleVolunteerStatus(session.id!)}
-                                            disabled={availableSpots[session.id!] === 0}
-                                            className={`mt-3 px-4 py-2 rounded-lg transition-colors ${
-                                                availableSpots[session.id!] === 0
-                                                    ? 'bg-gray-400 cursor-not-allowed'
-                                                    : 'bg-green-600 hover:bg-green-700 text-white'
-                                            }`}
-                                        >
-                                            Inscribirse
-                                        </button>
-                                    ) : (
-                                        <button
-                                            onClick={() => toggleVolunteerStatus(session.id!)}
-                                            className="mt-3 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
-                                        >
-                                            Desinscribirse
-                                        </button>
-                                    )}
-                                </div>
-                            ))
-                        ) : (
-                            <div className="text-center py-8">
-                                <p className="text-gray-600">No hay sesiones de voluntariado disponibles en este momento.</p>
-                            </div>
-                        )}
-
-                        <div className="flex justify-end mt-6">
-                            <button
-                                onClick={() => navigate('/home')}
-                                className="px-6 py-2 border border-green-600 text-green-600 rounded-lg hover:bg-green-50 transition-colors"
-                            >
-                                Volver al listado
-                            </button>
-                        </div>
-                    </div>
+                    <GardenSessionsList
+                        sessions={sessions}
+                        volunteerStatus={volunteerStatus}
+                        availableSpots={availableSpots}
+                        onToggleVolunteerStatus={toggleVolunteerStatus}
+                        onNavigate={navigate}
+                    />
                 )}
 
-                {((activeTab === 'productos' && !garden.productAvailable) ||
-                    (activeTab === 'voluntariado' && sessions.length === 0)) && (
-                        <div className="text-center py-8">
-                            <p className="text-gray-600 text-lg">
-                                {activeTab === 'productos'
-                                    ? 'Este huerto no tiene productos disponibles actualmente.'
-                                    : 'Este huerto no tiene opciones de voluntariado disponibles actualmente.'}
-                            </p>
-                            <button
-                                onClick={() => navigate('/home')}
-                                className="mt-4 px-6 py-2 border border-green-600 text-green-600 rounded-lg hover:bg-green-50 transition-colors"
-                            >
-                                Volver al listado
-                            </button>
-                        </div>
-                    )}
+                {activeTab === 'productos' && !garden.productAvailable && (
+                    <div className="text-center py-8">
+                        <p className="text-gray-600 text-lg">Este huerto no tiene productos disponibles actualmente.</p>
+                        <button
+                            onClick={() => navigate('/home')}
+                            className="mt-4 px-6 py-2 border border-green-600 text-green-600 rounded-lg hover:bg-green-50 transition-colors"
+                        >
+                            Volver al listado
+                        </button>
+                    </div>
+                )}
             </div>)}
         </div>
     );

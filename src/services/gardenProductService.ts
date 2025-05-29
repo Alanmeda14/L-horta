@@ -1,6 +1,13 @@
-import { GardenProduct, Product } from 'types/types';
-import api from './api';
-const API_URL = '/products';
+/* import api from './api';
+const API_URL = '/garden-products';
+
+export interface Product {
+  id?: number;
+  name: string;
+  unitPrice: number;
+  stock: number;
+  gardenId: number; // asumiendo que seleccionas el huerto al crear
+}
 
 export const getAllProducts = async (): Promise<Product[]> => {
   const res = await api.get(API_URL);
@@ -12,7 +19,7 @@ export const getProductById = async (id: number): Promise<Product> => {
   return res.data;
 };
 
-/* export const createProduct = async (product: Product): Promise<Product> => {
+export const createProduct = async (product: Product): Promise<Product> => {
   return (await api.post(API_URL, {
     ...product,
     garden: { id: product.gardenId } // para vincular con Garden en el backend

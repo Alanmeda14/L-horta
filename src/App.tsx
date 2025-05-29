@@ -11,9 +11,8 @@ import { useAuth } from './context/AuthContext';
 import "./index.css";
 import GardenForm from "./components/Form/GardenForm";
 import { ToastContainer } from "react-toastify";
-import { YourGardens } from "./pages/YourGardens";
-
-// Aquí mantengo las rutas protegidas y públicas que tenías
+import YourGardens from "./pages/YourGardens";
+//import OwnerGarden from "./pages/OwnerGarden";
 
 const PublicRoute = ({ children }: { children: React.ReactNode }) => {
   const { isAuthenticated } = useAuth();

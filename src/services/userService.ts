@@ -53,10 +53,6 @@ export const updateUserProfile = async (userId: number, data: Partial<UserData>,
     formData.append('profileImage', imageFile);
   }
 
-  for (const [key, value] of formData.entries()) {
-    console.log(`${key}:`, value);
-  }
-
   await api.patch(`${API_URL}/${userId}`, formData, {
     headers: {
       'Content-Type': 'multipart/form-data',
