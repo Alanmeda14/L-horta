@@ -138,6 +138,8 @@
   "create_garden": "Crear huerto",
   "preview": "Vista previa",
   "edit": "Editar",
-  "delete": "Eliminar"
+  "delete": "Eliminar",
+
+  "search": "Buscar"
   
 }

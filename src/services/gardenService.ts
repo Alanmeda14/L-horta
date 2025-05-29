@@ -42,6 +42,23 @@ export const getAllGardens = async (
   console.log("✅ Resultado backend:", res.data);
   return res.data;
 }
+export const filterGardens = async (
+  name?: string,
+  location?: string,
+  productName?: string
+): Promise<Garden[]> => {
+  const params: any = {};
+  if (name) params.name = name;
+  if (location) params.location = location;
+  if (productName) params.product = productName; // <- CORREGIDO
+  
+  console.log("🔍 Enviando filtros:", params);
+  
+  const res = await api.get(`${API_URL}/filter`, { params });
+  
+  console.log("✅ Resultado backend:", res.data);
+  return res.data;
+}
 // Obtener jardín por ID
 export const getGardenById = async (id: number): Promise<Garden> => {
   const res = await api.get(`${API_URL}/${id}`);
