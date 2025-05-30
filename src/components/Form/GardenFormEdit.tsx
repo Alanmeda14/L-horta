@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Home, FileText, MapPin, Mail, Image as ImageIcon, Leaf, AlertCircle, Loader, X, DollarSign } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { updateGarden } from '../../services/gardenService';
+import { getGardenById, updateGarden } from '../../services/gardenService';
 import { toast } from "react-toastify";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface ProductItem {
@@ -38,7 +38,8 @@ const productList = [
     "Apio", "Hinojo", "Alcachofa", "Escaluña", "Achicoria"
 ];
 
-const GardenForm: React.FC = () => {
+
+const GardenFormEdit: React.FC = () => {
     const [formData, setFormData] = useState<GardenFormData>({
         name: '',
         description: '',
@@ -47,7 +48,8 @@ const GardenForm: React.FC = () => {
         image: null,
         products: []
     });
-
+    const { id } = useParams();
+    const gardenId = Number(id);
     const [productInput, setProductInput] = useState('');
     const [suggestions, setSuggestions] = useState<string[]>([]);
     const [showSuggestions, setShowSuggestions] = useState(false);
@@ -56,9 +58,47 @@ const GardenForm: React.FC = () => {
     const [isDraggingOver, setIsDraggingOver] = useState(false);
     const suggestionsRef = useRef<HTMLUListElement>(null);
     const dropZoneRef = useRef<HTMLDivElement>(null);
+    const [isLoading, setIsLoading] = useState(true);
+    const [originalImageUrl, setOriginalImageUrl] = useState<string | null>(null);
 
     const { t } = useTranslation();
     const navigate = useNavigate();
+
+     useEffect(() => {
+        const fetchGardenData = async () => {
+            try {
+                setIsLoading(true);
+                const gardenData = await getGardenById(gardenId);
+                
+                setFormData({
+                    name: gardenData.name || '',
+                    description: gardenData.description || '',
+                    location: gardenData.location || '',
+                    postalCode: gardenData.postalCode || '',
+                    image: null,
+                    products: gardenData.products?.map(product => ({
+                        name: product.name,
+                        cantidad: product.stock.toString(),
+                        unidad: product.unitType || 'kg',
+                        price: product.unitPrice.toString()
+                    })) || []
+                });
+
+                if (gardenData.image) {
+                    setOriginalImageUrl(`http://localhost:8080${gardenData.image}`);
+                }
+            } catch (error) {
+                console.error('Error fetching garden:', error);
+                toast.error('Error al cargar los datos del huerto');
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        if (gardenId) {
+            fetchGardenData();
+        }
+    }, [gardenId]);
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -118,6 +158,7 @@ const GardenForm: React.FC = () => {
             products: prev.products.filter(p => p.name !== product)
         }));
     };
+    
 
     const handleCantidadInput = (product: string, cantidad: string) => {
         const cleaned = cantidad.replace(',', '.');
@@ -231,6 +272,7 @@ const GardenForm: React.FC = () => {
 
     const handleRemoveImage = () => {
         setFormData(prev => ({ ...prev, image: null }));
+        setOriginalImageUrl(null);
     };
 
     const handleSubmit = async () => {
@@ -246,6 +288,8 @@ const GardenForm: React.FC = () => {
             gardenFormData.append('name', formData.name);
             gardenFormData.append('description', formData.description);
             gardenFormData.append('location', formData.location);
+            gardenFormData.append('postalCode', formData.postalCode);
+
 
             const products = formData.products.map(item => ({
                 name: item.name,
@@ -259,12 +303,12 @@ const GardenForm: React.FC = () => {
                 gardenFormData.append('image', formData.image);
             }
 
-            await updateGarden(gardenFormData);
+            await updateGarden(gardenId, gardenFormData);
             toast.success("Huerto creado correctamente");
             navigate("/home");
         } catch (error) {
-            console.error('Error creating garden:', error);
-            toast.error("Error al crear el huerto");
+            console.error('Error updating garden:', error);
+            toast.error("Error updating garden");
         } finally {
             setIsSubmitting(false);
         }
@@ -328,6 +372,16 @@ const GardenForm: React.FC = () => {
         );
     };
 
+
+    if (isLoading) {
+        return (
+            <div className="flex items-center justify-center min-h-screen">
+                <Loader size={32} className="animate-spin text-green-600" />
+                <span className="ml-2 text-gray-600">Cargando datos del huerto...</span>
+            </div>
+        );
+    }
+
     return (
         <motion.div
             initial={{ opacity: 0, y: 10 }}
@@ -335,7 +389,7 @@ const GardenForm: React.FC = () => {
             transition={{ duration: 0.3 }}
             className="mt-16 p-6 space-y-4 max-w-3xl mx-auto bg-white rounded-xl shadow-lg"
         >
-            <h2 className="text-2xl font-bold text-green-700 mb-6">Formulario del Huerto</h2>
+            <h2 className="text-2xl font-bold text-green-700 mb-6">Editar Huerto</h2>
 
             {renderFormField(<Home size={18} />, 'name', 'Nombre del huerto', 'text', true)}
             {renderFormField(<FileText size={18} />, 'description', 'Descripción', 'text', false, 'textarea')}
@@ -353,7 +407,7 @@ const GardenForm: React.FC = () => {
                             onDrop={handleDrop}
                             className={`border-2 border-dashed rounded-lg p-4 text-center transition-colors ${isDraggingOver
                                     ? 'border-green-500 bg-green-50'
-                                    : formData.image
+                                    : formData.image || originalImageUrl
                                         ? 'border-green-400 bg-green-50'
                                         : 'border-gray-300 hover:border-green-400'
                                 }`}
@@ -376,6 +430,22 @@ const GardenForm: React.FC = () => {
                                     <p className="text-sm text-green-600 mt-2">
                                         {formData.image.name} ({(formData.image.size / 1024).toFixed(1)} KB)
                                     </p>
+                                </div>
+                            ) : originalImageUrl ? (
+                                <div className="relative">
+                                    <img
+                                        src={originalImageUrl}
+                                        alt="Imagen actual"
+                                        className="max-h-48 mx-auto object-contain rounded"
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={handleRemoveImage}
+                                        className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition-colors"
+                                        title="Eliminar imagen"
+                                    >
+                                        <X size={16} />
+                                    </button>
                                 </div>
                             ) : (
                                 <div className="py-4">
@@ -524,4 +594,4 @@ const GardenForm: React.FC = () => {
     );
 };
 
-export default GardenForm;
+export default GardenFormEdit;

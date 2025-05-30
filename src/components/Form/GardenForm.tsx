@@ -411,7 +411,7 @@ const GardenForm: React.FC = () => {
               onKeyDown={handleProductInputKeyDown}
               onFocus={handleProductInputFocus}
               placeholder={t("add_product_placeholder")}
-              className="w-full p-2.5 border rounded text-sm focus:ring-2 focus:ring-green-300 focus:border-green-500 transition-all"
+              className="border-gray-300 w-full p-2.5 border rounded text-sm focus:ring-2 focus:ring-green-300 focus:border-green-500 transition-all"
             />
             <AnimatePresence>
               {showSuggestions && suggestions.length > 0 && (

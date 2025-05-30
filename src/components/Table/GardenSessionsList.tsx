@@ -3,9 +3,10 @@ import { Session } from '../../types/types';
 
 interface Props {
     sessions: Session[];
-    volunteerStatus?: Record<number, boolean>;
-    availableSpots?: Record<number, number>;
+    volunteerStatus: Record<number, boolean>;
+    availableSpots: Record<number, number>;
     onToggleVolunteerStatus?: (sessionId: number) => void;
+    isOwner?: boolean;
     onNavigate: (path: string) => void;
 }
 
@@ -14,6 +15,7 @@ export const GardenSessionsList: React.FC<Props> = ({
     volunteerStatus,
     availableSpots,
     onToggleVolunteerStatus,
+    isOwner,
     onNavigate
 }) => {
     if (sessions.length === 0) {
@@ -42,25 +44,27 @@ export const GardenSessionsList: React.FC<Props> = ({
                             <span className="text-red-600 text-sm">No hay plazas disponibles</span>
                         )}
                     </div>
-                    {!volunteerStatus[session.id] ? (
-                        <button
-                            onClick={() => onToggleVolunteerStatus(session.id)}
+                    {isOwner && (
+                        !volunteerStatus[session.id] ? (
+                            <button
+                            onClick={() => onToggleVolunteerStatus?.(session.id)}
                             disabled={availableSpots[session.id] === 0}
                             className={`mt-3 px-4 py-2 rounded-lg transition-colors ${
                                 availableSpots[session.id] === 0
-                                    ? 'bg-gray-400 cursor-not-allowed'
-                                    : 'bg-green-600 hover:bg-green-700 text-white'
+                                ? 'bg-gray-400 cursor-not-allowed'
+                                : 'bg-green-600 hover:bg-green-700 text-white'
                             }`}
-                        >
+                            >
                             Inscribirse
-                        </button>
-                    ) : (
-                        <button
-                            onClick={() => onToggleVolunteerStatus(session.id)}
+                            </button>
+                        ) : (
+                            <button
+                            onClick={() => onToggleVolunteerStatus?.(session.id)}
                             className="mt-3 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
-                        >
+                            >
                             Desinscribirse
-                        </button>
+                            </button>
+                        )
                     )}
                 </div>
             ))}

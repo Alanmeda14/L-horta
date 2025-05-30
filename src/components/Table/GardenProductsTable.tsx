@@ -1,5 +1,5 @@
 import React from 'react';
-import { ShoppingCart, Check } from 'lucide-react';
+import { ShoppingCart, Check, Pencil, Trash2 } from 'lucide-react';
 import { GardenProduct } from '../../types/types';
 
 interface Props {
@@ -11,7 +11,9 @@ interface Props {
   onUpdateQuantity?: (productId: string, amount: number) => void;
   onAddToCart?: () => void;
   onNavigate: (path: string) => void;
-  showActions?: boolean;
+  isOwner?: boolean;
+  onEditProduct?: (product: any) => void;
+  onDeleteProduct?: (productId: number) => void;
 }
 
 export const GardenProductsTable: React.FC<Props> = ({
@@ -23,7 +25,9 @@ export const GardenProductsTable: React.FC<Props> = ({
   onUpdateQuantity,
   onAddToCart,
   onNavigate,
-  showActions = true
+  isOwner = false,
+  onEditProduct,
+  onDeleteProduct
 }) => {
   const calculateTotal = (productId: string, pricePerKg: number) => {
     return (quantities[productId] / 1000) * pricePerKg;
@@ -44,8 +48,9 @@ export const GardenProductsTable: React.FC<Props> = ({
             <tr className="border-b">
               <th className="text-left py-2 w-1/3">Producto</th>
               <th className="text-center py-2 w-1/6">Precio por kg</th>
-              {showActions && <th className="text-center py-2 w-1/3">Cantidad</th>}
-              {showActions && <th className="text-right py-2 w-1/6">Total</th>}
+              {!isOwner && <th className="text-center py-2 w-1/3">Cantidad</th>}
+              {!isOwner && <th className="text-right py-2 w-1/6">Total</th>}
+              {isOwner && <th className="text-center py-2 w-1/3">Acciones</th>}
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200">
@@ -60,7 +65,26 @@ export const GardenProductsTable: React.FC<Props> = ({
                     <span>{product.caName}</span>
                   </td>
                   <td className="py-4 text-center">{product.unitPrice}€/kg</td>
-                  {showActions ? (
+                  {isOwner ? (
+                    <td className="py-4">
+                      <div className="flex items-center justify-center gap-2">
+                        <button
+                          onClick={() => onEditProduct?.(product)}
+                          className="bg-yellow-400 text-white px-3 py-1 rounded hover:bg-yellow-500 flex items-center gap-1"
+                        >
+                          <Pencil size={14} />
+                          Editar
+                        </button>
+                        <button
+                          onClick={() => onDeleteProduct?.(product.id)}
+                          className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 flex items-center gap-1"
+                        >
+                          <Trash2 size={14} />
+                          Eliminar
+                        </button>
+                      </div>
+                    </td>
+                  ) : (
                     <>
                       <td className="py-4">
                         <div className="flex items-center justify-center gap-2">
@@ -87,14 +111,12 @@ export const GardenProductsTable: React.FC<Props> = ({
                         </div>
                       </td>
                     </>
-                  ) : (
-                    <td className="py-4 text-center" colSpan={2}>–</td>
                   )}
                 </tr>
               );
             })}
           </tbody>
-          {showActions && (
+          {!isOwner && (
             <tfoot>
               <tr className="border-t">
                 <td colSpan={3} className="py-4 text-right font-semibold">Total</td>
@@ -109,7 +131,7 @@ export const GardenProductsTable: React.FC<Props> = ({
         </table>
       </div>
 
-      {showActions && (
+      {!isOwner && (
         <div className="flex flex-wrap justify-between mt-6 gap-4">
           <button
             onClick={onAddToCart}

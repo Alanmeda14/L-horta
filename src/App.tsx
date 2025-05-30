@@ -13,6 +13,7 @@ import GardenForm from "./components/Form/GardenForm";
 import { ToastContainer } from "react-toastify";
 import YourGardens from "./pages/YourGardens";
 import OwnerGarden from "./pages/OwnerGarden";
+import GardenFormEdit from "./components/Form/GardenFormEdit";
 
 // Aquí mantengo las rutas protegidas y públicas que tenías
 
@@ -71,6 +72,11 @@ function App() {
 
           {/* Private routes */}
           <Route path="/garden/new" element={<GardenForm />} />
+          <Route path="/garden/edit/:id" element={
+            <ProtectedRoute>
+              <GardenFormEdit />
+            </ProtectedRoute>
+          } />
           <Route path="/home" element={
             <ProtectedRoute>
               <HomePage />

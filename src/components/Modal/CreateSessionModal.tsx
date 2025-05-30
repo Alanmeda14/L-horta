@@ -44,10 +44,10 @@ export const CreateSessionModal: React.FC<Props> = ({ isOpen, onClose, gardenId 
   
       // ✅ Enviar la sesión
       await createSession(payload);
-      toast.success("✅ Sesión creada con éxito");
+      toast.success("Sesión creada con éxito");
       onClose();
     } catch (err) {
-      console.error("❌ Error al crear sesión:", err);
+      console.error("Error al crear sesión:", err);
       toast.error("No se pudo crear la sesión");
     }
   };

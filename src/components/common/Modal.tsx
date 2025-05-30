@@ -8,9 +8,12 @@ interface ModalProps {
   onConfirm: () => void;
   onCancel: () => void;
   isSubmitting?: boolean;
+  //isOpen: boolean;
 }
 
 export const Modal: React.FC<ModalProps> = ({ title, text, onConfirm, onCancel }) => {
+  //if (!isOpen) return null;
+
   return (
     <div
       className="fixed inset-0 z-50 grid place-content-center bg-black/50 px-8 p-4"

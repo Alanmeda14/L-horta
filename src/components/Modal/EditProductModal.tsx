@@ -1,21 +1,23 @@
 import React, { useState, useEffect } from "react";
 import { Modal } from '../common/Modal';
 import { toast } from "react-toastify";
+import { GardenProduct, Product } from "types/types";
 
-interface Product {
+/* interface Product {
     id: number;
     name: string;
     unitPrice: number;
-    quantity: number;
+    stock: number;
     image: string;
     description?: string;
-}
+    units: 'g' | 'kg' | 'units';
+} */
 
 interface Props {
     isOpen: boolean;
     onClose: () => void;
-    product: Product | null;
-    onSave?: (updatedProduct: Product) => Promise<void>;
+    product: any | null;
+    onSave?: (updatedProduct: GardenProduct) => Promise<void>;
     gardenId: number;
 }
 
@@ -24,22 +26,16 @@ export const EditProductModal: React.FC<Props> = ({ isOpen, onClose, product, on
     const [unitPrice, setUnitPrice] = useState("");
     const [quantity, setQuantity] = useState("");
     const [description, setDescription] = useState("");
-    const [quantityUnit, setQuantityUnit] = useState<'g'|'kg'|'units'>('g');
+    const [quantityUnit, setQuantityUnit] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     useEffect(() => {
+        console.log(product);
         if (product) {
-            setName(product.name);
+            setName(product.caName);
             setUnitPrice(product.unitPrice.toString());
-            setQuantity(product.quantity.toString());
-            setDescription(product.description || "");
-            if (product.quantity >= 1000) {
-                setQuantityUnit('kg');
-                setQuantity((product.quantity / 1000).toString());
-            } else {
-                setQuantityUnit('g');
-                setQuantity(product.quantity.toString());
-            }
+            setQuantityUnit(product.units);
+            setQuantity(product.stock);
         }
     }, [product]);
 
@@ -49,6 +45,8 @@ export const EditProductModal: React.FC<Props> = ({ isOpen, onClose, product, on
             setUnitPrice(value);
         }
     };
+
+    console.log(quantity)
 
     const handleQuantityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value.replace(/[^\d.,]/g, '');
@@ -98,17 +96,17 @@ export const EditProductModal: React.FC<Props> = ({ isOpen, onClose, product, on
                 ...product,
                 name,
                 unitPrice: priceValue,
-                quantity: finalQuantity,
+                stock: finalQuantity,
                 description
             };
 
             if (onSave) {
                 await onSave(updatedProduct);
             }
-            toast.success("✅ Producto actualizado con éxito");
+            toast.success("Producto actualizado con éxito");
             onClose();
         } catch (err) {
-            console.error("❌ Error al actualizar producto:", err);
+            console.error("Error al actualizar producto:", err);
             toast.error("No se pudo actualizar el producto");
         } finally {
             setIsSubmitting(false);
@@ -118,12 +116,8 @@ export const EditProductModal: React.FC<Props> = ({ isOpen, onClose, product, on
     return (
         <Modal
             title="Editar producto"
-            onCancel={onClose}
-            onConfirm={handleConfirm}
             isSubmitting={isSubmitting}
-            isOpen={isOpen}
-            
-        >
+            text={
             <form className="flex flex-col gap-3 text-left" onSubmit={e => e.preventDefault()}>
                 <label className="text-sm font-medium">Nombre:</label>
                 <input
@@ -151,13 +145,13 @@ export const EditProductModal: React.FC<Props> = ({ isOpen, onClose, product, on
                 <label className="text-sm font-medium">Cantidad:</label>
                 <div className="flex gap-2">
                     <input
-                        type="text"
+                        type="number"
                         inputMode="decimal"
                         value={quantity}
                         onChange={handleQuantityChange}
                         className="border p-2 rounded flex-1"
                         required
-                        placeholder="0,000"
+                        placeholder="0"
                     />
                     <select
                         value={quantityUnit}
@@ -175,9 +169,11 @@ export const EditProductModal: React.FC<Props> = ({ isOpen, onClose, product, on
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                     className="border p-2 rounded"
-                    rows={3}
-                />
-            </form>
-        </Modal>
+                    rows={3}/>
+               
+            </form>}
+            onCancel={onClose}
+            onConfirm={handleConfirm}
+        />
     );
 };
