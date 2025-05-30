@@ -8,7 +8,7 @@ import { toast } from 'react-toastify';
 
 export interface UserData {
   name: string;
-  lastName: string;
+  surname: string;
   email: string;
   location: string;
   profileImage?: string;
@@ -24,7 +24,7 @@ const UserProfile = () => {
 
   const [userData, setUserData] = useState<UserData>({
     name: '',
-    lastName: '',
+    surname: '',
     email: '',
     location: '',
     profileImage: '',
@@ -39,7 +39,7 @@ const UserProfile = () => {
       const user = await getUserById(userId);
       const data: UserData = {
         name: user.name,
-        lastName: user.surname,
+        surname: user.surname,
         email: user.email,
         location: user.location,
         profileImage: user.profileImage,
@@ -178,8 +178,8 @@ const UserProfile = () => {
                   <label className="block text-sm font-medium text-gray-700 mb-1">{t("surname")}</label>
                   <input
                     type="text"
-                    name="lastName"
-                    value={userData.lastName}
+                    name="surname"
+                    value={userData.surname}
                     onChange={handleInputChange}
                     disabled={!isEditing}
                     className="w-full px-3 py-2 border rounded-lg focus:ring-green-500 focus:border-green-500"

@@ -39,16 +39,17 @@ export const deleteUser = async (id: number): Promise<void> => {
 };
 
 
-export const updateUserProfile = async (userId: number, data: Partial<UserData>, imageFile?: File): Promise<void> => {
+export const updateUserProfile = async (
+  userId: number,
+  data: Partial<UserData>,
+  imageFile?: File
+): Promise<void> => {
   const formData = new FormData();
 
-  for (const key in data) {
-    const value = data[key as keyof UserData];
-    if (value !== undefined && value !== null) {
-      formData.append(key, value);
-    }
-  }
+  // Serializamos el objeto `data` a JSON y lo enviamos en el campo 'user'
+  formData.append('user', JSON.stringify(data));
 
+  // Adjuntamos la imagen solo si viene
   if (imageFile) {
     formData.append('profileImage', imageFile);
   }
@@ -59,6 +60,7 @@ export const updateUserProfile = async (userId: number, data: Partial<UserData>,
     },
   });
 };
+
 
 export const changeUserPassword = async (userId: number, data: PasswordPayload): Promise<void> => {
   /* await api.put(`${API_URL}/${userId}/change-password`, data, {
