@@ -2,36 +2,39 @@ import { Garden } from 'types/types';
 import api from './api';
 import { VolunteerSession } from './volunteerSessionService';
 
-const API_URL = 'http://localhost:8080/api/gardens';
-
+const API_URL = '/gardens'
 export interface Product {
   id?: number;
   name: string;
   unitPrice: number;
   stock: number;
-    unitType?: string;
+  unitType?: string;
 
 }
 
-/* export interface Garden {
-  id?: number;
-  name: string;
-  description: string;
-  image: string | null | string;
-  location: string;
-  postalCode?: string;
-  user?: { id: number };
-  productAvailable?: boolean;
-  sessionAvailable?: boolean;
-  products?: Product[];
-} */
 
-
-// Obtener todos los jardines
+// Obtener todos los jardines con filtros
 export const getAllGardens = async (): Promise<Garden[]> => {
   const res = await api.get(API_URL);
   return res.data;
-};
+}
+
+export const filterGardens = async (
+  name?: string,
+  location?: string,
+  productName?: string
+): Promise<Garden[]> => {
+  const params: any = {};
+  if (name) params.name = name;
+  if (location) params.location = location;
+  if (productName) params.product = productName;
+  
+  console.log("🔍 Enviando filtros:", params);
+  
+  const res = await api.get(`${API_URL}/filter`, { params });
+  
+  return res.data;
+}
 
 // Obtener jardín por ID
 export const getGardenById = async (id: number): Promise<Garden> => {

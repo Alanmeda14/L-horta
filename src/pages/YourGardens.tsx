@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { toast } from 'react-toastify';
 import { Garden } from 'types/types';
 import { getMyGardens } from '../services/gardenService';
+import { useTranslation } from 'react-i18next';
 
 const YourGardens: React.FC = () => {
     const [gardens, setGardens] = useState<Garden[]>([]);
@@ -12,6 +13,7 @@ const YourGardens: React.FC = () => {
     const [error, setError] = useState<string | null>(null);
     const [isDeleting, setIsDeleting] = useState<number | null>(null);
     const navigate = useNavigate();
+    const { t } = useTranslation();
 
     useEffect(() => {
         fetchGardens();
@@ -24,9 +26,9 @@ const YourGardens: React.FC = () => {
             console.log(data);
             setGardens(data);
         } catch (err) {
-            setError('No se pudieron obtener los huertos. Inténtalo más tarde.');
+            setError(t("fetch_gardens_error"));
             console.error('Error fetching gardens:', err);
-            toast.error('Error al cargar los huertos');
+            toast.error(t('load_gardens_error'));
         } finally {
             setLoading(false);
         }
@@ -44,13 +46,13 @@ const YourGardens: React.FC = () => {
         return (
             <div className="min-h-screen bg-gray-50 pt-20 px-4 flex items-center justify-center">
                 <div className="bg-white rounded-xl shadow-md p-8 text-center max-w-md mx-auto">
-                    <h2 className="text-xl text-red-600 mb-4">Error</h2>
+                    <h2 className="text-xl text-red-600 mb-4">{t("error_title")}</h2>
                     <p className="text-gray-700 mb-6">{error}</p>
                     <button 
                         onClick={fetchGardens}
                         className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg transition-colors duration-200"
                     >
-                        Intentar de nuevo
+                       {t("try_again")}
                     </button>
                 </div>
             </div>
@@ -66,14 +68,14 @@ const YourGardens: React.FC = () => {
                     transition={{ duration: 0.3 }}
                     className="flex justify-between items-center mb-8"
                 >
-                    <h1 className="text-2xl md:text-3xl font-bold text-gray-800">Tus Huertos</h1>
+                    <h1 className="text-2xl md:text-3xl font-bold text-gray-800">{t("your_gardens_title")}</h1>
                     {gardens.length > 0 && (
                         <Link
                             to="../garden/new"
                             className="flex items-center bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition-all duration-200 transform hover:scale-105 shadow-md"
                         >
                             <Plus size={20} className="mr-2" />
-                            Nuevo Huerto
+                            {t("create_new_garden")}
                         </Link>
                     )}
                 </motion.div>
@@ -97,29 +99,33 @@ const YourGardens: React.FC = () => {
     );
 };
 
-const EmptyState: React.FC = () => (
-    <motion.div 
+const EmptyState: React.FC = () => {
+    const { t } = useTranslation();
+  
+    return (
+      <motion.div 
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.4 }}
         className="bg-white rounded-xl shadow-md p-8 text-center"
-    >
+      >
         <div className="w-24 h-24 mx-auto mb-6 bg-green-50 rounded-full flex items-center justify-center">
-            <Plus size={40} className="text-green-500" />
+          <Plus size={40} className="text-green-500" />
         </div>
-        <h2 className="text-xl font-semibold text-gray-700 mb-4">No tienes huertos todavía</h2>
+        <h2 className="text-xl font-semibold text-gray-700 mb-4">{t("no_gardens_yet")}</h2>
         <p className="text-gray-500 mb-8">
-            Crea tu primer huerto para empezar a gestionar tus productos
+          {t("create_your_first_garden")}
         </p>
         <Link
-            to="/garden/new"
-            className="inline-flex items-center bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg transition-all duration-200 transform hover:scale-105 shadow-md"
+          to="/garden/new"
+          className="inline-flex items-center bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg transition-all duration-200 transform hover:scale-105 shadow-md"
         >
-            <Plus size={20} className="mr-2" />
-            Crear Huerto
+          <Plus size={20} className="mr-2" />
+          {t("create_garden")}
         </Link>
-    </motion.div>
-);
+      </motion.div>
+    );
+  };
 
 interface GardenCardProps {
     garden: Garden;
@@ -134,6 +140,7 @@ const GardenCard: React.FC<GardenCardProps> = ({
 }) => {
     const defaultImage = 'https://images.pexels.com/photos/2292550/pexels-photo-2292550.jpeg';
     const [imageError, setImageError] = useState(false);
+    const { t } = useTranslation();
 
     return (
         <motion.div
@@ -164,7 +171,7 @@ const GardenCard: React.FC<GardenCardProps> = ({
                     <div className="mt-4">
                         <h3 className="text-sm font-semibold text-gray-700 mb-2 flex items-center">
                             <Leaf size={16} className="mr-1 text-green-600" />
-                            Productos ({garden.gardenProducts.length})
+                           {t("products")} ({garden.gardenProducts.length})
                         </h3>
                         <div className="flex flex-wrap gap-1.5">
                             {garden.gardenProducts.slice(0, 3).map((product, index) => (

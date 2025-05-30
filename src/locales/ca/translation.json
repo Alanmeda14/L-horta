@@ -1,17 +1,12 @@
 {
   "welcome": "Benvingut!",
   "access-community": "Accedeix a la comunitat",
-  "login": "Iniciar sessió",
   "logout": "Tancar sessió",
-  "loading": "Carregant",
-  "email": "Correu electrònic",
-  "password": "Contrasenya",
+  
   "not-have-an-account": "No tens un compte?",
   "sign-up": "Registar-se",
 
   "create-an-account": "Crear el teu compte",
-  "name": "Nom",
-  "surname": "Cognoms",
   "confirm-password": "Confirmar contrasenya",
   "o": "or",
   "have-an-account": "Ja tens un compte?",
@@ -19,19 +14,16 @@
   "home": "Inici",
   "user": "Perfil",
   "cart": "Carret",
-  "your-garden": "El teu hort",
-  "gardens": "Horts",
+  "Your Garden": "El teu hort",
+  "Basket": "Cistella",
 
   "discover": "Discover local gardens",
   "connect": "Connect with the garden community, find fresh products.",
 
-  "find-gardens": "Buscar horts...",
-  "find-by-location": "Filtrar per localització...",
-  "find-products": "Filtrar per productes",
 
   "location": "Població",
   "profile": "Perfil d'usuari",
-  "edit-profile": "Editar perfil",
+  "edit-profile": "Edita el perfil",
   "change-password": "Canviar contrasenya",
   "new-password": "Nova contrasenya",
 
@@ -40,6 +32,137 @@
 
   "empty-cart": "El carret està buit",
   "empty-cart2": "Sembla que encara no has afegit productes",
-  "explore-gardens": "Explora els horts"
+  "explore-gardens": "Explora els horts",
 
+  "Your cart is empty":"La Teva cistella està buida",
+  "It looks like you haven't added any products to your cart yet":"Sembla que encara no has afegit productes a la teva cistella",
+  "explore orchards" :"explorar horts",
+
+  "mi-cesta":"La meva cistella",
+  "connects_home":"Connecta amb la comunitat, troba productes frescos i uneix-te al moviment per una vida sostenible.",
+  "discovering the garden" :"Descobreix els horts locals",
+  "Search gardens":"Cercar horts...",
+  "Filter by location" :"Filtra per ubicació...",
+  "Filter by products" : "Filtra per productes...",
+  "products_available":"Productes disponibles",
+  "no_products":"Sense Productes",
+  "Volunteering Available":"Voluntariat disponible",
+  "Without Volunteering":"Sense Voluntariat",
+
+
+  "passwords_do_not_match":"Les noves contrasenyes no coincideixen.",
+  "profile_updated_success": "Perfil actualitzat correctament.",
+  "unknown_error": "Error desconegut",
+  "change_photo": "Canviar foto",
+  "change_password": "Canviar Contrasenya",
+  "current_password": "Contrasenya Actual",
+  "new_password": "Nova Contrasenya",
+  "confirm_new_password": "Confirmar Nova Contrasenya",
+  "cancel": "Cancel·lar",
+  "save_changes": "Desar Canvis",
+
+  "your_cart_is_empty": "La teva cistella està buida",
+  "cart_empty_message": "Sembla que encara no has afegit productes a la teva cistella",
+  "explore_gardens": "Explorar horts",
+  "empty_cart": "Buidar cistella",
+  "subtotal": "Subtotal",
+  "tax_label": "IVA ({{percent}}%)",
+  "total": "Total",
+  "continue_shopping": "Continuar comprant",
+  "checkout": "Finalitzar compra",
+
+  "login_error": "S'ha produït un error en intentar iniciar sessió. Torna-ho a intentar.",
+  "email": "Correu electrònic",
+  "password": "Contrasenya",
+  "login": "Iniciar sessió",
+  "loading": "Carregant...",
+  "create_account": "Crea el teu compte",
+  "join_community": "Uneix-te a la nostra comunitat",
+  "name": "Nom",
+  "surname": "Cognoms",
+  "registering": "Registrant...",
+  "create_account_": "Crear compte",
+  "auth_missing_fields": "Sisplau, introdueix el correu electrònic i la contrasenya.",
+  "login_error_": "Error a l'iniciar sessió",
+  "access_community": "Accedeix a la teva comunitat",
+  "no_account": "No tens un compte?",
+  "sign_up": "Crear compte",
+  "or": "o",
+  "sign_in": "Iniciar sessió",
+  "already_have_account": "Ja tens un compte?",
+
+  "garden_name_required":"El nom de l'hort és obligatori",
+  "location_required": "La ubicació és obligatòria",
+  "invalid_image_file": "Si us plau, selecciona un fitxer d’imatge vàlid",
+  "invalid_dragged_image": "Si us plau, arrossega un fitxer d’imatge vàlid",
+  "form_required_fields": "Si us plau, completa tots els camps obligatoris",
+  "garden_created_success": "Hort creat correctament",
+  "garden_creation_error": "Error en crear l'hort",
+  "price_per_kg": "€/kg",
+  "price_per_100g": "€/100g",
+  "price_per_unit": "€/unitat",
+  "price_default": "€",
+  "garden_form_title": "Formulari de l'hort",
+  "garden_name": "Nom de l'hort",
+  "description": "Descripció",
+  "city": "Ciutat",
+  "postal_code": "Codi Postal",
+  "image_preview": "Previsualització",
+  "remove_image": "Eliminar imatge",
+  "image_info": "{{name}} ({{size}} KB)",
+  "drag_image_or": "Arrossega una imatge aquí",
+  "select_file": "Selecciona un fitxer",
+  "add_product_placeholder": "Afegir producte (escriu i prem Enter)",
+  "ingresar_cantidad": "Introdueix la quantitat",
+  "unit_kg": "kg",
+  "unit_g": "g",
+  "unit_unidad": "unitat",
+  "price_placeholder_kg": "€/kg",
+  "price_placeholder_g": "€/100g",
+  "price_placeholder_unidad": "€/unitat",
+  "aria_price_label": "Preu per {{unidad}}",
+  "remove_product": "Eliminar producte",
+  "saving": "Desant...",
+  "save": "Desar",
+ 
+  "fetch_gardens_error": "No s'han pogut obtenir els horts. Torna-ho a intentar més tard.",
+  "load_gardens_error": "Error en carregar els horts",
+  "delete_garden_confirmation": "Estàs segur que vols eliminar aquest hort?",
+  "garden_deleted_successfully": "Hort eliminat correctament",
+  "garden_delete_error": "Error en eliminar l'hort",
+  "error_title": "Error",
+  "try_again": "Torna-ho a intentar",
+  "your_gardens_title": "Els teus horts",
+  "create_new_garden": "Nou hort",
+  "no_gardens_yet": "Encara no tens cap hort",
+  "create_your_first_garden": "Crea el teu primer hort per començar a gestionar els teus productes",
+  "create_garden": "Crear hort",
+  "preview": "Vista prèvia",
+  "edit": "Editar",
+  "delete": "Eliminar",
+
+  "search":"Cercar"
+
+
+ 
+
+
+  
+  
+
+  
+
+
+  
+
+  
+
+
+
+ 
+
+ 
+  
 }
+
+

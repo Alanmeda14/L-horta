@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import { Trash2, ShoppingBag, ArrowLeft } from 'lucide-react';
+import { useTranslation } from "react-i18next";
+
+
 
 // Define the CartItem interface
 interface CartItem {
@@ -15,12 +18,21 @@ interface CartItem {
 const Cesta: React.FC = () => {
   const navigate = useNavigate();
   const [items, setItems] = useState<CartItem[]>([]);
+  const { t } = useTranslation();
   
   useEffect(() => {
     /* const cartItems = JSON.parse(localStorage.getItem('cart') || '[]');
     setItems(cartItems); */
+    const cartItems = JSON.parse(localStorage.getItem('cart') || '[]');
+  
+    const sanitizedItems = cartItems.map((item: any) => ({
+      ...item,
+      price: parseFloat(item.price),
+      quantity: parseFloat(item.quantity),
+    }));
+  
+    setItems(sanitizedItems);
   }, []);
-
   const removeFromCart = (itemId: string) => {
     const updatedItems = items.filter(item => item.id !== itemId);
     setItems(updatedItems);
@@ -56,14 +68,14 @@ const Cesta: React.FC = () => {
           <div className="flex justify-center mb-6">
             <ShoppingBag className="h-16 w-16 text-gray-400" />
           </div>
-          <h2 className="text-2xl font-semibold mb-4">Tu cesta está vacía</h2>
-          <p className="text-gray-600 mb-8">Parece que aún no has añadido productos a tu cesta</p>
+          <h2 className="text-2xl font-semibold mb-4">{t("your_cart_is_empty")}</h2>
+          <p className="text-gray-600 mb-8">{t("cart_empty_message")}</p>
           <button 
             onClick={() => navigate('/home')}
             className="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors inline-flex items-center gap-2"
           >
             <ArrowLeft size={18} />
-            Explorar huertos
+            {t("explore_gardens")}
           </button>
         </div>
       </div>
@@ -73,12 +85,12 @@ const Cesta: React.FC = () => {
   return (
     <div className="container mx-auto px-4 pt-24 pb-8 max-w-4xl">
       <div className="flex justify-between items-center mb-8">
-        <h1 className="text-2xl font-bold">Mi Cesta</h1>
+        <h1 className="text-2xl font-bold">{t("mi-cesta")}</h1>
         <button 
           onClick={clearCart}
           className="px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
         >
-          Vaciar cesta
+           {t("empty_cart")}
         </button>
       </div>
 
@@ -96,7 +108,7 @@ const Cesta: React.FC = () => {
               
               <div className="flex-grow">
                 <h3 className="font-medium">{item.name}</h3>
-                <p className="text-gray-500 text-sm">{item.price.toFixed(2)}€/{item.unit}</p>
+                <p className="text-gray-500 text-sm">{item.price}€/{item.unit}</p>
               </div>
               
               <div className="flex items-center gap-4">
@@ -135,15 +147,15 @@ const Cesta: React.FC = () => {
         
         <div className="p-6 bg-gray-50 space-y-3">
           <div className="flex justify-between">
-            <span className="text-gray-600">Subtotal</span>
+            <span className="text-gray-600">{t("subtotal")}</span>
             <span>{totalPrice.toFixed(2)}€</span>
           </div>
           <div className="flex justify-between">
-            <span className="text-gray-600">IVA (4%)</span>
+            <span className="text-gray-600">{t("tax_label", { percent: 4 })}</span>
             <span>{tax.toFixed(2)}€</span>
           </div>
           <div className="flex justify-between font-bold pt-3 border-t">
-            <span>Total</span>
+            <span>{t("total")}</span>
             <span>{grandTotal.toFixed(2)}€</span>
           </div>
         </div>
@@ -154,13 +166,13 @@ const Cesta: React.FC = () => {
           onClick={() => navigate('/home')}
           className="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
         >
-          Seguir comprando
+           {t("continue_shopping")}
         </button>
         
         <button 
           className="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
         >
-          Finalizar compra
+         {t("checkout")}
         </button>
       </div>
     </div>

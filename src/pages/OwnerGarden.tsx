@@ -7,13 +7,14 @@ import { EditProductModal } from '../components/Modal/EditProductModal';
 import { GardenSessionsList } from '../components/Table/GardenSessionsList';
 import { GardenProductsTable } from '../components/Table/GardenProductsTable';
 import { GardenProduct } from 'types/types';
-/* import { VolunteerSession } from 'types'; */
+import { useAuth } from '../context/AuthContext';
 import { getSessionsByGardenId, VolunteerSession } from '../services/volunteerSessionService';
 
 
 
 const GardenOwnerView = () => {
     const navigate = useNavigate();
+    const { userId } = useAuth(); 
     const { id } = useParams();
     const [garden, setGarden] = useState<any>(null);
     const [activeTab, setActiveTab] = useState('productos');
@@ -28,6 +29,7 @@ const GardenOwnerView = () => {
     const [quantities, setQuantities] = useState<Record<string, number>>({});
     const [sessions, setSessions] = useState<VolunteerSession[]>([]);
     const [showAddedMessage, setShowAddedMessage] = useState(false);
+    const isOwner = userId === garden?.userId;
     
 
     useEffect(() => {
@@ -122,6 +124,7 @@ const GardenOwnerView = () => {
                                             productLookup={productLookup}
                                             showAddedMessage={showAddedMessage}
                                             onNavigate={navigate}
+                                            showActions={!isOwner}
                                         />
                                     )}
                     
@@ -129,6 +132,7 @@ const GardenOwnerView = () => {
                                         <GardenSessionsList
                                             sessions={sessions}
                                             onNavigate={navigate}
+                                            showActions={!isOwner}
                                         />
                                     )}
                     

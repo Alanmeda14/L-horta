@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Lock, Mail, Sprout, User, Users } from 'lucide-react';
+import { useTranslation } from "react-i18next";
 
 type RegisterFormProps = {
     onSubmit: (data: {
@@ -18,12 +19,13 @@ const RegisterForm = ({ onSubmit }: RegisterFormProps) => {
     const [confirmPassword, setConfirmPassword] = useState("");
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
+    const { t } = useTranslation();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
         if (password !== confirmPassword) {
-            setError("Las contraseñas no coinciden.");
+            setError(t("passwords_do_not_match"));
             return;
         }
 
@@ -42,8 +44,8 @@ const RegisterForm = ({ onSubmit }: RegisterFormProps) => {
             <div className="flex justify-center mb-6">
                 <Sprout className="w-12 h-12 text-green-700" />
             </div>
-            <h2 className="text-2xl font-semibold text-center text-gray-800 mb-2">Crear tu cuenta</h2>
-            <p className="text-center text-gray-600 mb-8">Únete a nuestra comunidad</p>
+            <h2 className="text-2xl font-semibold text-center text-gray-800 mb-2">{t("create_account")}</h2>
+            <p className="text-center text-gray-600 mb-8">{t("join_community")}</p>
 
             <form onSubmit={handleSubmit} className="space-y-4">
                 {error && <p className="text-red-500 text-sm text-center">{error}</p>}
@@ -58,7 +60,7 @@ const RegisterForm = ({ onSubmit }: RegisterFormProps) => {
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                             className="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:border-green-500"
-                            placeholder="Nombre"
+                            placeholder={t("name")}
                             required
                         />
                     </div>
@@ -72,7 +74,7 @@ const RegisterForm = ({ onSubmit }: RegisterFormProps) => {
                             value={surname}
                             onChange={(e) => setSurname(e.target.value)}
                             className="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:border-green-500"
-                            placeholder="Apellidos"
+                            placeholder={t("surname")}
                             required
                         />
                     </div>
@@ -87,7 +89,7 @@ const RegisterForm = ({ onSubmit }: RegisterFormProps) => {
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         className="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:border-green-500"
-                        placeholder="Email"
+                        placeholder={t("email")}
                         required
                     />
                 </div>
@@ -101,7 +103,7 @@ const RegisterForm = ({ onSubmit }: RegisterFormProps) => {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         className="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:border-green-500"
-                        placeholder="Contraseña"
+                        placeholder={t("password")}
                         required
                     />
                 </div>
@@ -115,7 +117,7 @@ const RegisterForm = ({ onSubmit }: RegisterFormProps) => {
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
                         className="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:border-green-500"
-                        placeholder="Confirmar Contraseña"
+                        placeholder={t("confirm_new_password")}
                         required
                     />
                 </div>
@@ -125,7 +127,7 @@ const RegisterForm = ({ onSubmit }: RegisterFormProps) => {
                     disabled={loading}
                     className="cursor-pointer w-full bg-green-700 text-white py-2 rounded-lg hover:bg-green-800 transition-colors"
                 >
-                    {loading ? "Registrando..." : "Crear compte"}
+                    {loading ? t("registering") : t("create_account_")}
                 </button>
             </form>
         </div>
