@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Pencil, Trash2, PlusCircle } from 'lucide-react';
-import { getGardenById } from '../services/gardenService';
+import { getGardenById, deleteGarden, deleteProduct } from '../services/gardenService';
 import { CreateSessionModal } from '../components/Modal/CreateSessionModal';
 import { EditProductModal } from '../components/Modal/EditProductModal';
 import { GardenSessionsList } from '../components/Table/GardenSessionsList';
@@ -10,30 +10,37 @@ import { GardenProduct } from 'types/types';
 import { useAuth } from '../context/AuthContext';
 import { getSessionsByGardenId, VolunteerSession } from '../services/volunteerSessionService';
 import { toast } from 'react-toastify';
+import { deleteGardenProduct } from '../services/gardenProductService';
 
 
+// Asegúrate de importar o definir tu Modal aquí:
+import Modal from '../components/common/Modal';
 
 const GardenOwnerView = () => {
     const navigate = useNavigate();
-    const { userId } = useAuth(); 
+    const { userId } = useAuth();
     const { id } = useParams();
+
+    // Tus estados ya existentes
     const [garden, setGarden] = useState<any>(null);
     const [activeTab, setActiveTab] = useState('productos');
-    const [showEditModal, setShowEditModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [itemToDelete, setItemToDelete] = useState<{ type: 'garden' | 'product'; id: number } | null>(null);
     const [productToEdit, setProductToEdit] = useState<any>(null);
-    const [volunteerModalOpen, setVolunteerModalOpen] = useState(false);
     const [showCreateSession, setShowCreateSession] = useState(false);
-    const [showEditProductModal, setShowEditProductModal] = useState(false)
+    const [showEditProductModal, setShowEditProductModal] = useState(false);
     const [products, setProducts] = useState<GardenProduct[]>([]);
-    const [productLookup, setProductLookup] = useState<Record<string, any>>({});
-    const [quantities, setQuantities] = useState<Record<string, number>>({});
     const [sessions, setSessions] = useState<VolunteerSession[]>([]);
-    const [showAddedMessage, setShowAddedMessage] = useState(false);
     const [isOwner, setIsOwner] = useState(false);
     const [volunteerStatus, setVolunteerStatus] = useState<Record<number, boolean>>({});
     const [availableSpots, setAvailableSpots] = useState<Record<number, number>>({});
-    
+
+    // **ESTADOS QUE FALTABAN**
+    const [quantities, setQuantities] = useState<Record<number, number>>({});
+    const [productLookup, setProductLookup] = useState<Record<number, GardenProduct>>({});
+    const showAddedMessage = false;
+
+
     useEffect(() => {
         const fetchGarden = async () => {
             try {
@@ -47,35 +54,64 @@ const GardenOwnerView = () => {
                 const gardenSessions = await getSessionsByGardenId(Number(id));
                 setSessions(gardenSessions);
 
+                // Inicializa estados de voluntariado
                 const initialVolunteerStatus: Record<number, boolean> = {};
                 const initialAvailableSpots: Record<number, number> = {};
-                gardenSessions.forEach(session => {
+                gardenSessions.forEach((session) => {
                     if (session.id) {
                         initialVolunteerStatus[session.id] = false;
                         initialAvailableSpots[session.id] = session.maxVolunteers;
                     }
                 });
-                const [volunteerStatus, setVolunteerStatus] = useState<Record<number, boolean>>({});
-                const [availableSpots, setAvailableSpots] = useState<Record<number, number>>({});
-
+                setVolunteerStatus(initialVolunteerStatus);
+                setAvailableSpots(initialAvailableSpots);
             } catch (err) {
                 console.error('Error fetching garden:', err);
             }
-
         };
         fetchGarden();
     }, [id]);
 
     useEffect(() => {
         if (garden && userId) {
-            console.log('Checking ownership:', { userId, gardenUserId: garden.userId });
-            console.log(userId === garden.userId)
             setIsOwner(userId === garden.userId);
         }
     }, [garden, userId]);
 
-    const handleDeleteGarden = () => {
-        // lógica para eliminar el huerto
+    // Funciones para abrir modales eliminar
+    const openDeleteGardenModal = () => {
+        if (garden) {
+            setItemToDelete({ type: 'garden', id: garden.id });
+            setShowDeleteModal(true);
+        }
+    };
+
+    const openDeleteProductModal = (productId: number) => {
+        setItemToDelete({ type: 'product', id: productId });
+        setShowDeleteModal(true);
+    };
+
+    // Función para confirmar eliminación
+    const handleConfirmDelete = async () => {
+        if (!itemToDelete) return;
+
+        try {
+            if (itemToDelete.type === 'garden') {
+                await deleteGarden(itemToDelete.id);
+                toast.success('Huerto eliminado correctamente');
+                navigate('/home');
+            } else if (itemToDelete.type === 'product') {
+                await deleteGardenProduct(itemToDelete.id);
+                toast.success('Producto eliminado correctamente');
+                setProducts((prev) => prev.filter((p) => p.id !== itemToDelete.id));
+            }
+        } catch (err) {
+            console.error('Error eliminando:', err);
+            toast.error('Error al eliminar');
+        } finally {
+            setShowDeleteModal(false);
+            setItemToDelete(null);
+        }
     };
 
     const handleEditGarden = () => {
@@ -85,17 +121,12 @@ const GardenOwnerView = () => {
     };
 
     const handleEditProduct = (product: any) => {
-        console.log(product)
         setProductToEdit(product);
         setShowEditProductModal(true);
     };
 
     const handleDeleteProduct = (productId: number) => {
-        // lógica para eliminar producto
-    };
-
-    const handleAddVolunteerSession = () => {
-        // lógica para crear sesión de voluntariado
+        openDeleteProductModal(productId);
     };
 
     return (
@@ -116,7 +147,7 @@ const GardenOwnerView = () => {
                                 <Pencil size={20} />
                             </button>
                             <button
-                                onClick={() => setShowDeleteModal(true)}
+                                onClick={openDeleteGardenModal}
                                 className="bg-red-500 text-white p-2 rounded-full hover:bg-red-600"
                             >
                                 <Trash2 size={20} />
@@ -130,13 +161,19 @@ const GardenOwnerView = () => {
 
                     <div className="flex gap-4 mb-6 border-b">
                         <button
-                            className={`px-4 py-2 font-medium transition-colors ${activeTab === 'productos' ? 'text-green-600 border-b-2 border-green-600' : 'text-gray-600 hover:text-green-500'}`}
+                            className={`px-4 py-2 font-medium transition-colors ${activeTab === 'productos'
+                                    ? 'text-green-600 border-b-2 border-green-600'
+                                    : 'text-gray-600 hover:text-green-500'
+                                }`}
                             onClick={() => setActiveTab('productos')}
                         >
                             Productos
                         </button>
                         <button
-                            className={`px-4 py-2 font-medium transition-colors ${activeTab === 'voluntariado' ? 'text-green-600 border-b-2 border-green-600' : 'text-gray-600 hover:text-green-500'}`}
+                            className={`px-4 py-2 font-medium transition-colors ${activeTab === 'voluntariado'
+                                    ? 'text-green-600 border-b-2 border-green-600'
+                                    : 'text-gray-600 hover:text-green-500'
+                                }`}
                             onClick={() => setActiveTab('voluntariado')}
                         >
                             Voluntariado
@@ -146,36 +183,36 @@ const GardenOwnerView = () => {
                     {activeTab === 'productos' && garden.productAvailable && (
                         <GardenProductsTable
                             products={products}
+                            isOwner={isOwner}
+                            onEditProduct={handleEditProduct}
+                            onDeleteProduct={handleDeleteProduct}
                             quantities={quantities}
                             productLookup={productLookup}
                             showAddedMessage={showAddedMessage}
                             onNavigate={navigate}
-                            isOwner={isOwner}
-                            onEditProduct={handleEditProduct}
-                            onDeleteProduct={handleDeleteProduct}
                         />
                     )}
-                    
+
                     {activeTab === 'voluntariado' && (
                         <>
-                        <GardenSessionsList
-                            sessions={sessions}
-                            onNavigate={navigate}
-                            isOwner={!isOwner} 
-                            volunteerStatus={volunteerStatus} 
-                            availableSpots={availableSpots}
-                        />
-                        <div className="flex justify-end">
-                            <button
-                                onClick={() => setShowCreateSession(true)}
-                                className="mt-5 bg-green-600 text-white px-4 py-2 rounded flex items-center gap-2 hover:bg-green-700"
-                            >
-                                <PlusCircle size={20} /> Crear sesión de voluntariado
-                            </button>
-                        </div>
+                            <GardenSessionsList
+                                sessions={sessions}
+                                onNavigate={navigate}
+                                isOwner={isOwner}
+                                volunteerStatus={volunteerStatus}
+                                availableSpots={availableSpots}
+                            />
+                            <div className="flex justify-end">
+                                <button
+                                    onClick={() => setShowCreateSession(true)}
+                                    className="mt-5 bg-green-600 text-white px-4 py-2 rounded flex items-center gap-2 hover:bg-green-700"
+                                >
+                                    <PlusCircle size={20} /> Crear sesión de voluntariado
+                                </button>
+                            </div>
                         </>
                     )}
-                    
+
                     {activeTab === 'productos' && !garden.productAvailable && (
                         <div className="text-center py-8">
                             <p className="text-gray-600 text-lg">Este huerto no tiene productos disponibles actualmente.</p>
@@ -195,8 +232,8 @@ const GardenOwnerView = () => {
                             gardenId={Number(id)}
                         />
                     )}
+
                     {showEditProductModal && (
-                        console.log("Holi"),
                         <EditProductModal
                             isOpen={showEditProductModal}
                             onClose={() => {
@@ -207,9 +244,22 @@ const GardenOwnerView = () => {
                             product={productToEdit}
                         />
                     )}
-                </div>)}
 
-            </div>
+                    {/* Modal de confirmación para eliminar */}
+                    {showDeleteModal && (
+                        <Modal
+                            title="Confirmar eliminación"
+                            text={`¿Estás seguro que quieres eliminar este ${itemToDelete?.type === 'garden' ? 'huerto' : 'producto'}?`}
+                            onConfirm={handleConfirmDelete}
+                            onCancel={() => {
+                                setShowDeleteModal(false);
+                                setItemToDelete(null);
+                            }}
+                        />
+                    )}
+                </div>
+            )}
+        </div>
     );
 };
 

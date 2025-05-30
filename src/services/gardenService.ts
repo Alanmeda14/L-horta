@@ -68,6 +68,16 @@ export const deleteGarden = async (id: number): Promise<void> => {
   await api.delete(`${API_URL}/${id}`);
 };
 
+export const deleteProduct = async (productId: number) => {
+  const response = await fetch(`http://localhost:8080/products/${productId}`, {
+    method: 'DELETE',
+  });
+  if (!response.ok) {
+    throw new Error('Error deleting product');
+  }
+  return response.json();
+};
+
 // Buscar jardines por nombre de producto
 export const getGardensByProduct = async (productName: string): Promise<Garden[]> => {
   const res = await api.get(`${API_URL}/products/${encodeURIComponent(productName)}`);

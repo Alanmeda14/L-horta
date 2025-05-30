@@ -1,17 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Modal } from '../common/Modal';
 import { toast } from "react-toastify";
-import { GardenProduct, Product } from "types/types";
+import { GardenProduct } from "types/types";
 
-/* interface Product {
-    id: number;
-    name: string;
-    unitPrice: number;
-    stock: number;
-    image: string;
-    description?: string;
-    units: 'g' | 'kg' | 'units';
-} */
 
 interface Props {
     isOpen: boolean;
@@ -30,12 +21,12 @@ export const EditProductModal: React.FC<Props> = ({ isOpen, onClose, product, on
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     useEffect(() => {
-        console.log(product);
         if (product) {
             setName(product.caName);
             setUnitPrice(product.unitPrice.toString());
             setQuantityUnit(product.units);
-            setQuantity(product.stock);
+            setQuantity(product.stock.toString());  // <-- Aquí convertimos a string
+            setDescription(product.description || "");
         }
     }, [product]);
 
@@ -45,8 +36,6 @@ export const EditProductModal: React.FC<Props> = ({ isOpen, onClose, product, on
             setUnitPrice(value);
         }
     };
-
-    console.log(quantity)
 
     const handleQuantityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value.replace(/[^\d.,]/g, '');
@@ -62,7 +51,7 @@ export const EditProductModal: React.FC<Props> = ({ isOpen, onClose, product, on
                 return numValue * 1000;
             case 'units':
                 return numValue;
-            default:
+            default: // gramos o cualquier otro
                 return numValue;
         }
     };
@@ -118,60 +107,61 @@ export const EditProductModal: React.FC<Props> = ({ isOpen, onClose, product, on
             title="Editar producto"
             isSubmitting={isSubmitting}
             text={
-            <form className="flex flex-col gap-3 text-left" onSubmit={e => e.preventDefault()}>
-                <label className="text-sm font-medium">Nombre:</label>
-                <input
-                    type="text"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    className="border p-2 rounded"
-                    required
-                />
-
-                <label className="text-sm font-medium">Precio (€/kg):</label>
-                <div className="relative">
+                <form className="flex flex-col gap-3 text-left" onSubmit={e => e.preventDefault()}>
+                    <label className="text-sm font-medium">Nombre:</label>
                     <input
                         type="text"
-                        inputMode="decimal"
-                        value={unitPrice}
-                        onChange={handlePriceChange}
-                        className="border p-2 rounded w-full"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        className="border p-2 rounded"
                         required
-                        placeholder="0,00"
                     />
-                    <span className="absolute right-3 top-2 text-gray-500">€</span>
-                </div>
 
-                <label className="text-sm font-medium">Cantidad:</label>
-                <div className="flex gap-2">
-                    <input
-                        type="number"
-                        inputMode="decimal"
-                        value={quantity}
-                        onChange={handleQuantityChange}
-                        className="border p-2 rounded flex-1"
-                        required
-                        placeholder="0"
+                    <label className="text-sm font-medium">Precio (€/kg):</label>
+                    <div className="relative">
+                        <input
+                            type="text"
+                            inputMode="decimal"
+                            value={unitPrice}
+                            onChange={handlePriceChange}
+                            className="border p-2 rounded w-full"
+                            required
+                            placeholder="0,00"
+                        />
+                        <span className="absolute right-3 top-2 text-gray-500">€</span>
+                    </div>
+
+                    <label className="text-sm font-medium">Cantidad:</label>
+                    <div className="flex gap-2">
+                        <input
+                            type="text"
+                            inputMode="decimal"
+                            value={quantity}
+                            onChange={handleQuantityChange}
+                            className="border p-2 rounded flex-1"
+                            required
+                            placeholder="0"
+                        />
+                        <select
+                            value={quantityUnit}
+                            onChange={(e) => setQuantityUnit(e.target.value as 'g' | 'kg' | 'units')}
+                            className="border p-2 rounded bg-white"
+                        >
+                            <option value="g">gramos</option>
+                            <option value="kg">kilos</option>
+                            <option value="units">unidades</option>
+                        </select>
+                    </div>
+
+                    <label className="text-sm font-medium">Descripción:</label>
+                    <textarea
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
+                        className="border p-2 rounded"
+                        rows={3}
                     />
-                    <select
-                        value={quantityUnit}
-                        onChange={(e) => setQuantityUnit(e.target.value as 'g'|'kg'|'units')}
-                        className="border p-2 rounded bg-white"
-                    >
-                        <option value="g">gramos</option>
-                        <option value="kg">kilos</option>
-                        <option value="units">unidades</option>
-                    </select>
-                </div>
-
-                <label className="text-sm font-medium">Descripción:</label>
-                <textarea
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                    className="border p-2 rounded"
-                    rows={3}/>
-               
-            </form>}
+                </form>
+            }
             onCancel={onClose}
             onConfirm={handleConfirm}
         />
