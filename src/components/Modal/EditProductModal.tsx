@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Modal } from '../common/Modal';
 import { toast } from "react-toastify";
 import { GardenProduct } from "types/types";
+import { updateGardenProduct } from "../../services/gardenService";
 
 
 interface Props {
@@ -12,11 +13,10 @@ interface Props {
     gardenId: number;
 }
 
-export const EditProductModal: React.FC<Props> = ({ isOpen, onClose, product, onSave }) => {
+export const EditProductModal: React.FC<Props> = ({ isOpen, onClose, product, onSave, gardenId }) => {
     const [name, setName] = useState("");
     const [unitPrice, setUnitPrice] = useState("");
     const [quantity, setQuantity] = useState("");
-    const [description, setDescription] = useState("");
     const [quantityUnit, setQuantityUnit] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -26,7 +26,6 @@ export const EditProductModal: React.FC<Props> = ({ isOpen, onClose, product, on
             setUnitPrice(product.unitPrice.toString());
             setQuantityUnit(product.units);
             setQuantity(product.stock.toString());  // <-- Aquí convertimos a string
-            setDescription(product.description || "");
         }
     }, [product]);
 
@@ -57,50 +56,55 @@ export const EditProductModal: React.FC<Props> = ({ isOpen, onClose, product, on
     };
 
     const handleConfirm = async () => {
-        try {
-            if (!product) return;
+  try {
+    if (!product) return;
 
-            if (!name.trim()) {
-                toast.error("El nombre del producto es obligatorio");
-                return;
-            }
+    if (!name.trim()) {
+      toast.error("El nombre del producto es obligatorio");
+      return;
+    }
 
-            const priceValue = parseFloat(unitPrice.replace(',', '.'));
-            if (isNaN(priceValue) || priceValue <= 0) {
-                toast.error("El precio debe ser mayor que 0");
-                return;
-            }
+    const priceValue = parseFloat(unitPrice.replace(',', '.'));
+    if (isNaN(priceValue) || priceValue <= 0) {
+      toast.error("El precio debe ser mayor que 0");
+      return;
+    }
 
-            const quantityValue = parseFloat(quantity.replace(',', '.'));
-            if (isNaN(quantityValue) || quantityValue <= 0) {
-                toast.error("La cantidad debe ser mayor que 0");
-                return;
-            }
+    const quantityValue = parseFloat(quantity.replace(',', '.'));
+    if (isNaN(quantityValue) || quantityValue <= 0) {
+      toast.error("La cantidad debe ser mayor que 0");
+      return;
+    }
 
-            setIsSubmitting(true);
+    setIsSubmitting(true);
 
-            const finalQuantity = convertQuantityToGrams(quantity, quantityUnit);
+    const finalQuantity = convertQuantityToGrams(quantity, quantityUnit);
 
-            const updatedProduct = {
-                ...product,
-                name,
-                unitPrice: priceValue,
-                stock: finalQuantity,
-                description
-            };
+    // CAMBIO: Usar product.productId en vez de product.id
+    await updateGardenProduct(gardenId, product.id, {
+      unitPrice: priceValue,
+      stock: finalQuantity,
+      units: quantityUnit,
+    });
 
-            if (onSave) {
-                await onSave(updatedProduct);
-            }
-            toast.success("Producto actualizado con éxito");
-            onClose();
-        } catch (err) {
-            console.error("Error al actualizar producto:", err);
-            toast.error("No se pudo actualizar el producto");
-        } finally {
-            setIsSubmitting(false);
-        }
-    };
+    if (onSave) {
+      await onSave({
+        ...product,
+        unitPrice: priceValue,
+        stock: finalQuantity,
+        units: quantityUnit,
+      });
+    }
+
+    toast.success("Producto actualizado con éxito");
+    onClose();
+  } catch (err) {
+    console.error("Error al actualizar producto:", err);
+    toast.error("No se pudo actualizar el producto");
+  } finally {
+    setIsSubmitting(false);
+  }
+};
 
     return (
         <Modal
@@ -112,6 +116,7 @@ export const EditProductModal: React.FC<Props> = ({ isOpen, onClose, product, on
                     <input
                         type="text"
                         value={name}
+                        readOnly
                         onChange={(e) => setName(e.target.value)}
                         className="border p-2 rounded"
                         required
@@ -153,13 +158,6 @@ export const EditProductModal: React.FC<Props> = ({ isOpen, onClose, product, on
                         </select>
                     </div>
 
-                    <label className="text-sm font-medium">Descripción:</label>
-                    <textarea
-                        value={description}
-                        onChange={(e) => setDescription(e.target.value)}
-                        className="border p-2 rounded"
-                        rows={3}
-                    />
                 </form>
             }
             onCancel={onClose}

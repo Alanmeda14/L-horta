@@ -26,6 +26,6 @@ const API_URL = '/garden-products';
 //   })).data;
 // };
 
-export const deleteGardenProduct = async (id: number): Promise<void> => {
-  await api.delete(`${API_URL}/${id}`);
-};
+// export const deleteGardenProduct = async (id: number): Promise<void> => {
+//   await api.delete(`${API_URL}/${id}`);
+// };

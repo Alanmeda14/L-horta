@@ -99,3 +99,16 @@ export const deleteGardenProduct = async (gardenId: number, id: number) => {
   }
 };
 
+export const updateGardenProduct = async (
+  gardenId: number,
+  productId: number,
+  data: {
+    unitPrice?: number;
+    stock?: number;
+    units?: string;
+  }
+): Promise<void> => {
+  const res = await api.put(`${API_URL}/${gardenId}/products/${productId}`, data);
+  console.log(res.data)
+  return res.data;
+};
