@@ -10,7 +10,7 @@ import { GardenProduct } from 'types/types';
 import { useAuth } from '../context/AuthContext';
 import { getSessionsByGardenId, VolunteerSession } from '../services/volunteerSessionService';
 import { toast } from 'react-toastify';
-import { deleteGardenProduct } from '../services/gardenProductService';
+import { deleteGardenProduct } from '../services/gardenService';
 
 
 // Asegúrate de importar o definir tu Modal aquí:
@@ -101,7 +101,7 @@ const GardenOwnerView = () => {
                 toast.success('Huerto eliminado correctamente');
                 navigate('/home');
             } else if (itemToDelete.type === 'product') {
-                await deleteGardenProduct(itemToDelete.id);
+                await deleteGardenProduct(Number (id), itemToDelete.id);
                 toast.success('Producto eliminado correctamente');
                 setProducts((prev) => prev.filter((p) => p.id !== itemToDelete.id));
             }

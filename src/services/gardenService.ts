@@ -89,3 +89,13 @@ export const getMyGardens = async (): Promise<Garden[]> => {
   const res = await api.get(`${API_URL}/my-gardens`);
   return res.data;
 };
+
+export const deleteGardenProduct = async (gardenId: number, id: number) => {
+  try {
+    const response = await api.delete(`/gardens/${gardenId}/products/${id}`);
+    return response.data; 
+  } catch (error) {
+    throw new Error('Error deleting product');
+  }
+};
+
