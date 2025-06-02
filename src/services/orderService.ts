@@ -1,4 +1,5 @@
 import api from './api';
+import type { DisplayOrder } from '../types/types'; // 👈 Importamos el tipo para mostrar pedidos
 
 const API_URL = '/orders';
 
@@ -17,11 +18,13 @@ export interface Order {
   items: OrderItem[];
 }
 
+// Obtener todos los pedidos (uso administrativo o backend)
 export const getAllOrders = async (): Promise<Order[]> => {
   const res = await api.get(API_URL);
   return res.data;
 };
 
+// Crear un pedido
 export const createOrder = async (order: Order): Promise<Order> => {
   const payload = {
     ...order,
@@ -36,6 +39,13 @@ export const createOrder = async (order: Order): Promise<Order> => {
   return res.data;
 };
 
+// Eliminar un pedido
 export const deleteOrder = async (id: number): Promise<void> => {
   await api.delete(`${API_URL}/${id}`);
+};
+
+// 👇 NUEVO: Obtener los pedidos de un usuario para mostrar en su perfil
+export const getOrdersByUser = async (userId: number): Promise<DisplayOrder[]> => {
+  const res = await api.get(`${API_URL}/by-user/${userId}`);
+  return res.data;
 };

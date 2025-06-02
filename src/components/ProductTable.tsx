@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import QuantitySelector from './QuantitySelector';
+import { useTranslation } from 'react-i18next';
 
 interface Product {
     id: string;
@@ -84,6 +85,9 @@ const ProductTable: React.FC<{ gardenImage: string }> = ({ gardenImage }) => {
 
     const totalProductsPrice = selectedProducts.reduce((sum, product) => sum + product.price, 0);
     const totalSessionsCount = selectedSessions.reduce((sum, session) => sum + session.spots, 0);
+    const { t } = useTranslation();
+
+
 
     return (
         <div className="bg-white rounded-lg shadow-md overflow-hidden max-w-4xl mx-auto my-8">

@@ -6,7 +6,6 @@ import Avatar from '../components/Avatar';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 
-
 export interface UserData {
   name: string;
   lastName: string;
@@ -14,7 +13,7 @@ export interface UserData {
   location: string;
   profileImage?: string;
 }
- 
+
 const UserProfile = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -23,7 +22,6 @@ const UserProfile = () => {
 
   const [isEditing, setIsEditing] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-
   const [userData, setUserData] = useState<UserData>({
     name: '',
     lastName: '',
@@ -34,7 +32,6 @@ const UserProfile = () => {
   const [originalUserData, setOriginalUserData] = useState<UserData | null>(null);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [password, setPassword] = useState({ current: '', new: '', confirm: '' });
-  
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -123,7 +120,6 @@ const UserProfile = () => {
     } catch (err: any) {
       alert(err.message || t("unknown_error"));
     }
-    
   };
 
   return (
@@ -136,7 +132,7 @@ const UserProfile = () => {
               onClick={() => setIsEditing(!isEditing)}
               className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
             >
-              {isEditing ? t("cancel"): t("edit-profile")}
+              {isEditing ? t("cancel") : t("edit-profile")}
             </button>
           </div>
 
@@ -166,99 +162,49 @@ const UserProfile = () => {
 
             <form onSubmit={handleSubmit} className="flex-1">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">{t("name")}</label>
-                  <input
-                    type="text"
-                    name="name"
-                    value={userData.name}
-                    onChange={handleInputChange}
-                    disabled={!isEditing}
-                    className="w-full px-3 py-2 border rounded-lg focus:ring-green-500 focus:border-green-500"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">{t("surname")}</label>
-                  <input
-                    type="text"
-                    name="lastName"
-                    value={userData.lastName}
-                    onChange={handleInputChange}
-                    disabled={!isEditing}
-                    className="w-full px-3 py-2 border rounded-lg focus:ring-green-500 focus:border-green-500"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">{t("email")}</label>
-                  <input
-                    type="email"
-                    name="email"
-                    value={userData.email}
-                    onChange={handleInputChange}
-                    disabled={!isEditing}
-                    className="w-full px-3 py-2 border rounded-lg focus:ring-green-500 focus:border-green-500"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">{t("location")}</label>
-                  <input
-                    type="text"
-                    name="location"
-                    value={userData.location}
-                    onChange={handleInputChange}
-                    disabled={!isEditing}
-                    className="w-full px-3 py-2 border rounded-lg focus:ring-green-500 focus:border-green-500"
-                  />
-                </div>
+                {["name", "lastName", "email", "location"].map((field) => (
+                  <div key={field}>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">{t(field)}</label>
+                    <input
+                      type={field === "email" ? "email" : "text"}
+                      name={field}
+                      value={(userData as any)[field]}
+                      onChange={handleInputChange}
+                      disabled={!isEditing}
+                      className="w-full px-3 py-2 border rounded-lg focus:ring-green-500 focus:border-green-500"
+                    />
+                  </div>
+                ))}
               </div>
 
               {isEditing && (
                 <div className="mt-6 border-t pt-6">
                   <h2 className="text-lg font-semibold text-gray-800 mb-4">{t("change_password")}</h2>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">{t("current_password")}</label>
-                      <div className="relative">
+                    {[
+                      { name: "current", label: t("current_password") },
+                      { name: "new", label: t("new_password") },
+                      { name: "confirm", label: t("confirm_new_password") },
+                    ].map(({ name, label }) => (
+                      <div key={name}>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">{label}</label>
                         <input
-                          type={showPassword ? "text" : "password"}
-                          name="current"
-                          value={password.current}
+                          type="password"
+                          name={name}
+                          value={(password as any)[name]}
                           onChange={handlePasswordChange}
                           className="w-full px-3 py-2 border rounded-lg focus:ring-green-500 focus:border-green-500"
                         />
-                        <button
-                          type="button"
-                          onClick={() => setShowPassword(!showPassword)}
-                          className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500"
-                        >
-                          {showPassword ? "Ocultar" : "Mostrar"}
-                        </button>
                       </div>
-                    </div>
-
+                    ))}
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">{t("new_password")}</label>
-                      <input
-                        type="password"
-                        name="new"
-                        value={password.new}
-                        onChange={handlePasswordChange}
-                        className="w-full px-3 py-2 border rounded-lg focus:ring-green-500 focus:border-green-500"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">{t("confirm_new_password")}</label>
-                      <input
-                        type="password"
-                        name="confirm"
-                        value={password.confirm}
-                        onChange={handlePasswordChange}
-                        className="w-full px-3 py-2 border rounded-lg focus:ring-green-500 focus:border-green-500"
-                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="text-sm text-blue-500 underline mt-2"
+                      >
+                        {showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -267,7 +213,7 @@ const UserProfile = () => {
               {isEditing && (
                 <div className="mt-6 flex justify-end">
                   <button type="submit" className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
-                  {t("save_changes")}
+                    {t("save_changes")}
                   </button>
                 </div>
               )}

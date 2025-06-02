@@ -61,3 +61,13 @@ export interface Booking {
     status: string;
     date: string;
 } 
+export interface DisplayOrder {
+    id: number;
+    createdAt: string;
+    gardenName: string;
+    status: string;
+    products: {
+      name: string;
+      quantity: number;
+    }[];
+  }

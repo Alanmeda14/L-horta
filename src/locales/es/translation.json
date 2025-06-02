@@ -140,6 +140,15 @@
   "edit": "Editar",
   "delete": "Eliminar",
 
-  "search": "Buscar"
+ "search": "Buscar",
+  "profile_1": "👤 Mi perfil",
+  "orders": "📦 Mis pedidos",
+  "orders_1": "📦 Mis pedidos",
+  "noOrders": "Aún no tienes pedidos.",
+  "dateLabel": "🗓️ Fecha:",
+  "gardenLabel": "🌱 Huerto:",
+  "productsLabel": "🛒 Productos:",
+  "statusLabel": "📦 Estado:",
+  "ordersLoadError": "Error cargando pedidos"
   
 }

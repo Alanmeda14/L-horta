@@ -141,7 +141,18 @@
   "edit": "Editar",
   "delete": "Eliminar",
 
-  "search":"Cercar"
+  "search":"Cercar",
+  "profile_1":"👤 El meu perfil",
+  "orders": "📦 Les meves comandes",
+  "orders_1": "📦 Les meves comandes",
+  "noOrders": "Encara no tens comandes.",
+  "dateLabel": "🗓️ Data:",
+  "gardenLabel": "🌱 Hort:",
+  "productsLabel": "🛒 Productes:",
+  "statusLabel": "📦 Estat:",
+  "ordersLoadError": "Error en carregar les comandes"
+
+
 
 
  
