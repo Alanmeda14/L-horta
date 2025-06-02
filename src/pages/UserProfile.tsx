@@ -1,10 +1,14 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import { changeUserPassword, getUserById, updateUserProfile } from '../services/userService';
-import Avatar from '../components/Avatar';
-import { t } from 'i18next';
-import { toast } from 'react-toastify';
+import React, { useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import {
+  changeUserPassword,
+  getUserById,
+  updateUserProfile,
+} from "../services/userService";
+import Avatar from "../components/Avatar";
+import { t } from "i18next";
+import { toast } from "react-toastify";
 
 export interface UserData {
   name: string;
@@ -23,15 +27,21 @@ const UserProfile = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   const [userData, setUserData] = useState<UserData>({
-    name: '',
-    surname: '',
-    email: '',
-    location: '',
-    profileImage: '',
+    name: "",
+    surname: "",
+    email: "",
+    location: "",
+    profileImage: "",
   });
-  const [originalUserData, setOriginalUserData] = useState<UserData | null>(null);
+  const [originalUserData, setOriginalUserData] = useState<UserData | null>(
+    null
+  );
   const [imageFile, setImageFile] = useState<File | null>(null);
-  const [password, setPassword] = useState({ current: '', new: '', confirm: '' });
+  const [password, setPassword] = useState({
+    current: "",
+    new: "",
+    confirm: "",
+  });
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -60,7 +70,10 @@ const UserProfile = () => {
       setImageFile(file);
       const reader = new FileReader();
       reader.onloadend = () => {
-        setUserData((prev) => ({ ...prev, profileImage: reader.result as string }));
+        setUserData((prev) => ({
+          ...prev,
+          profileImage: reader.result as string,
+        }));
       };
       reader.readAsDataURL(file);
     }
@@ -76,7 +89,10 @@ const UserProfile = () => {
     setPassword((prev) => ({ ...prev, [name]: value }));
   };
 
-  const getModifiedFields = (original: UserData, updated: UserData): Partial<UserData> => {
+  const getModifiedFields = (
+    original: UserData,
+    updated: UserData
+  ): Partial<UserData> => {
     const changes: Partial<UserData> = {};
     (Object.keys(updated) as (keyof UserData)[]).forEach((key) => {
       if (updated[key] !== original[key]) {
@@ -115,7 +131,7 @@ const UserProfile = () => {
       toast.success("Perfil actualitzat correctament.");
       setOriginalUserData(userData);
       setIsEditing(false);
-      setPassword({ current: '', new: '', confirm: '' });
+      setPassword({ current: "", new: "", confirm: "" });
       setImageFile(null);
     } catch (err: any) {
       alert(err.message || "Error desconegut");
@@ -132,19 +148,27 @@ const UserProfile = () => {
               onClick={() => setIsEditing(!isEditing)}
               className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
             >
-              {isEditing ? 'Cancelar' : t("edit-profile")}
+              {isEditing ? "Cancelar" : t("edit-profile")}
             </button>
           </div>
 
           <div className="flex flex-col md:flex-row gap-8">
             <div className="flex flex-col items-center">
               <div className="relative" onClick={handleImageClick}>
-                <Avatar
-                  src={userData.profileImage}
-                  alt="Foto de perfil"
-                  size={192}
-                  className="shadow-md"
-                />
+                {userData.profileImage ? (
+                  <img
+                    src={`http://localhost:8080${userData.profileImage}`}
+                    alt="Foto de perfil"
+                    className="w-48 h-48 rounded-full object-cover shadow-md"
+                  />
+                ) : (
+                  <Avatar
+                    src=""
+                    alt="Foto de perfil"
+                    size={192}
+                    className="shadow-md"
+                  />
+                )}
                 {isEditing && (
                   <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center text-white rounded-full cursor-pointer">
                     <span className="text-sm font-medium">Cambiar foto</span>
@@ -163,7 +187,9 @@ const UserProfile = () => {
             <form onSubmit={handleSubmit} className="flex-1">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">{t("name")}</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    {t("name")}
+                  </label>
                   <input
                     type="text"
                     name="name"
@@ -175,7 +201,9 @@ const UserProfile = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">{t("surname")}</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    {t("surname")}
+                  </label>
                   <input
                     type="text"
                     name="surname"
@@ -187,7 +215,9 @@ const UserProfile = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">{t("email")}</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    {t("email")}
+                  </label>
                   <input
                     type="email"
                     name="email"
@@ -199,7 +229,9 @@ const UserProfile = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">{t("location")}</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    {t("location")}
+                  </label>
                   <input
                     type="text"
                     name="location"
@@ -213,10 +245,14 @@ const UserProfile = () => {
 
               {isEditing && (
                 <div className="mt-6 border-t pt-6">
-                  <h2 className="text-lg font-semibold text-gray-800 mb-4">Cambiar Contraseña</h2>
+                  <h2 className="text-lg font-semibold text-gray-800 mb-4">
+                    Cambiar Contraseña
+                  </h2>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Contraseña Actual</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Contraseña Actual
+                      </label>
                       <div className="relative">
                         <input
                           type={showPassword ? "text" : "password"}
@@ -236,7 +272,9 @@ const UserProfile = () => {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Nueva Contraseña</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Nueva Contraseña
+                      </label>
                       <input
                         type="password"
                         name="new"
@@ -247,7 +285,9 @@ const UserProfile = () => {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Confirmar Nueva Contraseña</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Confirmar Nueva Contraseña
+                      </label>
                       <input
                         type="password"
                         name="confirm"
@@ -262,7 +302,10 @@ const UserProfile = () => {
 
               {isEditing && (
                 <div className="mt-6 flex justify-end">
-                  <button type="submit" className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
+                  <button
+                    type="submit"
+                    className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+                  >
                     Guardar Cambios
                   </button>
                 </div>
