@@ -10,24 +10,25 @@ interface AvatarProps {
 
 const Avatar: React.FC<AvatarProps> = ({ 
   src, 
-  alt = 'User avatar', 
+  alt = 'Avatar de usuario', 
   size = 48,
   className = ''
 }) => {
-  const defaultAvatarStyle = {
+  const defaultStyle = {
     width: size,
     height: size,
-    backgroundColor: '#e5e7eb',
-    color: '#4b5563',
+    backgroundColor: '#e5e7eb', // gris claro
+    color: '#4b5563', // gris oscuro
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: '50%',
-  };
+    overflow: 'hidden',
+  } as React.CSSProperties;
 
   if (!src) {
     return (
-      <div style={defaultAvatarStyle} className={className}>
+      <div style={defaultStyle} className={className}>
         <User size={size * 0.6} />
       </div>
     );
@@ -37,7 +38,12 @@ const Avatar: React.FC<AvatarProps> = ({
     <img 
       src={src} 
       alt={alt} 
-      style={{ width: size, height: size, objectFit: 'cover', borderRadius: '50%' }}
+      style={{
+        width: size,
+        height: size,
+        objectFit: 'cover',
+        borderRadius: '50%',
+      }}
       className={className}
     />
   );

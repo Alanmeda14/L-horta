@@ -151,7 +151,16 @@
   "edit": "Edit",
   "delete": "Delete",
 
-  "search":"Search"
+  "search": "Search",
+  "profile_1": "👤 My Profile",
+  "orders": "📦 My Orders",
+  "orders_1": "📦 My Orders",
+  "noOrders": "You have no orders yet.",
+  "dateLabel": "🗓️ Date:",
+  "gardenLabel": "🌱 Garden:",
+  "productsLabel": "🛒 Products:",
+  "statusLabel": "📦 Status:",
+  "ordersLoadError": "Error loading orders"
 
 
   

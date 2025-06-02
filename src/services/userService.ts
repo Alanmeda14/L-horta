@@ -4,7 +4,7 @@ import api from './api';
 const API_URL = '/users';
 
 export interface User {
-  id?: number;
+  id: number;
   name: string;
   surname: string;
   email: string; 
@@ -26,7 +26,14 @@ export const getAllUsers = async (): Promise<User[]> => {
 
 export const getUserById = async (id: number): Promise<User> => {
   const response = await api.get<User>(`${API_URL}/${id}`);
-  return response.data;
+  const user = response.data;
+
+  return {
+    ...user,
+    profileImage: user.profileImage
+      ? `${import.meta.env.VITE_API_URL}/${user.profileImage}`
+      : undefined,
+  };
 };
 
 export const createUser = async (user: User): Promise<User> => {
