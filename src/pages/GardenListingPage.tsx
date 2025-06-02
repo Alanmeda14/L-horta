@@ -5,6 +5,8 @@ import { getSessionsByGardenId, VolunteerSession } from '../services/volunteerSe
 import { GardenProductsTable } from '../components/Table/GardenProductsTable';
 import { GardenSessionsList } from '../components/Table/GardenSessionsList';
 import { GardenProduct } from '../types/types';
+import { toast } from 'react-toastify';
+import { addToCart } from '../services/shoppingListService';
 
 const GardenListingPage = () => {
     const navigate = useNavigate();
@@ -17,7 +19,6 @@ const GardenListingPage = () => {
     const [sessions, setSessions] = useState<VolunteerSession[]>([]);
     const [volunteerStatus, setVolunteerStatus] = useState<Record<number, boolean>>({});
     const [availableSpots, setAvailableSpots] = useState<Record<number, number>>({});
-    const [showAddedMessage, setShowAddedMessage] = useState(false);
 
     useEffect(() => {
         const fetchGardens = async () => {
@@ -76,42 +77,43 @@ const GardenListingPage = () => {
 
     const hasItemsInCart = Object.values(quantities).some(quantity => quantity > 0);
 
-    const handleAddToCart = () => {
-        const cartItems = Object.entries(quantities)
-            .filter(([_, quantity]) => quantity > 0)
-            .map(([productId, quantity]) => {
-                const product = productLookup[productId];
-                return {
-                    id: product.id.toString(),
-                    name: product.product.caName,
-                    image: product.product.image,
-                    price: product.unitPrice,
-                    quantity: quantity / 1000,
-                    unit: 'kg'
-                };
+    const handleAddToCart = async () => {
+        try {
+            // Get all products with quantity > 0
+            const itemsToAdd = Object.entries(quantities)
+                .filter(([_, quantity]) => quantity > 0)
+                .map(([productId, quantity]) => ({
+                    gardenProductId: Number(productId),
+                    quantity: quantity / 1000 // Convert to kg
+                }));
+
+            /* if (itemsToAdd.length === 0) {
+                setNotification({
+                    message: 'Please select at least one product to add to cart',
+                    type: 'error'
+                });
+                return;
+            } */
+
+            // Add each item to the cart
+            for (const item of itemsToAdd) {
+                await addToCart(item.gardenProductId, item.quantity);
+            }
+
+            // Show success message
+            toast.success("Item added to cart!")
+            
+            // Reset quantities
+            const resetQuantities: Record<string, number> = {};
+            Object.keys(quantities).forEach((key) => {
+                resetQuantities[key] = 0;
             });
+            setQuantities(resetQuantities);
 
-        // Get existing cart items from localStorage
-        const existingCart = JSON.parse(localStorage.getItem('cart') || '[]');
-        
-        // Merge new items with existing cart
-        const updatedCart = [...existingCart, ...cartItems];
-        
-        // Save back to localStorage
-        localStorage.setItem('cart', JSON.stringify(updatedCart));
-
-        // Show added to cart message
-        setShowAddedMessage(true);
-        setTimeout(() => {
-            setShowAddedMessage(false);
-        }, 2000);
-        
-        // Reset quantities
-        const resetQuantities: Record<string, number> = {};
-        Object.keys(quantities).forEach((key) => {
-            resetQuantities[key] = 0;
-        });
-        setQuantities(resetQuantities);
+        } catch (error) {
+            console.error('Error adding items to cart:', error);
+            toast.error("Error adding item to cart.")
+        }
     };
 
     const toggleVolunteerStatus = (sessionId: number) => {
@@ -172,7 +174,6 @@ const GardenListingPage = () => {
                         products={products}
                         quantities={quantities}
                         productLookup={productLookup}
-                        showAddedMessage={showAddedMessage}
                         hasItemsInCart={hasItemsInCart}
                         onUpdateQuantity={updateQuantity}
                         onAddToCart={handleAddToCart}

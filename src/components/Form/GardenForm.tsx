@@ -56,6 +56,7 @@ const GardenForm: React.FC = () => {
     const fetchProducts = async () => {
       try {
         const data = await getAllProducts();
+        console.log(data)
         setProductList(data);
       } catch (err) {
         console.error('Error fetching products:', err);

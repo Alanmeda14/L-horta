@@ -19,7 +19,7 @@ const HomePage = () => {
     const fetchGardens = async () => {
       try {
         setLoading(true);
-        const data = await getAllGardens(); // sin filtros al inicio
+        const data = await getAllGardens();
         setGardens(data);
       } catch (err) {
         console.error('Error al cargar los huertos iniciales', err);
