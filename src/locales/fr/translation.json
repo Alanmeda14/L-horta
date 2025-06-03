@@ -148,6 +148,25 @@
   "gardenLabel": "🌱 Jardin potager :",
   "productsLabel": "🛒 Produits :",
   "statusLabel": "📦 Statut :",
-  "ordersLoadError": "Erreur lors du chargement des commandes"
+  "ordersLoadError": "Erreur lors du chargement des commandes",
+
+  "product": "Produit",
+  "pricePerKg": "Prix par kg",
+  "quantity": "Quantité",
+  "total_1": "Total",
+  "actions": "Actions",
+  "edit_1": "Modifier",
+  "delete_1": "Supprimer",
+  "addedToCart": "Ajouté au panier",
+  "addToCart": "Ajouter au panier",
+  "backToList": "Retour à la liste",
+  "viewCart": "Voir le panier",
+  "products_1": "Produits",
+  "availableServices": "Services disponibles : Livraison, Retrait, Visites",
+  "volunteering": "Bénévolat",
+  "products_2": "Produits"
+
+
+  
   }
   

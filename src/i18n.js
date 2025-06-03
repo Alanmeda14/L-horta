@@ -15,11 +15,11 @@ const resources = {
 };
 
 i18n
-  .use(LanguageDetector)   // <--- ACTÍVALO
+  .use(LanguageDetector)  
   .use(initReactI18next)
   .init({
     resources,
-    fallbackLng: 'ca',      // Si no detecta idioma usa catalán
+    fallbackLng: 'ca',      
     interpolation: {
       escapeValue: false
     },

@@ -150,7 +150,34 @@
   "gardenLabel": "🌱 Hort:",
   "productsLabel": "🛒 Productes:",
   "statusLabel": "📦 Estat:",
-  "ordersLoadError": "Error en carregar les comandes"
+  "ordersLoadError": "Error en carregar les comandes",
+
+  "product": "Producte",
+  "pricePerKg": "Preu per kg",
+  "quantity": "Quantitat",
+  "total_1": "Total",
+  "actions": "Accions",
+  "edit_1": "Editar",
+  "delete_1": "Eliminar",
+  "addedToCart": "Afegit a la cistella",
+  "addToCart": "Afegir al carret",
+  "backToList": "Tornar a la llista",
+  "viewCart": "Veure carret",
+  "products_1": "Productes",
+  "availableServices": "Serveis disponibles: Lliurament, Recollida, Visites",
+  "volunteering": "Voluntariat",
+  "products_2": "Productes",
+
+  "noProducts": "Aquest hort no té productes disponibles actualment.",
+  "backToList_1": "Tornar a la llista",
+  "availableSlots": "Places disponibles:",
+  "noSlotsAvailable": "No hi ha places disponibles",
+  "signUp": "Inscriure's",
+  "unsubscribe": "Desinscriure's",
+  "noVolunteerOptions": "Aquest hort no té opcions de voluntariat disponibles actualment."
+
+
+
 
 
 

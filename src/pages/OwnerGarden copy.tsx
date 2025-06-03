@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { ArrowLeft, Save, Trash2, PlusCircle, Calendar, Clock, Users } from 'lucide-react';
 import { getGardenById, Product, Garden } from '../services/gardenService';
 import { getSessionsByGardenId, VolunteerSession } from '../services/volunteerSessionService';
+import { useTranslation } from 'react-i18next';
 
 const OwnerGarden = () => {
     const navigate = useNavigate();
@@ -113,7 +114,7 @@ const OwnerGarden = () => {
             setIsSaving(false);
         }
     };
-
+  const { t } = useTranslation();
     return (
         <div className="min-h-screen bg-gray-50">
             <div className="container mx-auto px-4 py-8">
@@ -151,7 +152,7 @@ const OwnerGarden = () => {
                                 }`}
                             onClick={() => setActiveTab('productos')}
                         >
-                            Productos
+                            {t('products')}
                         </button>
                         <button
                             className={`px-4 py-2 font-medium ml-4 ${activeTab === 'voluntariado'

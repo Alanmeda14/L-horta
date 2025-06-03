@@ -1,5 +1,6 @@
 import React from 'react';
 import { Session } from '../../types/types';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
     sessions: Session[];
@@ -18,18 +19,20 @@ export const GardenSessionsList: React.FC<Props> = ({
     isOwner,
     onNavigate
 }) => {
+    const { t } = useTranslation();
     if (sessions.length === 0) {
         return (
             <div className="text-center py-8">
-                <p className="text-gray-600 text-lg">Este huerto no tiene opciones de voluntariado disponibles actualmente.</p>
+                <p className="text-gray-600 text-lg">{t('noVolunteerOptions')}</p>
                 <button
                     onClick={() => onNavigate('/home')}
                     className="mt-4 px-6 py-2 border border-green-600 text-green-600 rounded-lg hover:bg-green-50 transition-colors"
                 >
-                    Volver al listado
+                    {t('backToList')}
                 </button>
             </div>
         );
+       
     }
 
     return (
@@ -39,9 +42,9 @@ export const GardenSessionsList: React.FC<Props> = ({
                     <h3 className="font-semibold">{session.taskDescription}</h3>
                     <p className="text-gray-600">{new Date(session.datetime).toLocaleString()}</p>
                     <div className="flex items-center gap-2">
-                        <p className="text-gray-600">Plazas disponibles: {availableSpots[session.id]}</p>
+                        <p className="text-gray-600">{t('availableSlots')}{availableSpots[session.id]}</p>
                         {availableSpots[session.id] === 0 && (
-                            <span className="text-red-600 text-sm">No hay plazas disponibles</span>
+                            <span className="text-red-600 text-sm">{t('noSlotsAvailable')}</span>
                         )}
                     </div>
                     {isOwner && (
@@ -55,14 +58,14 @@ export const GardenSessionsList: React.FC<Props> = ({
                                 : 'bg-green-600 hover:bg-green-700 text-white'
                             }`}
                             >
-                            Inscribirse
+                            {t('signUp')}
                             </button>
                         ) : (
                             <button
                             onClick={() => onToggleVolunteerStatus?.(session.id)}
                             className="mt-3 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
                             >
-                            Desinscribirse
+                            {t('unsubscribe')}
                             </button>
                         )
                     )}

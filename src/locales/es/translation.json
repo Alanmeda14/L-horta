@@ -149,6 +149,23 @@
   "gardenLabel": "🌱 Huerto:",
   "productsLabel": "🛒 Productos:",
   "statusLabel": "📦 Estado:",
-  "ordersLoadError": "Error cargando pedidos"
+  "ordersLoadError": "Error cargando pedidos",
+
+
+  "product": "Producto",
+  "pricePerKg": "Precio por kg",
+  "quantity": "Cantidad",
+  "total_1": "Total",
+  "actions": "Acciones",
+  "edit_1": "Editar",
+  "delete_1": "Eliminar",
+  "addedToCart": "Añadido a la cesta",
+  "addToCart": "Añadir al carrito",
+  "backToList": "Volver al listado",
+  "viewCart": "Ver carrito",
+  "products_1": "Productos",
+  "availableServices": "Servicios disponibles: Entrega, Recogida, Visitas",
+  "volunteering": "Voluntariado",
+  "products_2": "Productos"
   
 }
