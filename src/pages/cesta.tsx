@@ -24,7 +24,6 @@ const Cesta: React.FC = () => {
       try {
         console.log('Fetching cart data...');
         const data = await getShoppingCart();
-        console.log('Received cart data:', data);
         setCart(data);
       } catch (err) {
         console.error('Error fetching cart:', err);

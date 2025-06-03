@@ -140,14 +140,14 @@
   "delete": "Supprimer",
 
   "search": "Rechercher",
-  "profile_1": "👤 Mon profil",
-  "orders": "📦 Mes commandes",
-  "orders_1": "📦 Mes commandes",
+  "profile_1": "Mon profil",
+  "orders": "Mes commandes",
+  "orders_1": "Mes commandes",
   "noOrders": "Vous n'avez pas encore de commandes.",
-  "dateLabel": "🗓️ Date :",
-  "gardenLabel": "🌱 Jardin potager :",
-  "productsLabel": "🛒 Produits :",
-  "statusLabel": "📦 Statut :",
+  "dateLabel": "Date :",
+  "gardenLabel": "Jardin potager :",
+  "productsLabel": "Produits :",
+  "statusLabel": "Statut :",
   "ordersLoadError": "Erreur lors du chargement des commandes"
   }
   

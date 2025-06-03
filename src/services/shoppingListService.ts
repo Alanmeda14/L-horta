@@ -34,6 +34,7 @@ export interface ShoppingCart {
 }
 
 export const groupItemsByGarden = (items: ShoppingCartItem[]) => {
+  console.log(items);
   return items.reduce((groups, item) => {
     const gardenId = item.garden.id;
     if (!groups[gardenId]) {
@@ -49,7 +50,6 @@ export const groupItemsByGarden = (items: ShoppingCartItem[]) => {
 
 export const getShoppingCart = async (): Promise<ShoppingCart> => {
   const res = await api.get(API_URL);
-  console.log(res.data)
   return res.data;
 };
 

@@ -8,14 +8,29 @@ import { toast } from 'react-toastify';
 import { useAuth } from '../../context/AuthContext'; // ajusta la ruta si es necesario
 
 const UserOrders = () => {
-  const [orders, setOrders] = useState<DisplayOrder[]>([]);
+  const [orders, setOrders] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const { t } = useTranslation();
 
-  // 2️⃣ Usa useAuth para obtener el userId del usuario autenticado
+  // Usa useAuth para obtener el userId del usuario autenticado
   const { userId } = useAuth();
 
   useEffect(() => {
+      const fetchOrders = async () => {
+        try {
+          const data = await getOrdersByUser();
+          setOrders(data);
+        } catch (err) {
+          console.error('Error fetching orders:', err);
+        } finally {
+          setLoading(false);
+        }
+      };
+  
+      fetchOrders();
+    }, []);
+
+  /* useEffect(() => {
     // 3️⃣ Si no hay userId, no haces nada (todavía no logueado o cargando)
     if (!userId) return;
 
@@ -37,7 +52,7 @@ const UserOrders = () => {
       .finally(() => {
         setLoading(false);
       });
-  }, [t, userId]); // Mantén userId en dependencias para que se actualice al cambiar
+  }, [t, userId]); // Mantén userId en dependencias para que se actualice al cambiar */
 
   return (
     <div className="min-h-screen bg-gray-50 pt-20 pb-32">
@@ -74,7 +89,7 @@ const UserOrders = () => {
                   <div>
                     <p className="font-medium text-gray-700">{t('productsLabel')}:</p>
                     <ul className="ml-6 list-disc text-sm text-gray-700 mt-1">
-                      {order.products.map((p, i) => (
+                      {order.items.map((p, i) => (
                         <li key={i}>{p.name} x{p.quantity}</li>
                       ))}
                     </ul>

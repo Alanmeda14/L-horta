@@ -16,7 +16,7 @@ export const loginRequest = async (email: string, password: string): Promise<str
     }
 
     const data = await response.json();
-    return data.token; // Asegúrate de que el backend responde con { token: "..." }
+    return data.token;
 };
 
 // Registro

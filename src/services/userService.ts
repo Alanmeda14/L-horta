@@ -25,7 +25,7 @@ export const getAllUsers = async (): Promise<User[]> => {
 };
 
 export const getUserById = async (id: number): Promise<User> => {
-  const response = await api.get<User>(`${API_URL}/${id}`);
+  /* const response = await api.get<User>(`${API_URL}/${id}`);
   const user = response.data;
 
   return {
@@ -33,7 +33,9 @@ export const getUserById = async (id: number): Promise<User> => {
     profileImage: user.profileImage
       ? `${import.meta.env.VITE_API_URL}/${user.profileImage}`
       : undefined,
-  };
+  }; */
+  const response = await api.get<User>(`${API_URL}/${id}`);
+  return response.data;
 };
 
 export const createUser = async (user: User): Promise<User> => {
