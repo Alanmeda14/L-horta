@@ -160,7 +160,23 @@
   "gardenLabel": "🌱 Garden:",
   "productsLabel": "🛒 Products:",
   "statusLabel": "📦 Status:",
-  "ordersLoadError": "Error loading orders"
+  "ordersLoadError": "Error loading orders",
+
+  "product": "Product",
+  "pricePerKg": "Price per kg",
+  "quantity": "Quantity",
+  "total_1": "Total",
+  "actions": "Actions",
+  "edit_1": "Edit",
+  "delete_1": "Delete",
+  "addedToCart": "Added to cart",
+  "addToCart": "Add to cart",
+  "backToList": "Back to list",
+  "viewCart": "View cart",
+  "products_1": "Products",
+  "availableServices": "Available services: Delivery, Pickup, Visits",
+  "volunteering": "Volunteering",
+  "products_2": "Products"
 
 
   

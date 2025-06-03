@@ -11,18 +11,21 @@ const resources = {
   ca: { translation: translationCA },
   es: { translation: translationES },
   en: { translation: translationEN },
-  fr: { translation: translationFR}
+  fr: { translation: translationFR }
 };
 
 i18n
-  /* .use(LanguageDetector) */
+  .use(LanguageDetector)  
   .use(initReactI18next)
   .init({
     resources,
-    lng: 'ca',
-    fallbackLng: 'ca',
+    fallbackLng: 'ca',      
     interpolation: {
       escapeValue: false
+    },
+    detection: {
+      order: ['localStorage', 'navigator', 'htmlTag', 'path', 'subdomain'],
+      caches: ['localStorage']
     }
   });
 

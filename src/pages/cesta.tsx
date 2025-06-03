@@ -1,106 +1,67 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
-import { ShoppingBag, ArrowLeft } from 'lucide-react';
+import { Trash2, ShoppingBag, ArrowLeft } from 'lucide-react';
 import { useTranslation } from "react-i18next";
-import { 
-  getShoppingCart, 
-  updateCartItemQuantity, 
-  removeFromCart, 
-  clearCart, 
-  ShoppingCart, 
-  ShoppingCartItem
-} from "../services/shoppingListService";
-import CartItemsList from '../components/CartItemList';
+
+
+
+// Define the CartItem interface
+interface CartItem {
+  id: string;
+  name: string;
+  price: number;
+  quantity: number;
+  unit: string;
+  image: string;
+}
 
 const Cesta: React.FC = () => {
   const navigate = useNavigate();
-  const [cart, setCart] = useState<ShoppingCart | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [items, setItems] = useState<CartItem[]>([]);
   const { t } = useTranslation();
-
+  
   useEffect(() => {
-    const fetchCart = async () => {
-      try {
-        console.log('Fetching cart data...');
-        const data = await getShoppingCart();
-        console.log('Received cart data:', data);
-        setCart(data);
-      } catch (err) {
-        console.error('Error fetching cart:', err);
-        setError(err instanceof Error ? err.message : 'An error occurred while fetching the cart');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchCart();
+    /* const cartItems = JSON.parse(localStorage.getItem('cart') || '[]');
+    setItems(cartItems); */
+    const cartItems = JSON.parse(localStorage.getItem('cart') || '[]');
+  
+    const sanitizedItems = cartItems.map((item: any) => ({
+      ...item,
+      price: parseFloat(item.price),
+      quantity: parseFloat(item.quantity),
+    }));
+  
+    setItems(sanitizedItems);
   }, []);
-
-  const handleUpdateQuantity = async (item: ShoppingCartItem, newQuantity: number) => {
-    try {
-      await updateCartItemQuantity(item.gardenProductId, newQuantity);
-      if (cart) {
-        setCart({
-          ...cart,
-          items: cart.items.map(i => 
-            i.id === item.id ? { ...i, quantity: newQuantity } : i
-          )
-        });
-      }
-    } catch (err) {
-      console.error('Error updating quantity:', err);
-    }
+  const removeFromCart = (itemId: string) => {
+    const updatedItems = items.filter(item => item.id !== itemId);
+    setItems(updatedItems);
+    localStorage.setItem('cart', JSON.stringify(updatedItems));
   };
 
-  const handleRemoveItem = async (item: ShoppingCartItem) => {
-    try {
-      await removeFromCart(item.gardenProductId);
-      if (cart) {
-        setCart({
-          ...cart,
-          items: cart.items.filter(i => i.id !== item.id)
-        });
-      }
-    } catch (err) {
-      console.error('Error removing item:', err);
+  const updateQuantity = (itemId: string, newQuantity: number) => {
+    if (newQuantity <= 0) {
+      removeFromCart(itemId);
+      return;
     }
-  };
 
-  const handleClearCart = async () => {
-    try {
-      await clearCart();
-      setCart(null);
-    } catch (err) {
-      console.error('Error clearing cart:', err);
-    }
-  };
-
-  if (loading) {
-    return (
-      <div className="container mx-auto px-4 pt-24 pb-16 max-w-4xl">
-        <div className="text-center">Loading...</div>
-      </div>
+    const updatedItems = items.map(item =>
+      item.id === itemId ? { ...item, quantity: newQuantity } : item
     );
-  }
+    setItems(updatedItems);
+    localStorage.setItem('cart', JSON.stringify(updatedItems));
+  };
 
-  if (error) {
-    return (
-      <div className="container mx-auto px-4 pt-24 pb-16 max-w-4xl">
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-center">
-          <p className="text-red-600">{error}</p>
-          <button 
-            onClick={() => window.location.reload()}
-            className="mt-4 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
-          >
-            Retry
-          </button>
-        </div>
-      </div>
-    );
-  }
+  const clearCart = () => {
+    setItems([]);
+    localStorage.setItem('cart', '[]');
+  };
 
-  if (!cart || cart.items.length === 0) {
+  const totalPrice = items.reduce((total, item) => total + item.price * item.quantity, 0);
+  const tax = totalPrice * 0.04; // 4% tax
+  const grandTotal = totalPrice + tax;
+
+  if (items.length === 0) {
     return (
       <div className="container mx-auto px-4 pt-24 pb-16 max-w-4xl">
         <div className="bg-white rounded-lg shadow-lg p-8 text-center">
@@ -121,30 +82,68 @@ const Cesta: React.FC = () => {
     );
   }
 
-  const totalPrice = cart.items.reduce((total, item) => 
-    total + (item.unitPrice * item.quantity), 0
-  );
-  const tax = totalPrice * 0.04; // 4% tax
-  const grandTotal = totalPrice + tax;
-
   return (
     <div className="container mx-auto px-4 pt-24 pb-8 max-w-4xl">
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-2xl font-bold">{t("mi-cesta")}</h1>
         <button 
-          onClick={handleClearCart}
+          onClick={clearCart}
           className="px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
         >
-          {t("empty_cart")}
+           {t("empty_cart")}
         </button>
       </div>
 
       <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-        <CartItemsList 
-          items={cart.items}
-          onUpdateQuantity={handleUpdateQuantity}
-          onRemoveItem={handleRemoveItem}
-        />
+        <div className="divide-y divide-gray-200">
+          {items.map((item) => (
+            <div key={item.id} className="p-4 sm:p-6 flex flex-col sm:flex-row gap-4">
+              <div className="flex-shrink-0">
+                <img 
+                  src={item.image} 
+                  alt={item.name} 
+                  className="w-20 h-20 object-cover rounded-lg"
+                />
+              </div>
+              
+              <div className="flex-grow">
+                <h3 className="font-medium">{item.name}</h3>
+                <p className="text-gray-500 text-sm">{item.price}€/{item.unit}</p>
+              </div>
+              
+              <div className="flex items-center gap-4">
+                <div className="flex items-center border rounded-lg">
+                  <button 
+                    className="px-3 py-1 text-gray-600 hover:bg-gray-100 transition-colors"
+                    onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                  >
+                    -
+                  </button>
+                  <span className="px-3 py-1 min-w-[40px] text-center">
+                    {item.quantity}
+                  </span>
+                  <button 
+                    className="px-3 py-1 text-gray-600 hover:bg-gray-100 transition-colors"
+                    onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                  >
+                    +
+                  </button>
+                </div>
+                
+                <div className="min-w-[80px] text-right font-medium">
+                  {(item.price * item.quantity).toFixed(2)}€
+                </div>
+                
+                <button 
+                  onClick={() => removeFromCart(item.id)}
+                  className="text-gray-400 hover:text-red-600 transition-colors"
+                >
+                  <Trash2 size={18} />
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
         
         <div className="p-6 bg-gray-50 space-y-3">
           <div className="flex justify-between">
@@ -167,13 +166,13 @@ const Cesta: React.FC = () => {
           onClick={() => navigate('/home')}
           className="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
         >
-          {t("continue_shopping")}
+           {t("continue_shopping")}
         </button>
         
         <button 
           className="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
         >
-          {t("checkout")}
+         {t("checkout")}
         </button>
       </div>
     </div>

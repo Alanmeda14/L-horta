@@ -7,6 +7,7 @@ import { GardenSessionsList } from '../components/Table/GardenSessionsList';
 import { GardenProduct } from '../types/types';
 import { toast } from 'react-toastify';
 import { addToCart } from '../services/shoppingListService';
+import { useTranslation } from 'react-i18next';
 
 const GardenListingPage = () => {
     const navigate = useNavigate();
@@ -19,6 +20,32 @@ const GardenListingPage = () => {
     const [sessions, setSessions] = useState<VolunteerSession[]>([]);
     const [volunteerStatus, setVolunteerStatus] = useState<Record<number, boolean>>({});
     const [availableSpots, setAvailableSpots] = useState<Record<number, number>>({});
+    
+ const { t, i18n } = useTranslation();
+    const currentLang = i18n.language;
+
+    const getTranslatedName = (product: any) => {
+    
+        const langMap: Record<string, string> = {
+            'es': 'esName',
+            'en': 'enName',
+            'fr': 'frName',
+            'ca': 'caName'
+        };
+
+        const langProperty = langMap[currentLang] || 'caName';
+        
+     
+        if (product[langProperty]) {
+            return product[langProperty];
+        }
+        if (product.caName) {
+            return product.caName;
+        }
+        
+      
+        return product.name;
+    };
 
     useEffect(() => {
         const fetchGardens = async () => {
@@ -87,14 +114,7 @@ const GardenListingPage = () => {
                     quantity: quantity / 1000 // Convert to kg
                 }));
 
-            /* if (itemsToAdd.length === 0) {
-                setNotification({
-                    message: 'Please select at least one product to add to cart',
-                    type: 'error'
-                });
-                return;
-            } */
-
+           
             // Add each item to the cart
             for (const item of itemsToAdd) {
                 await addToCart(item.gardenProductId, item.quantity);
@@ -131,7 +151,7 @@ const GardenListingPage = () => {
             [sessionId]: prev[sessionId] + (volunteerStatus[sessionId] ? 1 : -1)
         }));
     };
-
+     
     return (
         <div className="container mx-auto px-4 py-8">
             {garden && garden.image && (
@@ -150,7 +170,7 @@ const GardenListingPage = () => {
 
                 <div className="mb-6">
                     <p className="text-gray-600">
-                        Servicios disponibles: Entrega, Recogida, Visitas
+                    {t('availableServices')}
                     </p>
                 </div>
 
@@ -159,13 +179,13 @@ const GardenListingPage = () => {
                         className={`px-4 py-2 font-medium transition-colors ${activeTab === 'productos' ? 'text-green-600 border-b-2 border-green-600' : 'text-gray-600 hover:text-green-500'}`}
                         onClick={() => setActiveTab('productos')}
                     >
-                        Productos
+                       {t('products')}
                     </button>
                     <button
                         className={`px-4 py-2 font-medium transition-colors ${activeTab === 'voluntariado' ? 'text-green-600 border-b-2 border-green-600' : 'text-gray-600 hover:text-green-500'}`}
                         onClick={() => setActiveTab('voluntariado')}
                     >
-                        Voluntariado
+                       {t('volunteering')}
                     </button>
                 </div>
 
@@ -174,6 +194,7 @@ const GardenListingPage = () => {
                         products={products}
                         quantities={quantities}
                         productLookup={productLookup}
+                        /*showAddedMessage={showAddedMessage}*/
                         hasItemsInCart={hasItemsInCart}
                         onUpdateQuantity={updateQuantity}
                         onAddToCart={handleAddToCart}
@@ -193,12 +214,12 @@ const GardenListingPage = () => {
 
                 {activeTab === 'productos' && !garden.productAvailable && (
                     <div className="text-center py-8">
-                        <p className="text-gray-600 text-lg">Este huerto no tiene productos disponibles actualmente.</p>
+                        <p className="text-gray-600 text-lg">{t('noProducts')}</p>
                         <button
                             onClick={() => navigate('/home')}
                             className="mt-4 px-6 py-2 border border-green-600 text-green-600 rounded-lg hover:bg-green-50 transition-colors"
                         >
-                            Volver al listado
+                           {t('backToList_1')}
                         </button>
                     </div>
                 )}

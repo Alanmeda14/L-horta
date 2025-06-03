@@ -49,14 +49,29 @@ const GardenForm: React.FC = () => {
   const dropZoneRef = useRef<HTMLDivElement>(null);
   const [productList, setProductList] = useState<Product[]>([]);
 
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+const currentLang = i18n.language; // ej: "es", "en", "ca", "fr"
+const getProductName = (product: Product): string => {
+  const currentLang = i18n.language;
+  switch (currentLang) {
+    case 'ca':
+      return product.caName || product.esName;
+    case 'es':
+      return product.esName || product.caName;
+    case 'en':
+      return product.enName || product.esName;
+    case 'fr':
+      return product.frName || product.esName;
+    default:
+      return product.esName; // idioma por defecto
+  }
+};
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         const data = await getAllProducts();
-        console.log(data)
         setProductList(data);
       } catch (err) {
         console.error('Error fetching products:', err);
@@ -137,7 +152,7 @@ const GardenForm: React.FC = () => {
 
     if (value.trim()) {
       const filtered = productList.filter(product =>
-        product.caName.toLowerCase().includes(value.toLowerCase()) &&
+        getProductName(product).toLowerCase().includes(value.toLowerCase()) &&
         !formData.products.some(p => p.productId === product.id)
       );
       setSuggestions(filtered);
@@ -154,7 +169,7 @@ const GardenForm: React.FC = () => {
 
       const input = productInput.trim().toLowerCase();
       const match = productList.find(p =>
-        p.caName.toLowerCase() === input
+       getProductName(p).toLowerCase() === input
       );
 
       if (match && !formData.products.some(p => p.productId === match.id)) {
@@ -432,7 +447,7 @@ const GardenForm: React.FC = () => {
                       className="px-4 py-2 cursor-pointer hover:bg-green-50 border-b border-gray-100 last:border-0 flex items-center"
                     >
                       <Leaf size={14} className="mr-2 text-green-500" />
-                      {product.caName}
+                      {getProductName(product)}
                     </motion.li>
                   ))}
                 </motion.ul>
@@ -455,38 +470,7 @@ const GardenForm: React.FC = () => {
                 transition={{ duration: 0.2 }}
                 className="bg-green-50 text-green-900 px-3 py-2 rounded-lg flex items-center gap-2 border border-green-100 flex-wrap"
               >
-                <span className="font-medium whitespace-nowrap mr-1">{productInfo?.caName}</span>
-          {/* {formData.products.map((product) => (
-            <motion.div
-              key={product.name}
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.8 }}
-              transition={{ duration: 0.2 }}
-              className="bg-green-50 text-green-900 px-3 py-2 rounded-lg flex items-center gap-2 border border-green-100 flex-wrap"
-            >
-              <span className="font-medium whitespace-nowrap mr-1">{product.name}</span>
-              
-              <div className="flex items-center gap-2 flex-wrap">
-                <input
-                  type="text"
-                  inputMode="decimal"
-                  value={product.cantidad}
-                  onChange={(e) => handleCantidadInput(product.name, e.target.value)}
-                  className="w-16 p-1 border rounded text-center text-sm focus:ring-2 focus:ring-green-300 focus:border-green-500"
-                  placeholder={t('ingresar_cantidad')}
-                  pattern="[0-9]*[.,]?[0-9]*"
-                />
-                
-                <select
-                  value={product.unidad}
-                  onChange={(e) => handleUnidadChange(product.name, e.target.value)}
-                  className="border rounded px-2 py-1 text-sm bg-white focus:ring-2 focus:ring-green-300 focus:border-green-500"
-                >
-                  <option value="kg">{t("unit_kg")}</option>
-                  <option value="g">{t("unit_g")}</option>
-                  <option value="unidad">{t("unit_unidad")}</option>
-                </select> */}
+                <span className="font-medium whitespace-nowrap mr-1">{productInfo ? getProductName(productInfo) : ''}</span>
                 
                 <div className="flex items-center gap-2 flex-wrap">
                   <input
@@ -542,11 +526,6 @@ const GardenForm: React.FC = () => {
                     placeholder="Precio"
                     min="0"
                     step="0.01"
-                    /* value={product.price}
-                    onChange={(e) => handlePriceInput(product.name, e.target.value)}
-                    className="w-16 p-1 text-center text-sm focus:ring-2 focus:ring-green-300 focus:border-green-500 border-none"
-                    placeholder={t(`price_placeholder_${product.unidad}`)}
-                    aria-label={t("aria_price_label", { unidad: t(`unit_${product.unidad}`) })} */
                   />
                   <span className="text-sm text-gray-600">{getPriceLabel(product.units)}</span>
 
@@ -566,20 +545,6 @@ const GardenForm: React.FC = () => {
               </motion.div>
             );
           })}
-                
-                {/* <motion.button
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.9 }}
-                  type="button"
-                  onClick={() => handleRemoveProduct(product.name)}
-                  className="text-red-500 hover:text-red-700 transition-colors"
-                  title={t("remove_product")}
-                >
-                  <X size={16} />
-                </motion.button>
-              </div>
-            </motion.div>
-          ))} */}
         </AnimatePresence>
       </div>
 

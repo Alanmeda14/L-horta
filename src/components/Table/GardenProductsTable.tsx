@@ -1,6 +1,7 @@
 import React from 'react';
 import { ShoppingCart, Check, Pencil, Trash2 } from 'lucide-react';
 import { GardenProduct } from '../../types/types';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
   products: any[];
@@ -39,6 +40,7 @@ export const GardenProductsTable: React.FC<Props> = ({
       return total + (quantity / 1000) * product.unitPrice;
     }, 0);
   };
+  const { t } = useTranslation();
 
   return (
     <div>
@@ -46,11 +48,11 @@ export const GardenProductsTable: React.FC<Props> = ({
         <table className="w-full">
           <thead>
             <tr className="border-b">
-              <th className="text-left py-2 w-1/3">Producto</th>
-              <th className="text-center py-2 w-1/6">Precio por kg</th>
-              {!isOwner && <th className="text-center py-2 w-1/3">Cantidad</th>}
-              {!isOwner && <th className="text-right py-2 w-1/6">Total</th>}
-              {isOwner && <th className="text-center py-2 w-1/3">Acciones</th>}
+             <th className="text-left py-2 w-1/3">{t('product')}</th>
+             <th className="text-center py-2 w-1/6">{t('pricePerKg')}</th>
+              {!isOwner && <th className="text-center py-2 w-1/3">{t('quantity')}</th>}
+              {!isOwner && <th className="text-right py-2 w-1/6">{t('total_1')}</th>}
+              {isOwner && <th className="text-center py-2 w-1/3">{t('actions')}</th>}
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200">
@@ -73,14 +75,14 @@ export const GardenProductsTable: React.FC<Props> = ({
                           className="bg-yellow-400 text-white px-3 py-1 rounded hover:bg-yellow-500 flex items-center gap-1"
                         >
                           <Pencil size={14} />
-                          Editar
+                          {t('edit_1')}
                         </button>
                         <button
                           onClick={() => onDeleteProduct?.(product.id)}
                           className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 flex items-center gap-1"
                         >
                           <Trash2 size={14} />
-                          Eliminar
+                          {t('delete_1')}
                         </button>
                       </div>
                     </td>
@@ -119,7 +121,7 @@ export const GardenProductsTable: React.FC<Props> = ({
           {!isOwner && (
             <tfoot>
               <tr className="border-t">
-                <td colSpan={3} className="py-4 text-right font-semibold">Total</td>
+                <td colSpan={3} className="py-4 text-right font-semibold">{t('total_1')}</td>
                 <td className="py-4">
                   <div className="w-20 text-right ml-auto tabular-nums font-bold">
                     {calculateGrandTotal().toFixed(2)}€
@@ -145,12 +147,12 @@ export const GardenProductsTable: React.FC<Props> = ({
             {showAddedMessage ? (
               <>
                 <Check size={20} />
-                Añadido a la cesta
+                {t('addedToCart')}
               </>
             ) : (
               <>
                 <ShoppingCart size={20} />
-                Añadir al carrito
+                {t('addToCart')}
               </>
             )}
           </button>
@@ -159,14 +161,14 @@ export const GardenProductsTable: React.FC<Props> = ({
               onClick={() => onNavigate('/home')}
               className="px-6 py-2 border border-green-600 text-green-600 rounded-lg hover:bg-green-50 transition-colors"
             >
-              Volver al listado
+              {t('backToList')}
             </button>
             <button
               onClick={() => onNavigate('/cesta')}
               className="px-6 py-2 border border-green-600 text-green-600 rounded-lg hover:bg-green-50 transition-colors flex items-center gap-2"
             >
               <ShoppingCart size={16} />
-              Ver carrito
+              {t('viewCart')}
             </button>
           </div>
         </div>
