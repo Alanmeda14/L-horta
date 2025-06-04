@@ -12,6 +12,7 @@ interface Props {
 }
 
 export const GardenSessionsList: React.FC<Props> = ({
+    
     sessions,
     volunteerStatus,
     availableSpots,
@@ -19,7 +20,7 @@ export const GardenSessionsList: React.FC<Props> = ({
     isOwner,
     onNavigate
 }) => {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
     if (sessions.length === 0) {
         return (
             <div className="text-center py-8">
@@ -34,12 +35,25 @@ export const GardenSessionsList: React.FC<Props> = ({
         );
        
     }
-
+    const getDescriptionByLang = (session: Session) => {
+        switch (i18n.language) {
+          case 'es':
+            return session.taskDescriptionEs || session.taskDescription;
+          case 'en':
+            return session.taskDescriptionEn || session.taskDescription;
+          case 'fr':
+            return session.taskDescriptionFr || session.taskDescription;
+          case 'ca':
+          default:
+            return session.taskDescription;
+        }
+      };
+      
     return (
         <div className="space-y-4">
-            {sessions.map((session) => (
+                   {sessions.map((session) => (
                 <div key={session.id} className="border rounded-lg p-4 transition-all hover:shadow-md">
-                    <h3 className="font-semibold">{session.taskDescription}</h3>
+                     <h3 className="font-semibold">{getDescriptionByLang(session)}</h3>
                     <p className="text-gray-600">{new Date(session.datetime).toLocaleString()}</p>
                     <div className="flex items-center gap-2">
                         <p className="text-gray-600">{t('availableSlots')}{availableSpots[session.id]}</p>
