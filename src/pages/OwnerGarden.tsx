@@ -99,9 +99,9 @@ const GardenOwnerView = () => {
     };
 
     return (
-        <div className="container mx-auto px-4 py-8">
+        <div className="container mx-auto px-4 py-8 dark:bg-gray-800">
             {garden && (
-                <div className="bg-white rounded-lg shadow-lg p-6">
+                <div className="bg-white rounded-lg shadow-lg p-6 dark:bg-green-800">
                     <div className="relative h-64 mb-6">
                         <img
                             src={`http://localhost:8080${garden.image}`}
