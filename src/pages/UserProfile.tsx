@@ -5,10 +5,11 @@ import { changeUserPassword, getUserById, updateUserProfile } from '../services/
 import Avatar from '../components/Avatar';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
+import { t } from "i18next";
 
 export interface UserData {
   name: string;
-  lastName: string;
+  surname: string;
   email: string;
   location: string;
   profileImage?: string;
@@ -23,15 +24,21 @@ const UserProfile = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [userData, setUserData] = useState<UserData>({
-    name: '',
-    lastName: '',
-    email: '',
-    location: '',
-    profileImage: '',
+    name: "",
+    surname: "",
+    email: "",
+    location: "",
+    profileImage: "",
   });
-  const [originalUserData, setOriginalUserData] = useState<UserData | null>(null);
+  const [originalUserData, setOriginalUserData] = useState<UserData | null>(
+    null
+  );
   const [imageFile, setImageFile] = useState<File | null>(null);
-  const [password, setPassword] = useState({ current: '', new: '', confirm: '' });
+  const [password, setPassword] = useState({
+    current: "",
+    new: "",
+    confirm: "",
+  });
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -39,7 +46,7 @@ const UserProfile = () => {
       const user = await getUserById(userId);
       const data: UserData = {
         name: user.name,
-        lastName: user.surname,
+        surname: user.surname,
         email: user.email,
         location: user.location,
         profileImage: user.profileImage,
@@ -60,7 +67,10 @@ const UserProfile = () => {
       setImageFile(file);
       const reader = new FileReader();
       reader.onloadend = () => {
-        setUserData((prev) => ({ ...prev, profileImage: reader.result as string }));
+        setUserData((prev) => ({
+          ...prev,
+          profileImage: reader.result as string,
+        }));
       };
       reader.readAsDataURL(file);
     }
@@ -76,7 +86,10 @@ const UserProfile = () => {
     setPassword((prev) => ({ ...prev, [name]: value }));
   };
 
-  const getModifiedFields = (original: UserData, updated: UserData): Partial<UserData> => {
+  const getModifiedFields = (
+    original: UserData,
+    updated: UserData
+  ): Partial<UserData> => {
     const changes: Partial<UserData> = {};
     (Object.keys(updated) as (keyof UserData)[]).forEach((key) => {
       if (updated[key] !== original[key]) {
@@ -115,7 +128,7 @@ const UserProfile = () => {
       toast.success(t("profile_updated_success"));
       setOriginalUserData(userData);
       setIsEditing(false);
-      setPassword({ current: '', new: '', confirm: '' });
+      setPassword({ current: "", new: "", confirm: "" });
       setImageFile(null);
     } catch (err: any) {
       alert(err.message || t("unknown_error"));
@@ -139,12 +152,20 @@ const UserProfile = () => {
           <div className="flex flex-col md:flex-row gap-8">
             <div className="flex flex-col items-center">
               <div className="relative" onClick={handleImageClick}>
-                <Avatar
-                  src={userData.profileImage}
-                  alt="Foto de perfil"
-                  size={192}
-                  className="shadow-md"
-                />
+                {userData.profileImage ? (
+                  <img
+                    src={`http://localhost:8080${userData.profileImage}`}
+                    alt="Foto de perfil"
+                    className="w-48 h-48 rounded-full object-cover shadow-md"
+                  />
+                ) : (
+                  <Avatar
+                    src=""
+                    alt="Foto de perfil"
+                    size={192}
+                    className="shadow-md"
+                  />
+                )}
                 {isEditing && (
                   <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center text-white rounded-full cursor-pointer">
                     <span className="text-sm font-medium">{t("change_photo")}</span>
@@ -162,32 +183,74 @@ const UserProfile = () => {
 
             <form onSubmit={handleSubmit} className="flex-1">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {["name", "lastName", "email", "location"].map((field) => (
-                  <div key={field}>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">{t(field)}</label>
-                    <input
-                      type={field === "email" ? "email" : "text"}
-                      name={field}
-                      value={(userData as any)[field]}
-                      onChange={handleInputChange}
-                      disabled={!isEditing}
-                      className="w-full px-3 py-2 border rounded-lg focus:ring-green-500 focus:border-green-500"
-                    />
-                  </div>
-                ))}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    {t("name")}
+                  </label>
+                  <input
+                    type="text"
+                    name="name"
+                    value={userData.name}
+                    onChange={handleInputChange}
+                    disabled={!isEditing}
+                    className="w-full px-3 py-2 border rounded-lg focus:ring-green-500 focus:border-green-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    {t("surname")}
+                  </label>
+                  <input
+                    type="text"
+                    name="surname"
+                    value={userData.surname}
+                    onChange={handleInputChange}
+                    disabled={!isEditing}
+                    className="w-full px-3 py-2 border rounded-lg focus:ring-green-500 focus:border-green-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    {t("email")}
+                  </label>
+                  <input
+                    type="email"
+                    name="email"
+                    value={userData.email}
+                    onChange={handleInputChange}
+                    disabled={!isEditing}
+                    className="w-full px-3 py-2 border rounded-lg focus:ring-green-500 focus:border-green-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    {t("location")}
+                  </label>
+                  <input
+                    type="text"
+                    name="location"
+                    value={userData.location}
+                    onChange={handleInputChange}
+                    disabled={!isEditing}
+                    className="w-full px-3 py-2 border rounded-lg focus:ring-green-500 focus:border-green-500"
+                  />
+                </div>
               </div>
 
               {isEditing && (
                 <div className="mt-6 border-t pt-6">
-                  <h2 className="text-lg font-semibold text-gray-800 mb-4">{t("change_password")}</h2>
+                  <h2 className="text-lg font-semibold text-gray-800 mb-4">
+                    Cambiar Contraseña
+                  </h2>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {[
-                      { name: "current", label: t("current_password") },
-                      { name: "new", label: t("new_password") },
-                      { name: "confirm", label: t("confirm_new_password") },
-                    ].map(({ name, label }) => (
-                      <div key={name}>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">{label}</label>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Contraseña Actual
+                      </label>
+                      <div className="relative">
                         <input
                           type="password"
                           name={name}
@@ -196,15 +259,32 @@ const UserProfile = () => {
                           className="w-full px-3 py-2 border rounded-lg focus:ring-green-500 focus:border-green-500"
                         />
                       </div>
-                    ))}
+                    </div>
+
                     <div>
-                      <button
-                        type="button"
-                        onClick={() => setShowPassword(!showPassword)}
-                        className="text-sm text-blue-500 underline mt-2"
-                      >
-                        {showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
-                      </button>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Nueva Contraseña
+                      </label>
+                      <input
+                        type="password"
+                        name="new"
+                        value={password.new}
+                        onChange={handlePasswordChange}
+                        className="w-full px-3 py-2 border rounded-lg focus:ring-green-500 focus:border-green-500"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Confirmar Nueva Contraseña
+                      </label>
+                      <input
+                        type="password"
+                        name="confirm"
+                        value={password.confirm}
+                        onChange={handlePasswordChange}
+                        className="w-full px-3 py-2 border rounded-lg focus:ring-green-500 focus:border-green-500"
+                      />
                     </div>
                   </div>
                 </div>
@@ -212,8 +292,11 @@ const UserProfile = () => {
 
               {isEditing && (
                 <div className="mt-6 flex justify-end">
-                  <button type="submit" className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
-                    {t("save_changes")}
+                  <button
+                    type="submit"
+                    className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+                  >
+                    Guardar Cambios
                   </button>
                 </div>
               )}

@@ -45,7 +45,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             throw new Error("El token no contiene un ID válido");
           }
   
-          const id: number = rawId; // 🔐 ahora TypeScript está feliz
+          const id: number = rawId; 
           setUserId(id);
   
           const userData = await getUserById(id);
@@ -53,7 +53,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             id: userData.id,
             name: userData.name,
             surname: userData.surname,
-            profileImage: userData.profileImage,
+            //profileImage: userData.profileImage,
           });
         } catch (err) {
           console.error("Error decoding token:", err);

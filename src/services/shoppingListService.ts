@@ -34,7 +34,6 @@ export interface ShoppingCart {
 }
 
 export const groupItemsByGarden = (items: ShoppingCartItem[]) => {
-  console.log(items);
   return items.reduce((groups, item) => {
     const gardenId = item.garden.id;
     if (!groups[gardenId]) {

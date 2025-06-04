@@ -39,7 +39,6 @@ export const filterGardens = async (
 // Obtener jardín por ID
 export const getGardenById = async (id: number): Promise<Garden> => {
   const res = await api.get(`${API_URL}/${id}`);
-  console.log(res.data)
   return res.data;
 };
 

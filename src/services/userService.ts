@@ -25,7 +25,7 @@ export const getAllUsers = async (): Promise<User[]> => {
 };
 
 export const getUserById = async (id: number): Promise<User> => {
-  /* const response = await api.get<User>(`${API_URL}/${id}`);
+  const response = await api.get<User>(`${API_URL}/${id}`);
   const user = response.data;
 
   return {
@@ -33,9 +33,9 @@ export const getUserById = async (id: number): Promise<User> => {
     profileImage: user.profileImage
       ? `${import.meta.env.VITE_API_URL}/${user.profileImage}`
       : undefined,
-  }; */
-  const response = await api.get<User>(`${API_URL}/${id}`);
-  return response.data;
+  };
+  /* const response = await api.get<User>(`${API_URL}/${id}`);
+  return response.data; */
 };
 
 export const createUser = async (user: User): Promise<User> => {
@@ -48,16 +48,17 @@ export const deleteUser = async (id: number): Promise<void> => {
 };
 
 
-export const updateUserProfile = async (userId: number, data: Partial<UserData>, imageFile?: File): Promise<void> => {
+export const updateUserProfile = async (
+  userId: number,
+  data: Partial<UserData>,
+  imageFile?: File
+): Promise<void> => {
   const formData = new FormData();
 
-  for (const key in data) {
-    const value = data[key as keyof UserData];
-    if (value !== undefined && value !== null) {
-      formData.append(key, value);
-    }
-  }
+  // Serializamos el objeto `data` a JSON y lo enviamos en el campo 'user'
+  formData.append('user', JSON.stringify(data));
 
+  // Adjuntamos la imagen solo si viene
   if (imageFile) {
     formData.append('profileImage', imageFile);
   }
@@ -69,10 +70,6 @@ export const updateUserProfile = async (userId: number, data: Partial<UserData>,
   });
 };
 
-// Cambiar rol de usuario a OWNER
-export const changeUserRoleToOwner = async (userId: number): Promise<void> => {
-  await api.patch(`${API_URL}/${userId}/role`);
-};
 
 export const changeUserPassword = async (userId: number, data: PasswordPayload): Promise<void> => {
   /* await api.put(`${API_URL}/${userId}/change-password`, data, {
@@ -80,4 +77,9 @@ export const changeUserPassword = async (userId: number, data: PasswordPayload):
       'Content-Type': 'application/json',
     },
   }); */
+};
+
+// Cambiar rol de usuario a OWNER
+export const changeUserRoleToOwner = async (userId: number): Promise<void> => {
+  await api.patch(`${API_URL}/${userId}/role`);
 };

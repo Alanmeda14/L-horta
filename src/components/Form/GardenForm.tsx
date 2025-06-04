@@ -56,7 +56,6 @@ const GardenForm: React.FC = () => {
     const fetchProducts = async () => {
       try {
         const data = await getAllProducts();
-        console.log(data)
         setProductList(data);
       } catch (err) {
         console.error('Error fetching products:', err);
@@ -505,7 +504,7 @@ const GardenForm: React.FC = () => {
                     className="w-16 p-1 border rounded text-center text-sm focus:ring-2 focus:ring-green-300 focus:border-green-500"
                     placeholder="Stock"
                     min="0"
-                    step="0.001"
+                    step="0.01"
                   />
                   
                   <select

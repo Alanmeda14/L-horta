@@ -20,7 +20,6 @@ const GardenOwnerView = () => {
         const fetchGarden = async () => {
             try {
                 const data = await getGardenById(Number(id));
-                console.log(data);
                 setGarden(data);
             } catch (err) {
                 console.error('Error fetching garden:', err);

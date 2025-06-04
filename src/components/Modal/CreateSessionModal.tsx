@@ -39,8 +39,6 @@ export const CreateSessionModal: React.FC<Props> = ({ isOpen, onClose, gardenId 
         taskDescription,
       };
   
-      // Mostrar el payload en la consola
-      console.log("Payload enviado a createSession:", payload);
   
       // ✅ Enviar la sesión
       await createSession(payload);

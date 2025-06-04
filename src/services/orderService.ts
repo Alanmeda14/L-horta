@@ -59,7 +59,7 @@ export const getAllOrders = async (): Promise<Order[]> => {
 };
 
 // Crear un pedido
-export const createOrder = async (order: Order): Promise<Order> => {
+/* export const createOrder = async (order: Order): Promise<Order> => {
   const payload = {
     ...order,
     garden: { id: order.gardenId },
@@ -71,6 +71,11 @@ export const createOrder = async (order: Order): Promise<Order> => {
   };
   const res = await api.post(API_URL, payload);
   return res.data;
+}; */
+
+export const createOrderFromCart = async (): Promise<any[]> => {
+  const res = await api.post(`${API_URL}/create-from-cart`);
+  return res.data;
 };
 
 // Eliminar un pedido
@@ -81,6 +86,5 @@ export const deleteOrder = async (id: number): Promise<void> => {
 // Obtener los pedidos de un usuario para mostrar en su perfil
 export const getOrdersByUser = async (): Promise<[]> => {
   const res = await api.get(`${API_URL}`);
-  console.log(res.data)
   return res.data;
 };

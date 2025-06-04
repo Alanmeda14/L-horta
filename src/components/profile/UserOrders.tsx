@@ -86,14 +86,14 @@ const UserOrders = () => {
                     <strong>{t('gardenLabel')}:</strong> {order.gardenName}
                   </p>
 
-                  <div>
+                 {/*  <div>
                     <p className="font-medium text-gray-700">{t('productsLabel')}:</p>
                     <ul className="ml-6 list-disc text-sm text-gray-700 mt-1">
                       {order.items.map((p, i) => (
                         <li key={i}>{p.name} x{p.quantity}</li>
                       ))}
                     </ul>
-                  </div>
+                  </div> */}
                 </div>
               ))}
             </div>

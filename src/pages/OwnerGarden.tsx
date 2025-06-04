@@ -196,7 +196,6 @@ const GardenOwnerView = () => {
                         />
                     )}
                     {showEditProductModal && (
-                        console.log("Holi"),
                         <EditProductModal
                             isOpen={showEditProductModal}
                             onClose={() => {

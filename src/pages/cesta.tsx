@@ -11,6 +11,8 @@ import {
   ShoppingCartItem
 } from "../services/shoppingListService";
 import CartItemsList from '../components/CartItemList';
+import { createOrderFromCart } from "../services/orderService";
+import { toast } from "react-toastify";
 
 const Cesta: React.FC = () => {
   const navigate = useNavigate();
@@ -22,8 +24,9 @@ const Cesta: React.FC = () => {
   useEffect(() => {
     const fetchCart = async () => {
       try {
-        console.log('Fetching cart data...');
+        console.log('Fetching cart data...', cart);
         const data = await getShoppingCart();
+        console.log('Fetching cart data...', data);
         setCart(data);
       } catch (err) {
         console.error('Error fetching cart:', err);
@@ -72,6 +75,22 @@ const Cesta: React.FC = () => {
       setCart(null);
     } catch (err) {
       console.error('Error clearing cart:', err);
+    }
+  };
+
+  const handleCheckout = async () => {
+    try {
+      setLoading(true);
+      const order = await createOrderFromCart();
+      toast.success('Error creating order');
+      setCart(null);
+      // Optionally navigate to order details or confirmation page
+      // navigate(`/orders/${order.id}`);
+    } catch (err) {
+      console.error('Error creating order:', err);
+      toast.error('Error creating order');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -169,8 +188,14 @@ const Cesta: React.FC = () => {
           {t("continue_shopping")}
         </button>
         
-        <button 
-          className="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+        <button
+        onClick={handleCheckout}
+          disabled={loading || !cart || cart.items.length === 0}
+          className={`px-6 py-3 bg-green-600 text-white rounded-lg transition-colors ${
+            loading || !cart || cart.items.length === 0
+              ? 'opacity-50 cursor-not-allowed'
+              : 'hover:bg-green-700'
+          }`}
         >
           {t("checkout")}
         </button>

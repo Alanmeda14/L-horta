@@ -7,11 +7,11 @@ import { useTranslation } from "react-i18next";
 
 const HomePage = () => {
   const navigate = useNavigate();
-  const [ gardens, setGardens ] = useState<Garden[]>([]);
+  const [gardens, setGardens] = useState<Garden[]>([]);
   const [loading, setLoading] = useState(true);
-  const [search, setSearch] = useState('');
-  const [locationFilter, setLocationFilter] = useState('');
-  const [productFilter, setProductFilter] = useState('');
+  const [search, setSearch] = useState("");
+  const [locationFilter, setLocationFilter] = useState("");
+  const [productFilter, setProductFilter] = useState("");
   const [error, setError] = useState<string | null>(null);
   const { t } = useTranslation();
   
@@ -22,7 +22,7 @@ const HomePage = () => {
         const data = await getAllGardens();
         setGardens(data);
       } catch (err) {
-        console.error('Error al cargar los huertos iniciales', err);
+        console.error("Error fetching gardens:", err);
       } finally {
         setLoading(false);
       }
@@ -48,7 +48,7 @@ const HomePage = () => {
   
 
   const handleNameChange = (id: number, newName: string) => {
-    const updatedProducts = gardens.map(garden =>
+    const updatedProducts = gardens.map((garden) =>
       garden.id === id ? { ...garden, name: newName } : garden
     );
     setGardens(updatedProducts);
@@ -58,11 +58,18 @@ const HomePage = () => {
     navigate(`/garden/${garden.id}`);
   };
 
-   const filteredGardens = gardens.filter(garden =>
-        garden.name.toLowerCase().includes(search.toLowerCase()) &&
-        (locationFilter ? garden.location.toLowerCase().includes(locationFilter.toLowerCase()) : true) &&
-        (productFilter ? (garden.productAvailable ? 'disponible' : 'no disponible').includes(productFilter.toLowerCase()) : true)
-    );
+  const filteredGardens = gardens.filter(
+    (garden) =>
+      garden.name.toLowerCase().includes(search.toLowerCase()) &&
+      (locationFilter
+        ? garden.location.toLowerCase().includes(locationFilter.toLowerCase())
+        : true) &&
+      (productFilter
+        ? (garden.productAvailable ? "disponible" : "no disponible").includes(
+            productFilter.toLowerCase()
+          )
+        : true)
+  );
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -155,12 +162,10 @@ const HomePage = () => {
                   </div>
                 </div>
               </div>
-            ))}
+          ))}
         </div>
       </div>
     </div>
-    
-    
   );
 };
 

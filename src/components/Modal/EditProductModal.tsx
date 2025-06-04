@@ -30,7 +30,6 @@ export const EditProductModal: React.FC<Props> = ({ isOpen, onClose, product, on
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     useEffect(() => {
-        console.log(product);
         if (product) {
             setName(product.caName);
             setUnitPrice(product.unitPrice.toString());
@@ -46,7 +45,6 @@ export const EditProductModal: React.FC<Props> = ({ isOpen, onClose, product, on
         }
     };
 
-    console.log(quantity)
 
     const handleQuantityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value.replace(/[^\d.,]/g, '');
