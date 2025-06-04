@@ -34,8 +34,14 @@ const Login = () => {
             <div className="max-w-md w-full bg-white rounded-xl shadow-lg p-8">
                 <div className="w-full max-w-sm mx-auto">
                     <div className="flex justify-center mb-6">
-                        <Sprout className="w-12 h-12 text-green-700" />
+                        <div className="relative group">
+                            <div className="absolute -inset-1 bg-gradient-to-r from-green-600 to-green-400 rounded-full opacity-25 transition duration-1000"></div>
+                            <div className="relative">
+                                <Sprout className="w-13 h-13 text-green-700 transform transition-transform duration-500 hover:scale-110 hover:rotate-42" />
+                            </div>
+                        </div>
                     </div>
+
                     <h2 className="text-2xl font-semibold text-center text-gray-800 mb-2">{t("welcome")}</h2>
                     <p className="text-center text-gray-600 mb-8">{t("access_community")}</p>
                     {error && <p className="text-red-500 text-sm text-center mb-4">{error}</p>}
