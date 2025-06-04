@@ -21,32 +21,8 @@ const GardenListingPage = () => {
     const [volunteerStatus, setVolunteerStatus] = useState<Record<number, boolean>>({});
     const [availableSpots, setAvailableSpots] = useState<Record<number, number>>({});
     
- const { t, i18n } = useTranslation();
-    const currentLang = i18n.language;
-
-    const getTranslatedName = (product: any) => {
+ const { t,  } = useTranslation();
     
-        const langMap: Record<string, string> = {
-            'es': 'esName',
-            'en': 'enName',
-            'fr': 'frName',
-            'ca': 'caName'
-        };
-
-        const langProperty = langMap[currentLang] || 'caName';
-        
-     
-        if (product[langProperty]) {
-            return product[langProperty];
-        }
-        if (product.caName) {
-            return product.caName;
-        }
-        
-      
-        return product.name;
-    };
-
     useEffect(() => {
         const fetchGardens = async () => {
             try {

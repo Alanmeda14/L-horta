@@ -166,6 +166,25 @@
   "products_1": "Productos",
   "availableServices": "Servicios disponibles: Entrega, Recogida, Visitas",
   "volunteering": "Voluntariado",
-  "products_2": "Productos"
+  "products_2": "Productos",
+
+  "noProducts": "Este huerto no tiene productos disponibles actualmente.",
+  "backToList_1": "Volver a la lista",
+  "availableSlots": "Plazas disponibles:",
+  "noSlotsAvailable": "No hay plazas disponibles",
+  "signUp": "Inscribirse",
+  "unsubscribe": "Darse de baja",
+  "noVolunteerOptions": "Este huerto no tiene opciones de voluntariado disponibles actualmente.",
+  "validation.endTimeAfterStartTime": "La hora de finalización debe ser posterior a la hora de inicio",
+  "validation.fillAllRequiredFields": "Por favor, completa todos los campos obligatorios",
+  "volunteerSessions.title": "Sesiones de Voluntariado",
+  "volunteerSessions.noScheduledSessions": "No hay sesiones programadas",
+  "volunteerSessions.addNewSession": "Añade una nueva sesión",
+  "volunteerSessions.taskDescription": "Descripción de la tarea",
+  "volunteerSessions.maxVolunteers": "Número máximo de voluntarios",
+  "volunteerSessions.startDateTime": "Fecha y hora de inicio",
+  "volunteerSessions.endDateTime": "Fecha y hora de finalización",
+  "common.date": "Fecha:",
+  "common.schedule": "Horario:"
   
 }

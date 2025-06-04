@@ -16,6 +16,20 @@ interface Props {
   onEditProduct?: (product: any) => void;
   onDeleteProduct?: (productId: number) => void;
 }
+const getTranslatedName = (product: any, language: string): string => {
+  switch (language) {
+    case 'es':
+      return product.esName;
+    case 'en':
+      return product.enName;
+    case 'fr':
+      return product.frName;
+    case 'ca':
+    default:
+      return product.caName;
+  }
+};
+
 
 export const GardenProductsTable: React.FC<Props> = ({
   products,
@@ -40,7 +54,8 @@ export const GardenProductsTable: React.FC<Props> = ({
       return total + (quantity / 1000) * product.unitPrice;
     }, 0);
   };
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const currentLanguage = i18n.language;
 
   return (
     <div>
@@ -64,7 +79,7 @@ export const GardenProductsTable: React.FC<Props> = ({
                 <tr key={product.id}>
                   <td className="py-4 flex items-center gap-2">
                     <img src={`http://localhost:8080${product?.image}`} alt={product?.caName} className="w-12 h-12 rounded-full object-cover"/>
-                    <span>{product.caName}</span>
+                    <span>{getTranslatedName(product, currentLanguage)}</span>
                   </td>
                   <td className="py-4 text-center">{product.unitPrice}€/kg</td>
                   {isOwner ? (

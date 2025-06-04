@@ -164,8 +164,27 @@
   "products_1": "Produits",
   "availableServices": "Services disponibles : Livraison, Retrait, Visites",
   "volunteering": "Bénévolat",
-  "products_2": "Produits"
+  "products_2": "Produits",
+  
 
+  "noProducts": "Ce jardin n'a actuellement aucun produit disponible.",
+  "backToList_1": "Retour à la liste",
+  "availableSlots": "Places disponibles :",
+  "noSlotsAvailable": "Aucune place disponible",
+  "signUp": "S'inscrire",
+  "unsubscribe": "Se désinscrire",
+  "noVolunteerOptions": "Ce jardin n'a actuellement aucune option de bénévolat disponible.",
+  "validation.endTimeAfterStartTime": "L'heure de fin doit être postérieure à l'heure de début",
+  "validation.fillAllRequiredFields": "Veuillez remplir tous les champs obligatoires",
+  "volunteerSessions.title": "Sessions de bénévolat",
+  "volunteerSessions.noScheduledSessions": "Aucune session programmée",
+  "volunteerSessions.addNewSession": "Ajouter une nouvelle session",
+  "volunteerSessions.taskDescription": "Description de la tâche",
+  "volunteerSessions.maxVolunteers": "Nombre maximum de bénévoles",
+  "volunteerSessions.startDateTime": "Date et heure de début",
+  "volunteerSessions.endDateTime": "Date et heure de fin",
+  "common.date": "Date :",
+  "common.schedule": "Horaire :"
 
   
   }

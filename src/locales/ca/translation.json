@@ -174,7 +174,24 @@
   "noSlotsAvailable": "No hi ha places disponibles",
   "signUp": "Inscriure's",
   "unsubscribe": "Desinscriure's",
-  "noVolunteerOptions": "Aquest hort no té opcions de voluntariat disponibles actualment."
+  "noVolunteerOptions": "Aquest hort no té opcions de voluntariat disponibles actualment.",
+  "validation.endTimeAfterStartTime": "L'hora de finalització ha de ser posterior a l'hora d'inici",
+  "validation.fillAllRequiredFields": "Si us plau, completa tots els camps obligatoris",
+  "volunteerSessions.title":"Sessions de Voluntariat",
+  "volunteerSessions.noScheduledSessions":"No hi ha sessions programades",
+  "volunteerSessions.addNewSession":"Afegeix una nova sessió",
+  "volunteerSessions.taskDescription":"Descripció de la tasca",
+  "volunteerSessions.maxVolunteers":"Nombre màxim de voluntaris",
+  "volunteerSessions.startDateTime": "Data i hora d'inici",
+  "volunteerSessions.endDateTime":"Data i hora de finalització",
+  "common.date":"Data:",
+  "common.schedule":"Horari:"
+  
+
+
+
+
+
 
 
 

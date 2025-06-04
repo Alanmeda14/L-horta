@@ -176,7 +176,25 @@
   "products_1": "Products",
   "availableServices": "Available services: Delivery, Pickup, Visits",
   "volunteering": "Volunteering",
-  "products_2": "Products"
+  "products_2": "Products",
+  "noProducts": "This garden currently has no available products.",
+  "backToList_1": "Back to list",
+  "availableSlots": "Available spots:",
+  "noSlotsAvailable": "No spots available",
+  "signUp": "Sign up",
+  "unsubscribe": "Unsubscribe",
+  "noVolunteerOptions": "This garden currently has no available volunteering options.",
+  "validation.endTimeAfterStartTime": "End time must be after start time",
+  "validation.fillAllRequiredFields": "Please fill all required fields",
+  "volunteerSessions.title": "Volunteering Sessions",
+  "volunteerSessions.noScheduledSessions": "No scheduled sessions",
+  "volunteerSessions.addNewSession": "Add a new session",
+  "volunteerSessions.taskDescription": "Task description",
+  "volunteerSessions.maxVolunteers": "Maximum number of volunteers",
+  "volunteerSessions.startDateTime": "Start date and time",
+  "volunteerSessions.endDateTime": "End date and time",
+  "common.date": "Date:",
+  "common.schedule": "Schedule:"
 
 
   
