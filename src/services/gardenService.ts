@@ -78,3 +78,8 @@ export const getMyGardens = async (): Promise<Garden[]> => {
   const res = await api.get(`${API_URL}/my-gardens`);
   return res.data;
 };
+
+export const getOtherGardens = async (): Promise<Garden[]> => {
+  const res = await api.get(`${API_URL}/others`);
+  return res.data;
+};

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { filterGardens, getAllGardens } from '../services/gardenService';
+import { filterGardens, getOtherGardens } from '../services/gardenService';
 import { MapPin, Package, Search } from 'lucide-react';
 import { Garden } from 'types/types';
 import { useTranslation } from "react-i18next";
@@ -19,7 +19,7 @@ const HomePage = () => {
     const fetchGardens = async () => {
       try {
         setLoading(true);
-        const data = await getAllGardens();
+        const data = await getOtherGardens();
         setGardens(data);
       } catch (err) {
         console.error("Error fetching gardens:", err);
