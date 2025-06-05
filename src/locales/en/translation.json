@@ -54,7 +54,7 @@
   "Search gardens": "Search gardens...",
   "Filter by location": "Filter by location...",
   "Filter by products": "Filter by products...",
-  "products_available": "Products Available",
+  "products_available": "Products",
   "no_products": "No Products",
   "Volunteering Available": "Volunteering Available",
   "Without Volunteering": "No Volunteering",
@@ -194,7 +194,8 @@
   "volunteerSessions.startDateTime": "Start date and time",
   "volunteerSessions.endDateTime": "End date and time",
   "common.date": "Date:",
-  "common.schedule": "Schedule:"
+  "common.schedule": "Schedule:",
+  "orderDetails": "Order details"
 
 
   

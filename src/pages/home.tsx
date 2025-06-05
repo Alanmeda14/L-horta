@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { filterGardens, getOtherGardens } from '../services/gardenService';
-import { MapPin, Package, Search } from 'lucide-react';
+import { MapPin, Package, Search, Users } from 'lucide-react';
 import { Garden } from 'types/types';
 import { useTranslation } from "react-i18next";
+import { motion } from 'framer-motion';
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -71,6 +72,8 @@ const HomePage = () => {
           )
         : true)
   );
+
+  console.log(gardens)
 
   return (
     <div className="min-h-screen  ">
@@ -152,14 +155,40 @@ const HomePage = () => {
                 <h3 className="font-bold text-xl mb-2">{garden.name}</h3>
                 <p className="text-gray-600">{garden.location}</p>
                 <div className="mt-2 flex gap-2">
-                  <span className={`px-2 py-1 text-xs rounded-md ${garden.volunteerSessionAvailable ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
-                    {garden.volunteerSessionAvailable ? t("Volunteering Available") : t("Without Volunteering")}
+                  {/* <span className={`px-2 py-1 text-xs rounded-md ${garden.sessionAvailable ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                    {garden.sessionAvailable ? t("Volunteering Available") : t("Without Volunteering")}
                     {/* <span className={`px-2 py-1 text-xs rounded-md ${garden.sessionAvailable ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
-                      {garden.sessionAvailable ? t("Volunteering Available") : t ("Without Volunteering")} */}
-                  </span>
-                  <span className={`px-2 py-1 text-xs rounded-md ${garden.productAvailable ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                      {garden.sessionAvailable ? t("Volunteering Available") : t ("Without Volunteering")} *
+                  </span> */}
+                  <motion.span
+                        whileHover={{ scale: 1.05 }}
+                        className={`px-3 py-1.5 text-xs rounded-full flex items-center gap-1.5 ${
+                          garden.sessionAvailable 
+                            ? 'bg-green-100 text-green-800 border border-green-200' 
+                            : 'bg-red-100 text-red-800 border border-red-200'
+                        }`}
+                      >
+                        <Users className={`w-4 h-4 ${garden.sessionAvailable ? 'text-green-600' : 'text-red-600'}`} />
+                        {garden.sessionAvailable 
+                          ? t("Volunteering Available") 
+                          : t("Without Volunteering")}
+                    </motion.span>
+                    <motion.span
+                        whileHover={{ scale: 1.05 }}
+                        className={`px-3 py-1.5 text-xs rounded-full flex items-center gap-1.5 ${
+                          garden.productAvailable 
+                            ? 'bg-green-100 text-green-800 border border-green-200' 
+                            : 'bg-red-100 text-red-800 border border-red-200'
+                        }`}
+                      >
+                        <Users className={`w-4 h-4 ${garden.productAvailable ? 'text-green-600' : 'text-red-600'}`} />
+                        {garden.productAvailable 
+                          ? t("products_available") 
+                          : t("no_products")}
+                      </motion.span>
+                 {/*  <span className={`px-2 py-1 text-xs rounded-md ${garden.productAvailable ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
                     {garden.productAvailable ? t("products_available") : t("no_products")}
-                  </span>
+                  </span> */}
                 </div>
               </div>
             </div>

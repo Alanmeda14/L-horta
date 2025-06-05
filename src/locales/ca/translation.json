@@ -44,10 +44,10 @@
   "Search gardens":"Cercar horts...",
   "Filter by location" :"Filtra per ubicació...",
   "Filter by products" : "Filtra per productes...",
-  "products_available":"Productes disponibles",
-  "no_products":"Sense Productes",
-  "Volunteering Available":"Voluntariat disponible",
-  "Without Volunteering":"Sense Voluntariat",
+  "products_available":"Productes",
+  "no_products":"Productes",
+  "Volunteering Available":"Voluntariat",
+  "Without Volunteering":"Voluntariat",
 
 
   "passwords_do_not_match":"Les noves contrasenyes no coincideixen.",
@@ -185,7 +185,9 @@
   "volunteerSessions.startDateTime": "Data i hora d'inici",
   "volunteerSessions.endDateTime":"Data i hora de finalització",
   "common.date":"Data:",
-  "common.schedule":"Horari:"
+  "common.schedule":"Horari:",
+
+  "orderDetails": "Informació comanda"
   
 
 

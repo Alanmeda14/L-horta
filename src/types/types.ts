@@ -38,7 +38,7 @@ export interface Garden {
       };
     gardenProducts?: GardenProduct[];
     volunteerSessions?: Session[];
-    volunteerSessionAvailable?: boolean;
+    sessionAvailable?: boolean;
     productAvailable?: boolean;
 }
 

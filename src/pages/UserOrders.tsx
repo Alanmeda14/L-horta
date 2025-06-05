@@ -14,7 +14,7 @@ const OrderDetailsContent = ({ order }: { order: DisplayOrder }) => {
     try {
       console.log('Formatting date:', dateString);
       const date = new Date(dateString);
-      return date.toLocaleDateString('es-ES', {
+      return date.toLocaleDateString('ca-CA', {
         year: 'numeric',
         month: 'long',
         day: 'numeric',
@@ -88,8 +88,7 @@ const OrderDetailsContent = ({ order }: { order: DisplayOrder }) => {
 
       <div className="flex justify-between items-center pt-3 border-t">
         <div className="flex items-center gap-2">
-          <Euro className="text-lime-600" size={20} />
-          <span className="font-medium">{t('totalLabel')}</span>
+          <span className="font-medium">Total</span>
         </div>
         <p className="text-xl font-bold text-lime-600">{formatPrice(order.totalPrice)}€</p>
       </div>

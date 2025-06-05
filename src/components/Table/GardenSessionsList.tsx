@@ -137,7 +137,7 @@ export const GardenSessionsList: React.FC<Props> = ({
                                             }`}
                                         >
                                             <UserPlus className="w-5 h-5" />
-                                            {t('join_session')}
+                                            {t('signUp')}
                                         </motion.button>
                                     ) : (
                                         <motion.button
@@ -147,7 +147,7 @@ export const GardenSessionsList: React.FC<Props> = ({
                                             className="px-6 py-3 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition-colors flex items-center gap-2"
                                         >
                                             <UserMinus className="w-5 h-5" />
-                                            {t('leave_session')}
+                                            {t('unsubscribe')}
                                         </motion.button>
                                     )}
 

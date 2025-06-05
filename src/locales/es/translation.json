@@ -185,6 +185,7 @@
   "volunteerSessions.startDateTime": "Fecha y hora de inicio",
   "volunteerSessions.endDateTime": "Fecha y hora de finalización",
   "common.date": "Fecha:",
-  "common.schedule": "Horario:"
+  "common.schedule": "Horario:",
+  "orderDetails": "Información pedido"
   
 }
