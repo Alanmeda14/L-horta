@@ -71,3 +71,14 @@ export interface DisplayOrder {
       quantity: number;
     }[];
   }
+
+
+export interface OrderItem {
+    id: number;
+    name: string;
+    quantity: number;
+    units: string;
+    totalPrice: number;
+    unitPrice: number;
+    image?: string;
+}

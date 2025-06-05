@@ -53,9 +53,12 @@ const UserProfile = () => {
       };
       setUserData(data);
       setOriginalUserData(data);
+      console.log(data);
     };
     fetchUser();
   }, [userId]);
+
+  
 
   const handleImageClick = () => {
     if (isEditing) fileInputRef.current?.click();

@@ -14,9 +14,10 @@ import GardenForm from "./components/Form/GardenForm";
 import GardenFormEdit from "./components/Form/GardenFormEdit";
 import YourGardens from "./pages/YourGardens";
 import OwnerGarden from "./pages/OwnerGarden";
-import UserOrders from './components/profile/UserOrders';
+import UserOrders from './pages/UserOrders';
 import { ToastContainer } from "react-toastify";
 import { ToggleButton } from "./components/ToggleButton";
+import Welcome from "./pages/Welcome";
 
 const PublicRoute = ({ children }: { children: React.ReactNode }) => {
   const { isAuthenticated } = useAuth();
@@ -46,6 +47,9 @@ function App() {
             } />
             <Route path="/register" element={
               <PublicRoute><Register /></PublicRoute>
+            } />
+            <Route path="/welcome" element={
+              <PublicRoute><Welcome /></PublicRoute>
             } />
 
             {/* Rutas protegidas */}

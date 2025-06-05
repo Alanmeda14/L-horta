@@ -28,10 +28,12 @@ export const getUserById = async (id: number): Promise<User> => {
   const response = await api.get<User>(`${API_URL}/${id}`);
   const user = response.data;
 
+  console.log(user)
+
   return {
     ...user,
     profileImage: user.profileImage
-      ? `${import.meta.env.VITE_API_URL}/${user.profileImage}`
+      ? `${user.profileImage}`
       : undefined,
   };
   /* const response = await api.get<User>(`${API_URL}/${id}`);

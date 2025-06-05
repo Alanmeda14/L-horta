@@ -13,7 +13,7 @@ import { useAuth } from '../context/AuthContext';
 import { useTranslation } from 'react-i18next';
 import { SelectorLenguaje } from './SelectorLenguaje';
 import UserMenu from './UserMenu';
-import UserOrders from './profile/UserOrders';
+import UserOrders from '../pages/UserOrders';
 import UserProfile from '../pages/UserProfile';
 import { ToggleButton } from './ToggleButton';
 

@@ -33,6 +33,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ setDrawerSection }) => {
       navigate("/pedidos");
     }
   };
+  console.log(user)
 
   const handleLogout = () => {
     logout();
@@ -52,7 +53,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ setDrawerSection }) => {
       >
         <Avatar
           size={40}
-          src={user?.profileImage}
+          src={`http://localhost:8080${user?.profileImage}`}
           alt={`${user?.name} ${user?.surname}`}
         />
       </button>

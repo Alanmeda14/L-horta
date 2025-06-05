@@ -53,7 +53,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             id: userData.id,
             name: userData.name,
             surname: userData.surname,
-            //profileImage: userData.profileImage,
+            profileImage: userData.profileImage,
           });
         } catch (err) {
           console.error("Error decoding token:", err);
@@ -90,9 +90,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       name: userData.name,
       surname: userData.surname,
       profileImage: userData.profileImage
-      ? `${import.meta.env.VITE_API_URL}/${userData.profileImage}`
+      ? `${userData.profileImage}`
       : undefined,
       });
+
     } catch (err) {
       console.error("Login failed:", err);
       throw err;
