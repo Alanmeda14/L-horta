@@ -4,7 +4,6 @@ import Navbar from './components/navbar';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import HomePage from './pages/home';
-import { ThemeProvider } from "./components/ThemeContext"; // Esto ya lo tienes
 import Cesta from './pages/cesta';
 import GardenListingPage from './pages/GardenListingPage';
 import UserProfile from './pages/UserProfile';

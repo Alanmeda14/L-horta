@@ -1,7 +1,5 @@
 import api from './api';
 import type { DisplayOrder } from '../types/types';
-/* import type { DisplayOrder } from '../types/types'; */
-
 const API_URL = '/orders';
 
 export interface OrderItem {
@@ -114,3 +112,4 @@ export const getOrdersByUser = async (): Promise<DisplayOrder[]> => {
     throw error;
   }
 };
+

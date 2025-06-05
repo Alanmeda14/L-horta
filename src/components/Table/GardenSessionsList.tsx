@@ -14,6 +14,7 @@ interface Props {
 }
 
 export const GardenSessionsList: React.FC<Props> = ({
+    
     sessions,
     volunteerStatus,
     availableSpots,
@@ -47,8 +48,22 @@ export const GardenSessionsList: React.FC<Props> = ({
                 </motion.button>
             </motion.div>
         );
+       
     }
-
+    const getDescriptionByLang = (session: Session) => {
+        switch (i18n.language) {
+          case 'es':
+            return session.taskDescriptionEs || session.taskDescription;
+          case 'en':
+            return session.taskDescriptionEn || session.taskDescription;
+          case 'fr':
+            return session.taskDescriptionFr || session.taskDescription;
+          case 'ca':
+          default:
+            return session.taskDescription;
+        }
+      };
+      
     return (
         <motion.div
             initial={{ opacity: 0 }}
@@ -101,9 +116,9 @@ export const GardenSessionsList: React.FC<Props> = ({
                                         </div>
                                     </div>
 
-                                    {session.description && (
+                                    {session.taskDescription && (
                                         <p className="mt-4 text-gray-600">
-                                            {session.description}
+                                            {session.taskDescription}
                                         </p>
                                     )}
                                 </div>

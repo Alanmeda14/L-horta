@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { VolunteerSession } from '../types';
 import { Trash2, PlusCircle, Calendar, Clock, Users } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 interface VolunteerSessionManagerProps {
   sessions: VolunteerSession[];
@@ -36,13 +37,13 @@ const VolunteerSessionManager: React.FC<VolunteerSessionManagerProps> = ({
     // Validate that end time is after start time
     if (newSession.startDateTime && newSession.endDateTime && 
         new Date(newSession.endDateTime) <= new Date(newSession.startDateTime)) {
-      alert('La hora de finalización debe ser posterior a la hora de inicio');
+      alert(t('validation.endTimeAfterStartTime'));
       return;
     }
     
     // Validate that all fields are filled
     if (!newSession.taskDescription || !newSession.startDateTime || !newSession.endDateTime) {
-      alert('Por favor, complete todos los campos obligatorios');
+      alert(t('validation.fillAllRequiredFields'));
       return;
     }
     
@@ -76,15 +77,15 @@ const VolunteerSessionManager: React.FC<VolunteerSessionManagerProps> = ({
       minute: '2-digit'
     });
   };
-
+  const { t } = useTranslation();
   return (
     <div className="space-y-6">
-      <h2 className="text-xl font-semibold text-gray-800">Sesiones de Voluntariado</h2>
+      <h2 className="text-xl font-semibold text-gray-800">{t('volunteerSessions.title')}</h2>
       
       {sessions.length === 0 ? (
         <div className="text-center p-8 bg-gray-50 rounded-lg border border-dashed border-gray-300">
-          <p className="text-gray-500">No hay sesiones programadas</p>
-          <p className="text-sm text-gray-400 mt-1">Añade una nueva sesión abajo</p>
+          <p className="text-gray-500">{t('volunteerSessions.noScheduledSessions')}</p>
+          <p className="text-sm text-gray-400 mt-1">{t('volunteerSessions.addNewSession')}</p>
         </div>
       ) : (
         <div className="space-y-4">
@@ -108,7 +109,7 @@ const VolunteerSessionManager: React.FC<VolunteerSessionManagerProps> = ({
                   <div className="space-y-4">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Descripción de la tarea
+                      {t('volunteerSessions.taskDescription')}
                       </label>
                       <input
                         type="text"
@@ -120,7 +121,7 @@ const VolunteerSessionManager: React.FC<VolunteerSessionManagerProps> = ({
                     
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Número máximo de voluntarios
+                      {t('volunteerSessions.maxVolunteers')}
                       </label>
                       <div className="flex items-center">
                         <Users size={18} className="text-gray-500 mr-2" />
@@ -138,7 +139,7 @@ const VolunteerSessionManager: React.FC<VolunteerSessionManagerProps> = ({
                   <div className="space-y-4">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Fecha y hora de inicio
+                      {t('volunteerSessions.startDateTime')}
                       </label>
                       <div className="flex items-center">
                         <Calendar size={18} className="text-gray-500 mr-2" />
@@ -153,7 +154,7 @@ const VolunteerSessionManager: React.FC<VolunteerSessionManagerProps> = ({
                     
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Fecha y hora de finalización
+                      {t('volunteerSessions.endDateTime')}
                       </label>
                       <div className="flex items-center">
                         <Clock size={18} className="text-gray-500 mr-2" />
@@ -172,12 +173,12 @@ const VolunteerSessionManager: React.FC<VolunteerSessionManagerProps> = ({
                   <div className="bg-green-50 rounded-md p-3 text-sm text-gray-700">
                     <p className="flex items-center">
                       <Calendar size={16} className="text-green-600 mr-2" />
-                      <span className="font-medium">Fecha:</span> 
+                      <span className="font-medium">{t('common.date')}</span> 
                       <span className="ml-2">{formatDate(session.startDateTime)}</span>
                     </p>
                     <p className="flex items-center mt-1">
                       <Clock size={16} className="text-green-600 mr-2" />
-                      <span className="font-medium">Horario:</span> 
+                      <span className="font-medium">{t('common.schedule')}</span> 
                       <span className="ml-2">
                         {formatTime(session.startDateTime)} - {formatTime(session.endDateTime)}
                       </span>

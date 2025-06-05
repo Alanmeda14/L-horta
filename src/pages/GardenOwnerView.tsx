@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Pencil, Trash2, PlusCircle } from 'lucide-react';
 import { getGardenById } from '../services/gardenService';
 import { CreateSessionModal } from '../components/Modal/CreateSessionModal';
+import { useTranslation } from 'react-i18next';
 
 const GardenOwnerView = () => {
   const navigate = useNavigate();

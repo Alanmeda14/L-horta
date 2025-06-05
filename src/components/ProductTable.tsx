@@ -106,7 +106,7 @@ const ProductTable: React.FC<{ gardenImage: string }> = ({ gardenImage }) => {
             </div>
 
             <div className="p-6">
-                <p className="text-gray-600 mb-8">Servicios disponibles: Entrega, Recogida, Visitas</p>
+                <p className="text-gray-600 mb-8">{t('availableServices')}</p>
 
                 <div className="flex border-b border-gray-200 mb-6">
                     <button
@@ -116,7 +116,7 @@ const ProductTable: React.FC<{ gardenImage: string }> = ({ gardenImage }) => {
                             }`}
                         onClick={() => setActiveTab('products')}
                     >
-                        Productos
+                        {t('products_1')}
                     </button>
                     <button
                         className={`py-2 px-4 font-medium ${activeTab === 'volunteer'
@@ -125,7 +125,7 @@ const ProductTable: React.FC<{ gardenImage: string }> = ({ gardenImage }) => {
                             }`}
                         onClick={() => setActiveTab('volunteer')}
                     >
-                        Voluntariado
+                        {t('volunteering')}
                     </button>
                 </div>
 

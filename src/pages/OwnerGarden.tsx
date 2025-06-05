@@ -10,6 +10,7 @@ import { GardenProduct } from 'types/types';
 import { useAuth } from '../context/AuthContext';
 import { getSessionsByGardenId, VolunteerSession } from '../services/volunteerSessionService';
 import { toast } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
 
 
 
@@ -97,7 +98,7 @@ const GardenOwnerView = () => {
     const handleAddVolunteerSession = () => {
         // lógica para crear sesión de voluntariado
     };
-
+    const { t } = useTranslation();
     return (
         <div className="container mx-auto px-4 py-8 dark:bg-gray-800">
             {garden && (
@@ -133,7 +134,7 @@ const GardenOwnerView = () => {
                             className={`px-4 py-2 font-medium transition-colors ${activeTab === 'productos' ? 'text-green-600 border-b-2 border-green-600' : 'text-gray-600 hover:text-green-500'}`}
                             onClick={() => setActiveTab('productos')}
                         >
-                            Productos
+                            {t('products_2')}
                         </button>
                         <button
                             className={`px-4 py-2 font-medium transition-colors ${activeTab === 'voluntariado' ? 'text-green-600 border-b-2 border-green-600' : 'text-gray-600 hover:text-green-500'}`}

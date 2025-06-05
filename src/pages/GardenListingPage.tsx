@@ -21,7 +21,7 @@ const GardenListingPage = () => {
     const [volunteerStatus, setVolunteerStatus] = useState<Record<number, boolean>>({});
     const [availableSpots, setAvailableSpots] = useState<Record<number, number>>({});
     const { t } = useTranslation();
-
+    
     useEffect(() => {
         const fetchGardens = async () => {
             try {
@@ -88,6 +88,8 @@ const GardenListingPage = () => {
                     quantity: quantity / 1000, // Convert to kg
                 }));
 
+           
+            // Add each item to the cart
             for (const item of itemsToAdd) {
                 await addToCart(item.gardenProductId, item.quantity);
             }
@@ -119,7 +121,7 @@ const GardenListingPage = () => {
             [sessionId]: prev[sessionId] + (volunteerStatus[sessionId] ? 1 : -1),
         }));
     };
-
+     
     return (
         <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
             {/* Header Section */}
