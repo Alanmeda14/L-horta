@@ -103,40 +103,52 @@ const UserProfile = () => {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!originalUserData || !userId) return;
+  e.preventDefault();
+  if (!originalUserData || !userId) return;
 
-    if (password.new || password.confirm || password.current) {
-      if (password.new !== password.confirm) {
-        alert(t("passwords_do_not_match"));
-        return;
-      }
+  if (password.new || password.confirm || password.current) {
+    if (password.new !== password.confirm) {
+      alert(t("passwords_do_not_match"));
+      return;
+    }
+  }
+
+  try {
+    const modifiedFields = getModifiedFields(originalUserData, userData);
+    const hasImageChange = imageFile !== null;
+
+    if (Object.keys(modifiedFields).length > 0 || hasImageChange) {
+      await updateUserProfile(userId, modifiedFields, imageFile ?? undefined);
     }
 
-    try {
-      const modifiedFields = getModifiedFields(originalUserData, userData);
-      const hasImageChange = imageFile !== null;
-
-      if (Object.keys(modifiedFields).length > 0 || hasImageChange) {
-        await updateUserProfile(userId, modifiedFields, imageFile ?? undefined);
-      }
-
-      if (password.current && password.new && password.confirm) {
-        await changeUserPassword(userId, {
-          currentPassword: password.current,
-          newPassword: password.new,
-        });
-      }
-
-      toast.success(t("profile_updated_success"));
-      setOriginalUserData(userData);
-      setIsEditing(false);
-      setPassword({ current: "", new: "", confirm: "" });
-      setImageFile(null);
-    } catch (err: any) {
-      alert(err.message || t("unknown_error"));
+    if (password.current && password.new && password.confirm) {
+      await changeUserPassword(userId, {
+        currentPassword: password.current,
+        newPassword: password.new,
+      });
     }
-  };
+
+    // ✅ Volvemos a obtener el usuario actualizado
+    const updatedUser = await getUserById(userId);
+    const data: UserData = {
+      name: updatedUser.name,
+      surname: updatedUser.surname,
+      email: updatedUser.email,
+      location: updatedUser.location,
+      profileImage: updatedUser.profileImage,
+    };
+
+    setUserData(data);
+    setOriginalUserData(data);
+    setIsEditing(false);
+    setPassword({ current: "", new: "", confirm: "" });
+    setImageFile(null);
+    toast.success(t("profile_updated_success"));
+  } catch (err: any) {
+    alert(err.message || t("unknown_error"));
+  }
+};
+
 
   return (
     <div className="min-h-screen bg-gray-50 pt-20 pb-32">

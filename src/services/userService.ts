@@ -28,14 +28,10 @@ export const getUserById = async (id: number): Promise<User> => {
   const response = await api.get<User>(`${API_URL}/${id}`);
   const user = response.data;
 
-  console.log(user)
-
-  return {
-    ...user,
-    profileImage: user.profileImage
-      ? `${user.profileImage}`
-      : undefined,
-  };
+return {
+  ...user,
+  profileImage: user.profileImage ?? undefined,
+};
   /* const response = await api.get<User>(`${API_URL}/${id}`);
   return response.data; */
 };
